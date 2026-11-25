@@ -36,4 +36,8 @@ db-test:
 	  if [ "$$errors" -ne 10 ]; then echo "expected exactly 10 rejected statements (MUST FAIL steps), got $$errors"; exit 1; fi; \
 	  echo "schema invariants OK (10/10 rejections, all MUST PASS steps accepted)"
 
-ci: build test lint arch vuln
+ci: build test lint arch vuln vectors
+
+vectors:
+	go run ./cmd/testvectors -check
+	node ../protocol/testvectors/runners/node/verify-vectors.mjs

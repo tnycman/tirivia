@@ -48,7 +48,24 @@ var (
 	ErrBadSignature = errors.New("cuesign: signature verification failed")
 	// ErrContent means question content would not fit the cue budget.
 	ErrContent = errors.New("cuesign: question content out of bounds")
+	// ErrWrongShow means a correctly signed cue belongs to a different show.
+	ErrWrongShow = errors.New("cuesign: cue is for another show")
+	// ErrReplay means the cue's seq is not greater than the last applied seq.
+	ErrReplay = errors.New("cuesign: cue replayed or out of order")
 )
+
+// CheckSequence applies the client-side rules after signature verification (SPEC §6.4):
+// drop cues for another show and cues whose seq is not strictly greater than the last one
+// applied. A gap (seq > lastSeq+1) is accepted but tells the caller to call GetShowState.
+func CheckSequence(body *cuev1.CueBody, expectedShowID string, lastSeq uint64) (gap bool, err error) {
+	if body.GetShowId() != expectedShowID {
+		return false, ErrWrongShow
+	}
+	if body.GetSeq() <= lastSeq {
+		return false, ErrReplay
+	}
+	return body.GetSeq() > lastSeq+1, nil
+}
 
 // Signer produces signed text cues. It is safe for concurrent use.
 type Signer struct {
