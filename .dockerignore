@@ -1,0 +1,9 @@
+# Backend images only need backend/ and protocol/gen/. Exclude everything else from the context.
+*
+!backend/
+!protocol/gen/
+backend/**/*_test.go
+backend/loadtest/
+backend/migrations/tests/
+**/*.exe
+**/.git
