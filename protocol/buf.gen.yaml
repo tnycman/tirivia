@@ -1,0 +1,52 @@
+# Code generation for all consumers: one definition, four languages.
+# Plugin references: https://connectrpc.com/docs/go/getting-started/ ,
+#   https://connectrpc.com/docs/swift/getting-started/ , https://connectrpc.com/docs/kotlin/getting-started/ ,
+#   https://github.com/bufbuild/protobuf-es
+# Remote plugins need network access to the BSR. To run offline, install local plugins and use `local:`.
+# Pin plugin versions (buf.build/<owner>/<plugin>:<version>) once they have been verified in Phase 0.
+version: v2
+clean: true
+managed:
+  enabled: true
+  override:
+    - file_option: go_package_prefix
+      value: github.com/tirivia/protocol/gen/go
+inputs:
+  - directory: proto
+plugins:
+  # Go server: protobuf-go + connect-go v2 (local plugins, versions pinned in scripts/install-tools.sh)
+  - local: protoc-gen-go
+    out: gen/go
+    opt: paths=source_relative
+  - local: protoc-gen-connect-go
+    out: gen/go
+    opt: paths=source_relative
+
+  # iOS: swift-protobuf + connect-swift (URLSession transport)
+  - remote: buf.build/apple/swift
+    out: gen/swift
+    opt: Visibility=Public
+  - remote: buf.build/connectrpc/swift
+    out: gen/swift
+    opt:
+      - GenerateAsyncMethods=true
+      - GenerateCallbackMethods=false
+      - Visibility=Public
+
+  # Android: protobuf-javalite + kotlin-lite + connect-kotlin (OkHttp transport)
+  - remote: buf.build/protocolbuffers/java
+    out: gen/kotlin
+    opt: lite
+  - remote: buf.build/protocolbuffers/kotlin
+    out: gen/kotlin
+    opt: lite
+  - remote: buf.build/connectrpc/kotlin
+    out: gen/kotlin
+    opt:
+      - generateCallbackMethods=false
+      - generateCoroutineMethods=true
+
+  # Web consoles: protobuf-es (Connect-ES clients use the generated service descriptors)
+  - remote: buf.build/bufbuild/es
+    out: gen/ts
+    opt: target=ts

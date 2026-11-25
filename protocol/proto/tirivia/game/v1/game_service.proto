@@ -1,0 +1,184 @@
+syntax = "proto3";
+
+package tirivia.game.v1;
+
+import "google/protobuf/timestamp.proto";
+import "tirivia/common/v1/common.proto";
+import "tirivia/cue/v1/cue.proto";
+
+// Hot-path service, served by the `game` deployable (SPEC §6.1).
+// Transport: Connect protocol (POST, application/proto) over HTTPS; https://connectrpc.com/docs/protocol/
+service GameService {
+  // Schedule and countdown. Cacheable (Connect GET) because it has no side effects.
+  rpc GetNextShow(GetNextShowRequest) returns (GetNextShowResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+  }
+  // Playback URL, chat token, player state, reaction set. Requires a fresh attestation for prize shows.
+  rpc JoinShow(JoinShowRequest) returns (JoinShowResponse);
+  // Idempotent. Natural key (show_id, question_id, user) is the uniqueness guard;
+  // the Idempotency-Key header follows draft-ietf-httpapi-idempotency-key-header-09.
+  rpc SubmitAnswer(SubmitAnswerRequest) returns (SubmitAnswerResponse);
+  // Batched reaction counts. Interval is server-tunable (default 5 s + jitter; ADR-0006).
+  rpc SubmitReactions(SubmitReactionsRequest) returns (SubmitReactionsResponse);
+  // Recover after reconnect or a gap in cue sequence numbers.
+  rpc GetShowState(GetShowStateRequest) returns (GetShowStateResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+  }
+  rpc UseExtraLife(UseExtraLifeRequest) returns (UseExtraLifeResponse);
+  // Returns FAILED_PRECONDITION while the chat switch is off.
+  rpc GetChatToken(GetChatTokenRequest) returns (GetChatTokenResponse);
+}
+
+message GetNextShowRequest {}
+
+message GetNextShowResponse {
+  Show show = 1;
+}
+
+message Show {
+  string show_id = 1;
+  google.protobuf.Timestamp starts_at = 2;
+  string title = 3;
+  // Sponsor branding, if any.
+  string sponsor_id = 4;
+  tirivia.common.v1.Money prize_pool = 5;
+  // Eligibility of the calling user's country for this show.
+  tirivia.common.v1.Eligibility eligibility = 6;
+}
+
+message JoinShowRequest {
+  string show_id = 1;
+}
+
+message JoinShowResponse {
+  // Resolved per request so a region failover (Frankfurt -> Ireland) needs no app release.
+  string playback_url = 1;
+  // IVS Chat token. Empty when chat_enabled is false (backend switch, SPEC §6.10).
+  string chat_token = 2;
+  string chat_endpoint = 3;
+  PlayerState player_state = 4;
+  ReactionSet reaction_set = 5;
+  // Seed for the per-player option shuffle.
+  bytes shuffle_seed = 6;
+  // Tunables pushed from the server.
+  uint32 reaction_batch_interval_ms = 7;
+  uint32 reaction_max_per_batch = 8;
+  // Public keys accepted for cue signatures (current + next).
+  repeated CueKey cue_keys = 9;
+  tirivia.common.v1.Eligibility eligibility = 10;
+  // Backend chat switch at join time; live changes arrive via Pulse.chat_enabled.
+  bool chat_enabled = 11;
+}
+
+// Fetch a chat token after chat is switched on mid-show (the app calls this when
+// Pulse.chat_enabled flips to true and it holds no valid token).
+message GetChatTokenRequest {
+  string show_id = 1;
+}
+
+message GetChatTokenResponse {
+  string chat_token = 1;
+  string chat_endpoint = 2;
+}
+
+message CueKey {
+  uint32 key_id = 1;
+  bytes ed25519_public_key = 2;
+}
+
+message ReactionSet {
+  repeated tirivia.common.v1.ReactionKind kinds = 1;
+  // Optional themed icon URL for REACTION_KIND_THEMED (football night, sponsor).
+  string themed_icon_url = 2;
+}
+
+enum PlayerStatus {
+  PLAYER_STATUS_UNSPECIFIED = 0;
+  PLAYER_STATUS_ALIVE = 1;
+  PLAYER_STATUS_ELIMINATED = 2;
+  // Can watch and react but not answer.
+  PLAYER_STATUS_SPECTATOR = 3;
+  // Joined after Q1 opened (decision AC-8): answers from the current question on for fun and
+  // stats, but can never win. Excluded from tallies and players-remaining. An extra life cannot
+  // cover questions that opened before the player joined (decision UF-4).
+  PLAYER_STATUS_PLAY_ALONG = 4;
+}
+
+message PlayerState {
+  PlayerStatus status = 1;
+  uint32 extra_lives_available = 2;
+  bool extra_life_used_this_show = 3;
+  uint32 last_answered_index = 4;
+}
+
+// Focus-loss and capture signals collected on the client during the question window (Master Plan §7 L2).
+message IntegritySignals {
+  uint32 focus_loss_count = 1;
+  uint32 focus_loss_total_ms = 2;
+  bool screen_captured = 3;
+  bool screenshot_taken = 4;
+  bool overlay_detected = 5;
+  bool accessibility_automation_detected = 6;
+}
+
+message SubmitAnswerRequest {
+  string show_id = 1;
+  string question_id = 2;
+  string option_id = 3;
+  // Client-observed ms from cue render to tap; a risk signal only, never trusted for the deadline.
+  uint32 client_elapsed_ms = 4;
+  IntegritySignals signals = 5;
+  // Sequence number of the question_open cue the client saw.
+  uint64 cue_seq = 6;
+}
+
+enum AnswerResult {
+  ANSWER_RESULT_UNSPECIFIED = 0;
+  // Stored; correctness is revealed later via the reveal cue.
+  ANSWER_RESULT_ACCEPTED = 1;
+  ANSWER_RESULT_DUPLICATE = 2;
+  ANSWER_RESULT_LATE = 3;
+  ANSWER_RESULT_NOT_ALIVE = 4;
+  ANSWER_RESULT_QUESTION_NOT_OPEN = 5;
+  // Focus loss on a final-three question (rule shown before the show).
+  ANSWER_RESULT_VOIDED_FOCUS_LOSS = 6;
+}
+
+message SubmitAnswerResponse {
+  AnswerResult result = 1;
+}
+
+message SubmitReactionsRequest {
+  string show_id = 1;
+  // Taps summed on the client since the last batch.
+  map<int32, uint32> counts = 2; // key = tirivia.common.v1.ReactionKind number
+  // Present while a burst is running.
+  string burst_id = 3;
+}
+
+message SubmitReactionsResponse {
+  // Server may adjust the interval under load.
+  uint32 next_batch_interval_ms = 1;
+}
+
+message GetShowStateRequest {
+  string show_id = 1;
+}
+
+message GetShowStateResponse {
+  tirivia.cue.v1.Phase phase = 1;
+  uint64 last_cue_seq = 2;
+  PlayerState player_state = 3;
+  // The current open question if any (same content as the cue; still no correct answer).
+  tirivia.cue.v1.QuestionOpen open_question = 4;
+  uint32 remaining_ms = 5;
+}
+
+message UseExtraLifeRequest {
+  string show_id = 1;
+  string question_id = 2;
+}
+
+message UseExtraLifeResponse {
+  PlayerState player_state = 1;
+}

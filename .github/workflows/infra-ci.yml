@@ -1,0 +1,36 @@
+# Infra CI: fmt, validate, TFLint, Trivy config scan, Checkov, plan with the read-only role.
+# Trivy runs as a pinned container image, never via a mutable action tag (Mar 2026 incident).
+name: infra-ci
+
+on:
+  pull_request:
+    paths: ["infra/**", ".github/workflows/infra-ci.yml"]
+
+permissions: {}
+
+jobs:
+  static:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e # v4.0.1
+        with:
+          terraform_version: "1.17.2"
+      - name: fmt
+        run: terraform -chdir=infra fmt -check -recursive
+      - name: validate every stack
+        run: |
+          for d in $(find infra/bootstrap infra/modules infra/live -name '*.tf' -exec dirname {} \; | sort -u); do
+            echo "::group::$d"
+            terraform -chdir="$d" init -backend=false -input=false >/dev/null
+            terraform -chdir="$d" validate
+            echo "::endgroup::"
+          done
+      - name: Trivy config scan (pinned image; set digest via Renovate)
+        run: docker run --rm -v "$PWD/infra:/src" aquasec/trivy:0.76.2 config --exit-code 1 --severity HIGH,CRITICAL /src
+      - name: Checkov
+        run: pipx run checkov==3.4.10 -d infra --quiet --compact

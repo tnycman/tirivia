@@ -1,0 +1,57 @@
+# golangci-lint v2 configuration (v2.15.0). Docs: https://golangci-lint.run/docs/linters/configuration/
+version: "2"
+
+linters:
+  default: standard
+  enable:
+    - bodyclose
+    - contextcheck
+    - depguard
+    - errorlint
+    - gosec
+    - misspell
+    - noctx
+    - revive
+    - sqlclosecheck
+    - unconvert
+  settings:
+    depguard:
+      rules:
+        # Module boundaries (stack/03-backend-go): a module may not reach into another module's
+        # storage or domain internals. Cross-module calls go through internal/contracts.
+        wallet-internals:
+          files:
+            - "**/internal/**"
+            - "!**/internal/wallet/**"
+          deny:
+            - pkg: github.com/tirivia/backend/internal/wallet/store
+              desc: "use internal/contracts; only the wallet module touches the ledger store"
+            - pkg: github.com/tirivia/backend/internal/wallet/domain
+              desc: "use internal/contracts"
+        auth-internals:
+          files:
+            - "**/internal/**"
+            - "!**/internal/auth/**"
+          deny:
+            - pkg: github.com/tirivia/backend/internal/auth/store
+              desc: "use internal/contracts"
+        no-legacy-connect:
+          deny:
+            - pkg: connectrpc.com/connect$
+              desc: "use connectrpc.com/connect/v2 (ADR-0007)"
+        no-math-rand-in-security:
+          files:
+            - "**/internal/auth/**"
+            - "**/internal/platform/cuesign/**"
+          deny:
+            - pkg: math/rand
+              desc: "use crypto/rand for anything security-relevant"
+
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  settings:
+    goimports:
+      local-prefixes:
+        - github.com/tirivia

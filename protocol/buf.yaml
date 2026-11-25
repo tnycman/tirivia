@@ -1,0 +1,14 @@
+# Buf v2 workspace. Docs: https://buf.build/docs/configuration/v2/buf-yaml/
+# Lint: STANDARD (Buf default). Breaking: FILE (Buf default; the strictest category).
+# Never drop below WIRE_JSON: Connect clients may speak JSON (https://buf.build/docs/breaking/rules/).
+version: v2
+modules:
+  - path: proto
+lint:
+  use:
+    - STANDARD
+  enum_zero_value_suffix: _UNSPECIFIED
+  service_suffix: Service
+breaking:
+  use:
+    - FILE

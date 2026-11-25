@@ -1,0 +1,9 @@
+version: v2
+clean: true
+plugins:
+  # protoc-gen-es 2.x also generates service descriptors used by Connect-ES 2.x clients.
+  - local: protoc-gen-es
+    out: src/gen
+    opt:
+      - target=ts
+      - import_extension=none

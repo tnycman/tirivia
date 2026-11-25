@@ -1,0 +1,49 @@
+# Go
+*.exe
+*.test
+*.out
+/backend/bin/
+coverage.*
+
+# Node / web
+node_modules/
+dist/
+.vite/
+*.tsbuildinfo
+
+# Terraform (commit .terraform.lock.hcl in root stacks only)
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+override.tf
+override.tf.json
+
+# iOS / Xcode
+DerivedData/
+*.xcuserstate
+xcuserdata/
+.build/
+/ios/Vendor/AmazonIVSPlayer/*
+!/ios/Vendor/AmazonIVSPlayer/.gitkeep
+
+# Android / Gradle
+.gradle/
+build/
+local.properties
+*.keystore
+*.jks
+
+# Secrets: never commit (Secrets Manager only)
+.env
+.env.*
+*.pem
+*.p8
+*.key
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

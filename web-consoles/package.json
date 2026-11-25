@@ -1,0 +1,17 @@
+{
+  "name": "tirivia-web-consoles",
+  "private": true,
+  "description": "Back-office consoles (studio, question bank, claims, risk, clips) and the public website. See stack/08-web-consoles.",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "generate": "npm run generate -w @tirivia/api-client",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "build": "npm run build --workspaces --if-present"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}

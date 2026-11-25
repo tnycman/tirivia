@@ -1,0 +1,24 @@
+{
+  "name": "@tirivia/studio",
+  "private": true,
+  "type": "module",
+  "description": "Studio console: run of show, question release, bursts, and back-office feature switches (chat etc.).",
+  "scripts": {
+    "dev": "vite",
+    "typecheck": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.json && vite build"
+  },
+  "dependencies": {
+    "@tirivia/api-client": "*",
+    "@tanstack/react-query": "5.108.4",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "6.3.0",
+    "typescript": "7.0.2",
+    "vite": "8.3.8"
+  }
+}

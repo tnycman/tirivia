@@ -1,0 +1,14 @@
+# Normalise line endings: CI runs on Linux; developers may be on Windows.
+* text=auto eol=lf
+*.bat text eol=crlf
+*.ps1 text eol=crlf
+
+# Binary
+*.pdf binary
+*.png binary
+*.jpg binary
+*.binpb binary
+
+# Generated code: collapse in diffs, mark as generated for GitHub linguist
+protocol/gen/** linguist-generated=true
+web-consoles/packages/api-client/src/gen/** linguist-generated=true

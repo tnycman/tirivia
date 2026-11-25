@@ -1,0 +1,38 @@
+# Architecture rules for the modular monolith (stack/03-backend-go).
+# Every module may depend only on platform/* and contracts. cmd/ (outside workdir) wires modules.
+# Tool: https://github.com/fe3dback/go-arch-lint
+version: 3
+workdir: internal
+
+allow:
+  depOnAnyVendor: true
+
+components:
+  platform:  { in: platform/** }
+  contracts: { in: contracts }
+  game:      { in: game/** }
+  studio:    { in: studio/** }
+  engage:    { in: engage/** }
+  auth:      { in: auth/** }
+  profile:   { in: profile/** }
+  content:   { in: content/** }
+  wallet:    { in: wallet/** }
+  risk:      { in: risk/** }
+  notify:    { in: notify/** }
+  chatmod:   { in: chatmod/** }
+
+commonComponents:
+  - platform
+  - contracts
+
+deps:
+  game:    { mayDependOn: [] }
+  studio:  { mayDependOn: [] }
+  engage:  { mayDependOn: [] }
+  auth:    { mayDependOn: [] }
+  profile: { mayDependOn: [] }
+  content: { mayDependOn: [] }
+  wallet:  { mayDependOn: [] }
+  risk:    { mayDependOn: [] }
+  notify:  { mayDependOn: [] }
+  chatmod: { mayDependOn: [] }

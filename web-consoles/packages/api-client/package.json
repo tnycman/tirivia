@@ -1,0 +1,22 @@
+{
+  "name": "@tirivia/api-client",
+  "private": true,
+  "type": "module",
+  "description": "Typed Connect clients generated from protocol/ with protobuf-es. Never hand-write API types.",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "generate": "buf generate ../../../protocol/proto --template buf.gen.yaml",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@bufbuild/protobuf": "2.17.0",
+    "@connectrpc/connect": "2.3.0",
+    "@connectrpc/connect-web": "2.3.0"
+  },
+  "devDependencies": {
+    "@bufbuild/protoc-gen-es": "2.17.0",
+    "typescript": "7.0.2"
+  }
+}

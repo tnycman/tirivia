@@ -1,0 +1,16 @@
+# sqlc 1.31.1: type-safe queries generated from SQL (stack/04-data).
+version: "2"
+sql:
+  - engine: postgresql
+    schema: migrations/core
+    queries: internal/wallet/store/queries
+    gen:
+      go:
+        package: walletdb
+        out: internal/wallet/store/walletdb
+        sql_package: pgx/v5
+        emit_interface: true
+        emit_json_tags: false
+        overrides:
+          - db_type: uuid
+            go_type: github.com/google/uuid.UUID

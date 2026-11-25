@@ -1,0 +1,15 @@
+included:
+  - App
+  - Packages
+excluded:
+  - Packages/Core/Sources/CoreProtocol   # generated
+  - Vendor
+opt_in_rules:
+  - force_unwrapping
+  - implicitly_unwrapped_optional
+  - fatal_error_message
+  - private_over_fileprivate
+  - unowned_variable_capture
+line_length:
+  warning: 140
+  error: 200

@@ -1,0 +1,72 @@
+# Backend CI (stack/10-ci-cd). Every action is pinned to a full commit SHA resolved on
+# 2026-11-25 (tag in the trailing comment); Renovate's pinGitHubActionDigests keeps them current.
+name: backend-ci
+
+on:
+  pull_request:
+    paths: ["backend/**", "protocol/**", ".github/workflows/backend-ci.yml"]
+  push:
+    branches: [main]
+    paths: ["backend/**", "protocol/**"]
+
+permissions: {}
+
+concurrency:
+  group: backend-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@d8cbb8045d7f43706b9177cceb36c1f91a6644d5 # v7.1.0
+        with:
+          go-version-file: backend/go.mod
+          cache-dependency-path: backend/go.sum
+      - name: Build
+        run: go build ./...
+      - name: Unit tests (race detector)
+        run: go test -race -count=1 ./...
+      - name: golangci-lint (incl. depguard module boundaries)
+        run: go run github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.15.0 run ./...
+      - name: Architecture rules
+        run: go run github.com/fe3dback/go-arch-lint@latest check
+      - name: govulncheck
+        run: go run golang.org/x/vuln/cmd/govulncheck@latest ./...
+      - name: Schema invariants (Postgres 17)
+        run: make db-test
+
+  image:
+    if: github.event_name == 'push'
+    needs: test
+    runs-on: ubuntu-24.04-arm
+    permissions:
+      contents: read
+      id-token: write       # OIDC to AWS + Sigstore for attestations
+      attestations: write
+    environment: dev
+    strategy:
+      matrix:
+        cmd: [game, core]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          role-to-assume: ${{ vars.AWS_APPLY_ROLE_ARN }}
+          aws-region: eu-central-1
+      - name: Build ARM64 image
+        run: docker build --build-arg CMD=${{ matrix.cmd }} -f backend/Dockerfile -t "$ECR_REPO:${GITHUB_SHA}" .
+        env:
+          ECR_REPO: ${{ vars.ECR_REGISTRY }}/tirivia-${{ matrix.cmd }}
+      # Push + `actions/attest` (SLSA provenance) + deploy to dev are wired in Phase 0 once ECR exists.
+      # - uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2

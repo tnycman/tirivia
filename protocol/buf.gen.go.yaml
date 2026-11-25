@@ -1,0 +1,18 @@
+# Go-only generation for backend development (no network access needed).
+# The full multi-language template, used in CI, is buf.gen.yaml.
+version: v2
+clean: true
+managed:
+  enabled: true
+  override:
+    - file_option: go_package_prefix
+      value: github.com/tirivia/protocol/gen/go
+inputs:
+  - directory: proto
+plugins:
+  - local: protoc-gen-go
+    out: gen/go
+    opt: paths=source_relative
+  - local: protoc-gen-connect-go
+    out: gen/go
+    opt: paths=source_relative

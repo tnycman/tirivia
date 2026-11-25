@@ -1,0 +1,40 @@
+# Protocol CI: lint, breaking-change detection against main, generated code is up to date.
+name: protocol-ci
+
+on:
+  pull_request:
+    paths: ["protocol/**", ".github/workflows/protocol-ci.yml"]
+  push:
+    branches: [main]
+    paths: ["protocol/**"]
+
+permissions: {}
+
+jobs:
+  buf:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-go@d8cbb8045d7f43706b9177cceb36c1f91a6644d5 # v7.1.0
+        with:
+          go-version: "1.27.4"
+      - name: Install pinned toolchain (buf 1.75.0, protoc-gen-go, protoc-gen-connect-go)
+        run: sh protocol/scripts/install-tools.sh && echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+      - name: Lint
+        working-directory: protocol
+        run: buf lint && buf format -d --exit-code
+      - name: Breaking changes vs main
+        if: github.event_name == 'pull_request'
+        working-directory: protocol
+        run: buf breaking --against "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}.git#branch=main,subdir=protocol"
+      - name: Generated Go code is up to date
+        working-directory: protocol
+        run: buf generate --template buf.gen.go.yaml && git diff --exit-code -- gen/
+      - name: Cue size budget + vectors (Go reference)
+        working-directory: backend
+        run: go test ./internal/platform/cuesign/... ./internal/platform/shuffle/...
