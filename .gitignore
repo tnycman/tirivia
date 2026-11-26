@@ -47,3 +47,7 @@ local.properties
 Thumbs.db
 .idea/
 .vscode/
+
+# Claude Code: agent worktrees and personal settings
+.claude/worktrees/
+.claude/settings.local.json
