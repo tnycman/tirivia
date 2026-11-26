@@ -11,5 +11,6 @@ var (
 	ErrSendFailed          = errors.New("otp: all providers failed")
 	ErrExpired             = errors.New("otp: code expired or unknown")
 	ErrWrongCode           = errors.New("otp: wrong code")
+	ErrBinding             = errors.New("otp: DPoP key mismatch")
 	ErrTooManyAttempts     = errors.New("otp: too many attempts")
 )
