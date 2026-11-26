@@ -30,7 +30,7 @@ func main() {
 	sw := switches.NewMemory(switches.Snapshot{})
 
 	public := connect.NewServer()
-	gamev1connect.RegisterGameServiceHandler(public, gameapi.NewHandler(sw, nil))
+	gamev1connect.RegisterGameServiceHandler(public, gameapi.New(gameapi.Deps{Switches: sw}))
 	admin := connect.NewServer()
 	adminv1connect.RegisterSwitchServiceHandler(admin, studioapi.NewSwitchHandler(studiostore.NewMemStore(log), operatorFromBFF(), sw))
 

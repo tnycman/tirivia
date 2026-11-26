@@ -29,7 +29,7 @@ func codeOf(err error) connect.Code {
 func TestGetChatTokenFollowsBackendSwitch(t *testing.T) {
 	ctx := context.Background()
 	sw := switches.NewMemory(switches.Snapshot{})
-	h := NewHandler(sw, fakeMinter{})
+	h := New(Deps{Switches: sw, Chat: fakeMinter{}})
 	req := &gamev1.GetChatTokenRequest{ShowId: "show-1"}
 
 	// Default: chat off.
@@ -52,7 +52,7 @@ func TestGetChatTokenFollowsBackendSwitch(t *testing.T) {
 }
 
 func TestGetChatTokenValidates(t *testing.T) {
-	h := NewHandler(switches.NewMemory(switches.Snapshot{}), fakeMinter{})
+	h := New(Deps{Switches: switches.NewMemory(switches.Snapshot{}), Chat: fakeMinter{}})
 	if _, err := h.GetChatToken(context.Background(), &gamev1.GetChatTokenRequest{}); codeOf(err) != connect.CodeInvalidArgument {
 		t.Fatalf("want InvalidArgument, got %v", err)
 	}

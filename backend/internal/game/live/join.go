@@ -38,6 +38,24 @@ func (p *Players) Join(ctx context.Context, show, user string, questionOpened in
 	return participant(vals)
 }
 
+// Get returns the standing without joining; ErrNotJoined if absent.
+func (p *Players) Get(ctx context.Context, show, user string) (domain.Participant, error) {
+	cmd := p.c.B().Hmget().Key(livestate.PlayerKey(show, user)).Field("joined_at_q", "last_ok", "life_used").Build()
+	vals, err := p.c.Do(ctx, cmd).ToArray()
+	if err != nil {
+		return domain.Participant{}, err
+	}
+	strs := make([]string, 0, len(vals))
+	for _, v := range vals {
+		s, err := v.ToString()
+		if err != nil {
+			return domain.Participant{}, ErrNotJoined
+		}
+		strs = append(strs, s)
+	}
+	return participant(strs)
+}
+
 func participant(vals []string) (domain.Participant, error) {
 	if len(vals) != 3 {
 		return domain.Participant{}, ErrNotJoined

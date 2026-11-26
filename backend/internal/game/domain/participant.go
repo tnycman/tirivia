@@ -28,3 +28,29 @@ func (p Participant) CanUseExtraLife(q int) bool {
 
 // IsWinner reports an on-time player who passed all questions.
 func (p Participant) IsWinner() bool { return !p.PlaysAlong() && p.LastOK == QuestionsPerShow }
+
+// Status is a standing at one moment of the show.
+type Status int
+
+// Statuses.
+const (
+	StatusAlive Status = iota + 1
+	StatusEliminated
+	StatusPlayAlong
+)
+
+// StatusAt reports the standing during question q; revealed means the reveal of q has happened.
+// Before the reveal a right and a wrong answer to q must look the same, or the status leaks correctness.
+func (p Participant) StatusAt(q int, revealed bool) Status {
+	if p.PlaysAlong() {
+		return StatusPlayAlong
+	}
+	alive := p.LastOK == q
+	if !revealed {
+		alive = alive || p.LastOK == max(q-1, 0)
+	}
+	if alive {
+		return StatusAlive
+	}
+	return StatusEliminated
+}

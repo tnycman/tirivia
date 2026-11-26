@@ -114,6 +114,10 @@ message IntegritySignals {
   bool screenshot_taken = 4;
   bool overlay_detected = 5;
   bool accessibility_automation_detected = 6;
+  // AC-3: the app went to background (iOS .background, Android onStop) during the question window.
+  bool went_background = 7;
+  // AC-3: the longest single inactive gap in the window; over 1.5 s voids answers on Q10-12.
+  uint32 longest_inactive_ms = 8;
 }
 
 message SubmitAnswerRequest {

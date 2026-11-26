@@ -213,6 +213,8 @@ SCHEDULED → LOBBY → QUESTION_OPEN → QUESTION_CLOSED → REVEAL ─┬→ Q
 6. **Focus-loss rule (AC-3, settled).**
    - On Q10–12, focus loss voids the answer only on `.background` on iOS or `onStop` on Android, or on an `inactive` gap longer than 1.5 s.
    - Shorter `inactive` events, such as a pulled-down notification shade, are only risk signals.
+   - The app reports `went_background` and `longest_inactive_ms` in `IntegritySignals`. A voided answer is stored as no option, so the question counts as missed (`domain.FocusLossVoids`).
+   - Before the reveal, a right and a wrong answer show the same player status, so `GetShowState` never leaks correctness (tested).
    - The rule is explained before every show.
 7. **Per-player shuffle.**
    - `k = HMAC-SHA256(key = shuffle_seed, msg = question_id)`.

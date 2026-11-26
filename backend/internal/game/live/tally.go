@@ -96,3 +96,6 @@ func Sum(ctx context.Context, c valkey.Client, show string, q int) (map[string]i
 	}
 	return out, nil
 }
+
+// LifeOption is the tally field counting extra lives used; players remaining = correct + lives (SPEC §6.3).
+const LifeOption = "_life"

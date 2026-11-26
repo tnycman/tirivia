@@ -52,7 +52,7 @@ store-test:
 	docker run -d --rm --name tirivia-kv-store -p 56379:6379 $(VALKEY_IMAGE)
 	until docker exec tirivia-pg-store pg_isready -U postgres -d tirivia; do sleep 1; done
 	$(MAKE) migrate DB_URL="$(STORE_DB_URL)"
-	TEST_DATABASE_URL="$(STORE_DB_URL)" TEST_VALKEY_URL="$(STORE_KV_URL)" go test -race -count=1 ./internal/auth/store/... ./internal/game/live/...; \
+	TEST_DATABASE_URL="$(STORE_DB_URL)" TEST_VALKEY_URL="$(STORE_KV_URL)" go test -race -count=1 ./internal/auth/store/... ./internal/game/...; \
 	  status=$?; docker stop tirivia-pg-store tirivia-kv-store; exit $status
 
 ci: build test lint arch vuln vectors sqlc-check store-test

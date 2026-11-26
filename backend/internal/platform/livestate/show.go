@@ -18,7 +18,9 @@ type Show struct {
 	QuestionIndex int
 	QuestionID    string
 	TCue          time.Time
+	CloseAt       time.Time
 	Deadline      time.Time
+	OpenCue       []byte
 	CorrectOption string
 	CueSeq        uint64
 }
@@ -36,7 +38,9 @@ func (s *Shows) Write(ctx context.Context, show string, st Show) error {
 		FieldValue("q", strconv.Itoa(st.QuestionIndex)).
 		FieldValue("qid", st.QuestionID).
 		FieldValue("t_cue", strconv.FormatInt(st.TCue.UnixMilli(), 10)).
+		FieldValue("close_at", strconv.FormatInt(st.CloseAt.UnixMilli(), 10)).
 		FieldValue("deadline", strconv.FormatInt(st.Deadline.UnixMilli(), 10)).
+		FieldValue("open", string(st.OpenCue)).
 		FieldValue("correct", st.CorrectOption).
 		FieldValue("seq", strconv.FormatUint(st.CueSeq, 10)).Build()
 	return s.c.Do(ctx, cmd).Error()
@@ -60,9 +64,11 @@ func parseShow(m map[string]string) (Show, error) {
 	tCue, err3 := strconv.ParseInt(m["t_cue"], 10, 64)
 	deadline, err4 := strconv.ParseInt(m["deadline"], 10, 64)
 	seq, err5 := strconv.ParseUint(m["seq"], 10, 64)
-	if err := errors.Join(err1, err2, err3, err4, err5); err != nil {
+	closeAt, err6 := strconv.ParseInt(m["close_at"], 10, 64)
+	if err := errors.Join(err1, err2, err3, err4, err5, err6); err != nil {
 		return Show{}, err
 	}
 	return Show{Phase: int32(phase), QuestionIndex: q, QuestionID: m["qid"], TCue: time.UnixMilli(tCue),
-		Deadline: time.UnixMilli(deadline), CorrectOption: m["correct"], CueSeq: seq}, nil
+		CloseAt: time.UnixMilli(closeAt), Deadline: time.UnixMilli(deadline), OpenCue: []byte(m["open"]),
+		CorrectOption: m["correct"], CueSeq: seq}, nil
 }
