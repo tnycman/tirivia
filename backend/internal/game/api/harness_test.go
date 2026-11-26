@@ -16,6 +16,7 @@ import (
 	"connectrpc.com/connect/v2/connecthttp"
 	"github.com/valkey-io/valkey-go"
 
+	gamev1 "github.com/tirivia/protocol/gen/go/tirivia/game/v1"
 	"github.com/tirivia/protocol/gen/go/tirivia/game/v1/gamev1connect"
 
 	"github.com/tirivia/backend/internal/contracts"
@@ -25,7 +26,10 @@ import (
 	"github.com/tirivia/backend/internal/platform/switches"
 )
 
-const userHeader = "X-Test-User"
+const (
+	userHeader   = "X-Test-User"
+	testCueKeyID = 7
+)
 
 type headerAuthn struct{}
 
@@ -99,7 +103,8 @@ func newGame(t *testing.T) game {
 	srv := connect.NewServer()
 	gamev1connect.RegisterGameServiceHandler(srv, New(Deps{PublicBaseURL: ts.URL, Switches: switches.NewMemory(switches.Snapshot{}),
 		Authn: headerAuthn{}, Shows: g.shows, Players: g.players, Answers: live.NewAnswers(c), Lives: live.NewLives(c),
-		Inventory: g.inv}))
+		Inventory: g.inv, ReactionBatchInterval: 5 * time.Second,
+		CueKeys: []*gamev1.CueKey{{KeyId: testCueKeyID, Ed25519PublicKey: make([]byte, 32)}}}))
 	connecthttp.Mount(mux, srv)
 	g.client = gamev1connect.NewGameServiceClient(connect.NewClient(connecthttp.NewTransport(ts.Client(), ts.URL)))
 	return g

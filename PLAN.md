@@ -76,6 +76,8 @@ Each item below either takes calendar time outside our control or has a default 
 | IVS ADVANCED_HD channel (dev), looping test stream (ffmpeg), recording configuration | VID INF |
 | `studio`: cue builder, Ed25519 signing, 900 B size guard, ≤ 4 TPS token bucket, retry on 404/429, `T_cue` anchoring | BE |
 | `game`: state machine, `JoinShow`, `SubmitAnswer` (natural-key `SET NX`, server deadline, correctness on intake), sharded tallies counted inside the intake script (TS-16), `last_ok` elimination, `GetShowState` | BE |
+| `JoinShow` slice 2: `playback_url` and `reaction_set` from the studio's per-show settings (needs Phase 2b show scheduling); `reaction_max_per_batch` stays unset and OPEN until the reactions design (TS-18) | BE |
+| `JoinShow` slice 3: prize eligibility at join (attestation ticket, AC-5; one prize account per device, AC-6; country, LG-1) recorded in `participations` | BE |
 | Valkey 9.1 cluster (dev), key design per SPEC §6.7 | BE INF |
 | Question bank v1: CRUD, content limits (question ≤ 240 B, option ≤ 64 B UTF-8; `cuesign.ValidateQuestionContent`), **two-person approval**, KMS vault | WEB BE |
 | Live screen on both apps: IVS player, cue parsing and verification, seq handling, timer from cue render, per-player shuffle, answer bars, resync after a gap | IOS AND |

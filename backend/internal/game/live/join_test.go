@@ -1,6 +1,7 @@
 package live
 
 import (
+	"bytes"
 	"context"
 	"testing"
 	"time"
@@ -26,6 +27,23 @@ func TestJoinKeepsFirstJoin(t *testing.T) {
 	ttl, err := c.Do(ctx, c.B().Pttl().Key(livestate.PlayerKey(show, onTime)).Build()).AsInt64()
 	if err != nil || ttl <= 0 || ttl > time.Hour.Milliseconds() {
 		t.Fatalf("player TTL: %d %v", ttl, err)
+	}
+}
+
+// TestJoinSeedIsStable: the shuffle seed is 32 random bytes made at the first join and kept on rejoin.
+func TestJoinSeedIsStable(t *testing.T) {
+	c := client(t)
+	players := NewPlayers(c, time.Hour)
+	ctx, show, a, b := context.Background(), id(t), id(t), id(t)
+	_, first, err := players.JoinSeeded(ctx, show, a, 0)
+	if err != nil || len(first) != SeedBytes {
+		t.Fatalf("first join: %d bytes, %v", len(first), err)
+	}
+	if _, again, err := players.JoinSeeded(ctx, show, a, 4); err != nil || !bytes.Equal(again, first) {
+		t.Fatalf("rejoin changed the seed: %x -> %x (%v)", first, again, err)
+	}
+	if _, other, _ := players.JoinSeeded(ctx, show, b, 0); bytes.Equal(other, first) {
+		t.Fatal("two players got the same seed")
 	}
 }
 

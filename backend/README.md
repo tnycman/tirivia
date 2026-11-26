@@ -62,6 +62,7 @@ The game server is fail-closed. Without `VALKEY_URL` it serves only the feature 
 | `PUBLIC_BASE_URL` | External http(s) origin that clients call (no path, query or userinfo); DPoP `htu` must name it |
 | `TOKEN_ISSUER` | `iss` of access tokens: the same origin `core` runs with as its `PUBLIC_BASE_URL` (both are normalized without a trailing slash) |
 | `ACCESS_TOKEN_KEYS` | `kid=base64url(Ed25519 public key)`, comma-separated for `kid` overlap during rotation |
+| `CUE_PUBLIC_KEYS` | `keyId=base64url(Ed25519 public key)` for the cue signing keys (current + next), returned to apps by `JoinShow`; `keyId` is a uint32 as carried in signed cues |
 | `PLAYER_STATE_TTL` | How long live player state outlives the show (Go duration, e.g. `6h`); no published value, so it is set per environment |
 
 Tallies are written inside the answer-intake script, so nothing is held in memory or flushed (TS-16). Extra lives stay off until the referral inventory lands (UF-5).

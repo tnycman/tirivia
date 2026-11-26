@@ -217,6 +217,7 @@ SCHEDULED → LOBBY → QUESTION_OPEN → QUESTION_CLOSED → REVEAL ─┬→ Q
    - Before the reveal, a right and a wrong answer show the same player status, so `GetShowState` never leaks correctness (tested).
    - The rule is explained before every show.
 7. **Per-player shuffle.**
+   - `shuffle_seed` is 32 random bytes from a cryptographic generator, created at the player's first join and returned unchanged on every rejoin. RFC 2104 §2 recommends an HMAC key of at least L bytes (the hash output, 32 for SHA-256 per RFC 6234 §6.2), and §3 requires random keys.
    - `k = HMAC-SHA256(key = shuffle_seed, msg = question_id)`.
    - For `i` from 2 down to 1: `j = k[2 - i] mod (i + 1)`; swap `options[i]` and `options[j]`.
    - The client always submits an `option_id`, never a position.
