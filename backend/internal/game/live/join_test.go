@@ -41,14 +41,14 @@ func TestFullShowWinner(t *testing.T) {
 	}
 	for q := 1; q <= 12; q++ {
 		st := openQuestion(q, now)
-		if _, err := a.Submit(ctx, show, winner, st, st.QuestionID, "right", now); err != nil {
+		if _, err := a.Submit(ctx, show, winner, st, st.QuestionID, "right", false, now); err != nil {
 			t.Fatalf("winner Q%d: %v", q, err)
 		}
 		opt := "right"
 		if q == 7 {
 			opt = "wrong"
 		}
-		_, _ = a.Submit(ctx, show, loser, st, st.QuestionID, opt, now)
+		_, _ = a.Submit(ctx, show, loser, st, st.QuestionID, opt, false, now)
 	}
 	w, _ := players.Join(ctx, show, winner, 0)
 	l, _ := players.Join(ctx, show, loser, 0)

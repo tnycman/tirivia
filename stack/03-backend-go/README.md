@@ -65,7 +65,7 @@ Go, built as a **modular monolith in one Go module** with two binaries (Master P
 - Every operation is a context-aware function with a deadline.
 
 ## Changes vs Master Plan
-- The tally design uses per-task pre-aggregation plus 64 shards spread across slots.
+- Tallies are incremented inside the atomic answer-intake script, in 64 buckets shared with the player keys, and checked against a recount after each reveal (TS-16, [research 09](../../docs/research/09-exact-tallies.md)).
 - The `studio` module also owns **feature switches**, which include the chat switch.
 
 ## Code

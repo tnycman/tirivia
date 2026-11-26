@@ -9,7 +9,6 @@ import (
 	"os/signal"
 	"sync"
 	"syscall"
-	"time"
 
 	"connectrpc.com/connect/v2"
 	"connectrpc.com/connect/v2/connecthttp"
@@ -47,13 +46,6 @@ func main() {
 	adminv1connect.RegisterSwitchServiceHandler(admin, studioapi.NewSwitchHandler(studiostore.NewMemStore(log), operatorFromBFF(), sw))
 
 	var wg sync.WaitGroup
-	var killAt time.Time
-	wg.Go(func() { <-ctx.Done(); killAt = time.Now().Add(ecsStopTimeout) })
-	if deps.Tally != nil {
-		wg.Go(func() {
-			deps.Tally.Run(ctx, tallyFlushEvery, func(err error) { log.Warn("tally flush failed", "err", err) })
-		})
-	}
 	for _, l := range []struct {
 		name, addr string
 		srv        *connect.Server
@@ -64,9 +56,6 @@ func main() {
 		wg.Go(func() { serve(ctx, stop, log.With("listener", l.name), l.addr, l.srv) })
 	}
 	wg.Wait()
-	if deps.Tally != nil {
-		finalFlush(deps.Tally, killAt, log)
-	}
 }
 
 func serve(ctx context.Context, stop context.CancelFunc, log *slog.Logger, addr string, srv *connect.Server) {

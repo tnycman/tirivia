@@ -7,8 +7,6 @@ import (
 	"strings"
 	"testing"
 	"time"
-
-	"github.com/tirivia/backend/internal/platform/httpserver"
 )
 
 func env(m map[string]string) func(string) string { return func(k string) string { return m[k] } }
@@ -65,12 +63,6 @@ func TestParseKeys(t *testing.T) {
 		if _, err := parseKeys(bad); err == nil {
 			t.Errorf("%s: accepted %q", name, bad)
 		}
-	}
-}
-
-func TestDrainLeavesTimeForFinalFlush(t *testing.T) {
-	if httpserver.DrainTimeout >= ecsStopTimeout {
-		t.Fatalf("drain %v leaves no time before SIGKILL at %v", httpserver.DrainTimeout, ecsStopTimeout)
 	}
 }
 

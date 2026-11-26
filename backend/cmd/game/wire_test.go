@@ -49,11 +49,11 @@ func TestWiredAnswerIsTallied(t *testing.T) {
 	if err != nil || res.GetResult() != gamev1.AnswerResult_ANSWER_RESULT_ACCEPTED {
 		t.Fatalf("answer: %v %v", res.GetResult(), err)
 	}
-	if err := w.deps.Tally.Flush(bg); err != nil {
-		t.Fatal(err)
-	}
 	if got, err := live.Sum(bg, w.kv, show, 1); err != nil || got["right"] != 1 {
 		t.Fatalf("tally = %v, %v; want right=1", got, err)
+	}
+	if err := live.Verify(bg, w.kv, show, 1); err != nil {
+		t.Fatal(err)
 	}
 }
 

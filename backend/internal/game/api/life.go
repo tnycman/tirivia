@@ -15,7 +15,8 @@ import (
 
 var errNoLife = connect.NewError(connect.CodeFailedPrecondition, "no extra life can be used now")
 
-// UseExtraLife applies UF-4 during the reveal; the rule is spent first, then the inventory, refunding on failure.
+// UseExtraLife applies UF-4 during the reveal: the rule is spent first, then the idempotent inventory debit.
+// Only a definite refusal is refunded; an ambiguous error is left for the client's retry to resolve.
 func (h *Handler) UseExtraLife(ctx context.Context, req *gamev1.UseExtraLifeRequest) (*gamev1.UseExtraLifeResponse, error) {
 	p, err := h.caller(ctx, gamev1connect.GameServiceUseExtraLifeProcedure)
 	if err != nil {
@@ -33,16 +34,18 @@ func (h *Handler) UseExtraLife(ctx context.Context, req *gamev1.UseExtraLifeRequ
 		return nil, connect.NewError(connect.CodeUnavailable, "retry")
 	}
 	ok, err := h.d.Inventory.Consume(ctx, p.UserID, req.GetShowId())
-	if err != nil || !ok {
+	if err != nil {
+		return nil, connect.NewError(connect.CodeUnavailable, "retry")
+	}
+	if !ok {
 		if rerr := h.d.Lives.Refund(ctx, req.GetShowId(), p.UserID, st.QuestionIndex); rerr != nil {
 			return nil, connect.NewError(connect.CodeUnavailable, "retry")
 		}
 		return nil, errNoLife
 	}
-	h.d.Tally.Add(req.GetShowId(), st.QuestionIndex, live.LifeOption)
 	ps, err := h.playerState(ctx, req.GetShowId(), p.UserID, st)
 	if err != nil {
-		return nil, connect.NewError(connect.CodeUnavailable, "retry")
+		return &gamev1.UseExtraLifeResponse{}, nil //nolint:nilerr // the life is spent; GetShowState resyncs the state
 	}
 	return &gamev1.UseExtraLifeResponse{PlayerState: ps}, nil
 }

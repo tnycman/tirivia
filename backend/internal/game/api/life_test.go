@@ -41,8 +41,8 @@ func TestExtraLife(t *testing.T) {
 	if g.inv.n[saved] != 0 {
 		t.Fatalf("inventory not consumed: %d", g.inv.n[saved])
 	}
-	if _, err := g.useLife(saved, "q1"); connect.CodeOf(err) != connect.CodeFailedPrecondition {
-		t.Fatalf("second life: %v", err)
+	if _, err := g.useLife(saved, "q1"); err != nil || g.inv.n[saved] != 0 {
+		t.Fatalf("a repeat on the same question is a retry, not a second debit: %v, inventory %d", err, g.inv.n[saved])
 	}
 	g.inv.failing = true
 	if _, err := g.useLife(unlucky, "q1"); connect.CodeOf(err) != connect.CodeFailedPrecondition {
@@ -51,10 +51,42 @@ func TestExtraLife(t *testing.T) {
 	if st := g.status(t, unlucky).GetPlayerState(); st.GetStatus() != gamev1.PlayerStatus_PLAYER_STATUS_ELIMINATED || st.GetExtraLifeUsedThisShow() {
 		t.Fatalf("refund must restore the player: %v", st)
 	}
-	if err := g.tally.Flush(ctx); err != nil {
-		t.Fatal(err)
-	}
 	if sum, _ := live.Sum(ctx, g.kv, g.show, 1); sum[live.LifeOption] != 1 {
-		t.Fatalf("lives used on Q1: %v", sum)
+		t.Fatalf("lives used on Q1 (the refund must cancel its count): %v", sum)
+	}
+}
+
+// TestExtraLifeAmbiguousDebit: a lost inventory reply is retried, never refunded, and nothing is charged or counted twice.
+func TestExtraLifeAmbiguousDebit(t *testing.T) {
+	g := newGame(t)
+	ctx := context.Background()
+	retried, unread := rnd(t), rnd(t)
+	for _, u := range []string{retried, unread} {
+		if _, err := g.players.Join(ctx, g.show, u, 0); err != nil {
+			t.Fatal(err)
+		}
+		g.inv.n[u] = 1
+	}
+	g.set(t, cuev1.Phase_PHASE_QUESTION_OPEN, 1, 10*time.Second)
+	g.answer(t, retried, 1, "wrong", nil)
+	g.answer(t, unread, 1, "wrong", nil)
+	g.set(t, cuev1.Phase_PHASE_REVEAL, 1, 0)
+	g.inv.lostReply = true
+	if _, err := g.useLife(retried, "q1"); connect.CodeOf(err) != connect.CodeUnavailable {
+		t.Fatalf("lost reply: %v, want Unavailable", err)
+	}
+	res, err := g.useLife(retried, "q1")
+	if err != nil || res.GetPlayerState().GetStatus() != gamev1.PlayerStatus_PLAYER_STATUS_ALIVE {
+		t.Fatalf("retry after lost reply: %v %v", res, err)
+	}
+	if g.inv.n[retried] != 0 {
+		t.Fatalf("debited twice or refunded: %d", g.inv.n[retried])
+	}
+	g.inv.readErr = true
+	if _, err := g.useLife(unread, "q1"); err != nil {
+		t.Fatalf("a spent life must not turn into an error when the state read fails: %v", err)
+	}
+	if sum, _ := live.Sum(ctx, g.kv, g.show, 1); sum[live.LifeOption] != 2 {
+		t.Fatalf("each life counted once: %v", sum)
 	}
 }

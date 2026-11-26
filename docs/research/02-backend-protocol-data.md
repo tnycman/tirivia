@@ -72,8 +72,8 @@
 
 **Valkey counters**
 14. Split hot keys across slots. ([ElastiCache perf pillar](https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/PerformanceEfficiencyPillar.html))
-15. Shard each tally as `tally:{s<show>:q<n>:<shard>}`, shard 0..63, with a **different hash tag per shard**, and HINCRBY the option field. Readers sum the shards.
-16. **Pre-aggregate in each `game` task**: in-memory counters flushed every 100–250 ms with pipelined HINCRBY.
+15. Shard each tally as `tally:{s<show>:q<n>:<shard>}`, shard 0..63, with a **different hash tag per shard**, and HINCRBY the option field. Readers sum the shards. *(No source was cited for the shard count. Superseded 2026-11-26 by TS-16: buckets shared with player keys; see [research 09](09-exact-tallies.md).)*
+16. **Pre-aggregate in each `game` task**: in-memory counters flushed every 100–250 ms with pipelined HINCRBY. *(No source was cited. Superseded 2026-11-26 by TS-16: it loses counts on a crash and doubles them on a retry; see [research 09](09-exact-tallies.md).)*
 
 **Kinesis**
 17. Use a high-cardinality partition key (user_id), never show_id. Use PutRecords batches and retry the records that failed.

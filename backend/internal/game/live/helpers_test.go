@@ -53,6 +53,8 @@ func setPlayer(t *testing.T, c valkey.Client, show, user string, p domain.Partic
 	}
 }
 
+func tallyKeyFor(show string, q int) string { return livestate.TallyKey(show, q, 0) }
+
 func openQuestion(q int, now time.Time) livestate.Show {
 	return livestate.Show{Phase: 3, QuestionIndex: q, QuestionID: "q" + strconv.Itoa(q), TCue: now,
 		Deadline: now.Add(10 * time.Second), CorrectOption: "right", CueSeq: 1}

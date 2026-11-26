@@ -22,7 +22,7 @@ type ChatTokenMinter interface {
 	MintChatToken(ctx context.Context, showID string) (token, endpoint string, err error)
 }
 
-// LifeInventory holds extra lives earned by referral (UF-5).
+// LifeInventory holds extra lives earned by referral (UF-5); Consume must be idempotent per (user, show), so a retry never debits twice.
 type LifeInventory interface {
 	Available(ctx context.Context, user string) (int, error)
 	Consume(ctx context.Context, user, show string) (bool, error)
@@ -38,7 +38,6 @@ type Deps struct {
 	Players       *live.Players
 	Answers       *live.Answers
 	Lives         *live.Lives
-	Tally         *live.Tally
 	Inventory     LifeInventory
 	Now           func() time.Time
 }

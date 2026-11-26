@@ -86,11 +86,11 @@ func TestAnswerFlow(t *testing.T) {
 	if st := g.status(t, late).GetPlayerState().GetStatus(); st != gamev1.PlayerStatus_PLAYER_STATUS_PLAY_ALONG {
 		t.Fatalf("late joiner: %v", st)
 	}
-	if err := g.tally.Flush(ctx); err != nil {
-		t.Fatal(err)
-	}
 	if sum, _ := live.Sum(ctx, g.kv, g.show, 1); sum["right"] != 1 || len(sum) != 1 {
 		t.Fatalf("tally must count only the on-time answer: %v", sum)
+	}
+	if err := live.Verify(ctx, g.kv, g.show, 1); err != nil {
+		t.Fatal(err)
 	}
 	g.set(t, cuev1.Phase_PHASE_QUESTION_OPEN, 2, -2*time.Second)
 	if got := g.answer(t, onTime, 2, "right", nil); got != gamev1.AnswerResult_ANSWER_RESULT_LATE {

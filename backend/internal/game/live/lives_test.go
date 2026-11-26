@@ -44,14 +44,27 @@ func TestLifeRefund(t *testing.T) {
 	lives, players := NewLives(c), NewPlayers(c, time.Hour)
 	ctx, show, user := context.Background(), id(t), id(t)
 	setPlayer(t, c, show, user, domain.Participant{LastOK: 4})
-	if err := lives.Use(ctx, show, user, 5); err != nil {
-		t.Fatal(err)
+	for range 2 {
+		if err := lives.Use(ctx, show, user, 5); err != nil {
+			t.Fatalf("use or retry on the same question: %v", err)
+		}
 	}
-	if err := lives.Refund(ctx, show, user, 5); err != nil {
-		t.Fatal(err)
+	if got, _ := Sum(ctx, c, show, 5); got[LifeOption] != 1 {
+		t.Fatalf("a retried life counted twice: %v", got)
+	}
+	if err := lives.Use(ctx, show, user, 6); !errors.Is(err, ErrLifeNotAllowed) {
+		t.Fatalf("second life on another question: %v", err)
+	}
+	for range 2 {
+		if err := lives.Refund(ctx, show, user, 5); err != nil {
+			t.Fatal(err)
+		}
 	}
 	if got, _ := players.Join(ctx, show, user, 0); got.LastOK != 4 || got.LifeUsed {
 		t.Fatalf("after refund: %+v", got)
+	}
+	if got, _ := Sum(ctx, c, show, 5); got[LifeOption] != 0 {
+		t.Fatalf("refund must remove the count exactly once: %v", got)
 	}
 	if err := lives.Use(ctx, id(t), id(t), 5); !errors.Is(err, ErrNotJoined) {
 		t.Fatalf("not joined: %v", err)
