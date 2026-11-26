@@ -332,7 +332,7 @@ For answers, the natural key (show, question, user) is the final guard against d
 | `rl:<user>:<bucket>` | string | Per-user rate limits for answers, reactions and OTP |
 | `switch:*` | string | Feature-switch cache (TTL 5 s; the source of truth is Postgres) |
 
-Asynchronous replication can lose acknowledged writes on failover ([cluster spec](https://valkey.io/topics/cluster-spec/)); ElastiCache synchronous durability is being evaluated in the 600k load test (TS-17). Valkey holds state that can be rebuilt. If a node is lost, the state is recovered from the last cue plus the Kinesis/answers stream, which is acceptable because Postgres persists results after every round.
+Live-state scripts validate key types before their first write, because Valkey does not roll a script back. A change to the live-state key format is deployed only between shows: readers do not fall back to an older format. Asynchronous replication can lose acknowledged writes on failover ([cluster spec](https://valkey.io/topics/cluster-spec/)); ElastiCache synchronous durability is being evaluated in the 600k load test (TS-17). Valkey holds state that can be rebuilt. If a node is lost, the state is recovered from the last cue plus the Kinesis/answers stream, which is acceptable because Postgres persists results after every round.
 
 ### 6.8 Event stream
 

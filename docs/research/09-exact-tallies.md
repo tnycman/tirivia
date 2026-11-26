@@ -85,6 +85,15 @@ No first-party write-up was found for HQ Trivia, Twitch, Kahoot, Facebook Live, 
 
 The AWS Performance Efficiency pillar marks a baseline load test as Required (PE1, [pillar](https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/PerformanceEfficiencyPillar.html)).
 
+## Measured locally (2026-11-26)
+
+| What | Result | Setup |
+|---|---|---|
+| `live.Recount` of 600k counted answers (TS-15 load target) | **2.56 s** per run (5 runs) | `BenchmarkRecount`; one Valkey 9.1.4 node in Docker Desktop on an Intel Core Ultra 9 185H laptop (22 vCPU), 64 buckets scanned in parallel, default HSCAN `COUNT` |
+| Keys of one bucket share a slot | player, tally and counted keys of a bucket all hash to slot 10130 | `CLUSTER KEYSLOT` on a cluster-enabled Valkey 9.1 node |
+
+A local single node is not ElastiCache: re-measure on the chosen node type in the load test before setting any `COUNT` or putting the recount on the reveal's critical path.
+
 ## Still UNVERIFIED
 
 - Internal designs of HQ Trivia, Twitch, Kahoot, Facebook Live, X and Netflix voting.

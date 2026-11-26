@@ -82,11 +82,31 @@ func TestExtraLifeAmbiguousDebit(t *testing.T) {
 	if g.inv.n[retried] != 0 {
 		t.Fatalf("debited twice or refunded: %d", g.inv.n[retried])
 	}
+	late := rnd(t)
+	if _, err := g.players.Join(ctx, g.show, late, 0); err != nil {
+		t.Fatal(err)
+	}
+	g.inv.n[late] = 1
+	g.set(t, cuev1.Phase_PHASE_QUESTION_OPEN, 1, 10*time.Second)
+	g.answer(t, late, 1, "wrong", nil)
+	g.set(t, cuev1.Phase_PHASE_REVEAL, 1, 0)
+	g.inv.lostReply = true
+	if _, err := g.useLife(late, "q1"); connect.CodeOf(err) != connect.CodeUnavailable {
+		t.Fatalf("lost reply: %v", err)
+	}
+	g.set(t, cuev1.Phase_PHASE_QUESTION_OPEN, 2, 10*time.Second)
+	if _, err := g.useLife(late, "q1"); err != nil {
+		t.Fatalf("a retry after the show moved on must still settle the debit: %v", err)
+	}
+	if _, err := g.useLife(late, "q2"); connect.CodeOf(err) != connect.CodeFailedPrecondition {
+		t.Fatalf("a request for another question is not a retry: %v", err)
+	}
+	g.set(t, cuev1.Phase_PHASE_REVEAL, 1, 0)
 	g.inv.readErr = true
 	if _, err := g.useLife(unread, "q1"); err != nil {
 		t.Fatalf("a spent life must not turn into an error when the state read fails: %v", err)
 	}
-	if sum, _ := live.Sum(ctx, g.kv, g.show, 1); sum[live.LifeOption] != 2 {
+	if sum, _ := live.Sum(ctx, g.kv, g.show, 1); sum[live.LifeOption] != 3 {
 		t.Fatalf("each life counted once: %v", sum)
 	}
 }

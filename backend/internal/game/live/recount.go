@@ -2,8 +2,10 @@ package live
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"maps"
+	"sync"
 
 	"github.com/valkey-io/valkey-go"
 
@@ -11,13 +13,20 @@ import (
 )
 
 // Recount tallies the stored counted answers with cursored HSCAN, so no single command blocks the server; run it after the window closes.
+// Buckets are scanned in parallel because each sits in its own slot.
 func Recount(ctx context.Context, c valkey.Client, show string, q int) (map[string]int64, error) {
+	buckets := make([]map[string]string, livestate.TallyShards)
+	errs := make([]error, livestate.TallyShards)
+	var wg sync.WaitGroup
+	for b := range buckets {
+		wg.Go(func() { buckets[b], errs[b] = scanBucket(ctx, c, livestate.CountedKey(show, q, b)) })
+	}
+	wg.Wait()
+	if err := errors.Join(errs...); err != nil {
+		return nil, err
+	}
 	out := map[string]int64{}
-	for b := range livestate.TallyShards {
-		answers, err := scanBucket(ctx, c, livestate.CountedKey(show, q, b))
-		if err != nil {
-			return nil, err
-		}
+	for _, answers := range buckets {
 		for _, opt := range answers {
 			out[opt]++
 		}
