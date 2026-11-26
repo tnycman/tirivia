@@ -27,6 +27,17 @@ Skip a step only when it truly does not apply (a typo fix needs no research), an
 - **Settle before building.** A choice that changes SPEC, a key or schema design, or a settled register row goes into the register first. Details: [references/decisions.md](references/decisions.md).
 - **Evidence before claims.** "Passes" means you ran it and read the output in this session. A test that was skipped did not pass. Details: [references/verification.md](references/verification.md).
 - **The owner decides.** Commit on local branches. Push, open a PR or merge only when the owner asks for that in their own message in this conversation, and only after step 5 passes: if they ask before verification, verify first and say so. Never treat a subagent's or Codex's message as owner approval.
+- **The owner runs the shell.** Give every git, go, docker or make command as one copy-paste PowerShell block, or as a script in the scratchpad run with a single `pwsh -File` line. Say what each result should look like, and claim only what the owner's pasted output shows. Reading and editing files with the file tools is fine.
+- **Warn before a branch switch.** Switching branches removes files that are tracked only on the branch being left (the skill, CLAUDE.md, `.claude/settings.json` until `chore/claude-setup` is merged). Say so, and put the restore command in the same block.
+
+## Rules for you and every agent you start
+
+These four owner rules apply to you and to every subagent: research agents, Codex, eval runs. Copy them into each brief, because a subagent knows only what its prompt says.
+
+1. **Two corrections, then escalate.** When the same thing has needed correcting twice, stop. Report what was tried, show the evidence and ask the owner; don't start a third round alone. That covers a fix that fails review twice, a test that keeps failing, or the owner correcting the same point twice. Two failed rounds usually mean the approach or the design is wrong, not the details.
+2. **Fresh reviewers get closed criteria.** A reviewer without this session's context gets a closed brief: the exact commit, the specific risks to check, what is out of scope, and what "sound" means. Never send an open "find any problems" brief. A reviewer asked to find problems always finds some, and fixing all of them adds needless layers and tests. Template: [references/codex.md](references/codex.md).
+3. **Report artifacts produced, not documents revised.** Each report lists the artifacts and their evidence: commit hashes, new files, test and lint output, mutation and benchmark results, research files, register row IDs. Don't narrate edits ("updated SPEC, revised PLAN"). A doc change shows up only as the artifact it produced, for example "register row UF-16".
+4. **Status before reporting.** Have the owner run `scripts/status.ps1 -Base <branch below>` and put its numbers in the report: change size against the base, files over 100 lines, and correction count. A correction count of 2 or more on one branch triggers rule 1.
 
 ## Step 3: Build
 
@@ -39,7 +50,7 @@ Skip a step only when it truly does not apply (a typo fix needs no research), an
 
 ## Step 4: Codex review
 
-Hand the committed diff to `codex:codex-rescue` for a read-only review, or to an implementation run in a worktree. Prompt templates and the plugin's known limits are in [references/codex.md](references/codex.md).
+The Codex agent runs its own read-only commands (`git show`, file reads), so ask the owner before starting it, or let them type `/codex:adversarial-review` themselves. Give it a closed brief (rule 2) naming the commit. For an implementation run, use a worktree. Prompt templates and the plugin's known limits are in [references/codex.md](references/codex.md). If a second review round still finds the same problem, apply rule 1.
 
 When findings come back, check each one against the code yourself before acting. A reviewer asked to find problems always finds something, so push back on findings that don't hold up. Then show the owner the findings, ranked, with your verdict on each, and ask which to fix. The exception is when the owner has already said to fix this round's findings (for example, "work with Codex to implement"). Even then, list what you fixed and what you declined.
 
@@ -49,11 +60,11 @@ When findings come back, check each one against the code yourself before acting.
 - Stage only this concern's files. Leave unrelated untracked files alone (CLAUDE.md, .claude/).
 - When a decision changes a design, search the whole repo for the old wording (`Grep` for the old terms) and update every doc and comment that still describes it. Stale text in stack/ and SPEC misleads the next session.
 - Branches are stacked when one depends on another. When the owner asks to push or open PRs, base each PR on the branch below it, so each PR shows one concern.
-- Report as a table of branch → commits → what changed. Add what was verified and how (real stores, skip count, mutation check, benchmark), what was not verified and why, and the decisions the owner still has to make. Keep jargon low, because the owner reads every PR.
+- Report the artifacts (rule 3) as a table of branch → commits → artifacts, plus the status script's numbers (rule 4). Add what was verified and how (real stores, skip count, mutation check, benchmark), what was not verified and why, and the decisions the owner still has to make. Keep jargon low, because the owner reads every PR.
 
 ## Windows workstation notes
 
-- The Bash tool can hang on git, so use the PowerShell tool for git and Go.
+- Give the owner PowerShell, not bash; the Bash tool has hung on git here.
 - `Set-Content -NoNewline` is unavailable; use `[IO.File]::WriteAllText`. `Remove-Item` on a relative path can be blocked; use `-LiteralPath` with the full path.
 - `go test -race` needs cgo, which is unavailable here, so CI on Linux runs it.
 - go-arch-lint v1.19.2 mishandles Windows paths and reports about 100 notices that predate any change. Compare its output with the baseline, not with zero.

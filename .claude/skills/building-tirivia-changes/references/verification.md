@@ -1,5 +1,7 @@
 # Verification (step 5)
 
+The owner runs every command below. Hand them over as one block, or as a scratchpad script with a single `pwsh -File` line, ideally printing PASS or FAIL per check. Base claims only on the output they paste back.
+
 A claim needs the command, its output, and the number of skipped tests. In this repo the store and live-state tests skip silently when `TEST_DATABASE_URL` and `TEST_VALKEY_URL` are unset, and that is how untested Lua once looked green.
 
 ## Real stores
