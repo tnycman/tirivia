@@ -7,6 +7,8 @@ import (
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/tirivia/backend/internal/platform/httpserver"
 )
 
 func env(m map[string]string) func(string) string { return func(k string) string { return m[k] } }
@@ -66,8 +68,23 @@ func TestParseKeys(t *testing.T) {
 	}
 }
 
-func TestFinalFlushFitsInsideStopTimeout(t *testing.T) {
-	if finalFlushTimeout <= 0 {
-		t.Fatalf("drain leaves no time for the final flush: %v", finalFlushTimeout)
+func TestDrainLeavesTimeForFinalFlush(t *testing.T) {
+	if httpserver.DrainTimeout >= ecsStopTimeout {
+		t.Fatalf("drain %v leaves no time before SIGKILL at %v", httpserver.DrainTimeout, ecsStopTimeout)
+	}
+}
+
+func TestOrigin(t *testing.T) {
+	for in, want := range map[string]string{"https://api.example": "https://api.example",
+		"https://api.example/": "https://api.example", "http://localhost:8081": "http://localhost:8081"} {
+		if got, err := origin("X", in); err != nil || got != want {
+			t.Errorf("origin(%q) = %q, %v; want %q", in, got, err, want)
+		}
+	}
+	for _, bad := range []string{"", "api.example.com", "ftp://api.example", "https://u:p@api.example",
+		"https://api.example/v1", "https://api.example?x=1", "https://api.example#f", "https://"} {
+		if _, err := origin("X", bad); err == nil {
+			t.Errorf("origin(%q) accepted", bad)
+		}
 	}
 }

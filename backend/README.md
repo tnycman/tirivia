@@ -59,8 +59,8 @@ The game server is fail-closed. Without `VALKEY_URL` it serves only the feature 
 | Variable | Meaning |
 |---|---|
 | `VALKEY_URL` | `valkey://` or `valkeys://` (TLS) live-state cluster |
-| `PUBLIC_BASE_URL` | External origin that clients call; DPoP `htu` must name it |
-| `TOKEN_ISSUER` | `iss` of access tokens (the `core` public origin) |
+| `PUBLIC_BASE_URL` | External http(s) origin that clients call (no path, query or userinfo); DPoP `htu` must name it |
+| `TOKEN_ISSUER` | `iss` of access tokens: the same origin `core` runs with as its `PUBLIC_BASE_URL` (both are normalized without a trailing slash) |
 | `ACCESS_TOKEN_KEYS` | `kid=base64url(Ed25519 public key)`, comma-separated for `kid` overlap during rotation |
 | `PLAYER_STATE_TTL` | How long live player state outlives the show (Go duration, e.g. `6h`); no published value, so it is set per environment |
 

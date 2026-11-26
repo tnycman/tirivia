@@ -6,6 +6,7 @@ import (
 	"crypto/rand"
 	"log/slog"
 	"os"
+	"strings"
 
 	"github.com/tirivia/protocol/gen/go/tirivia/core/v1/corev1connect"
 
@@ -25,7 +26,7 @@ func authHandler(log *slog.Logger) corev1connect.AuthServiceHandler {
 		return corev1connect.UnimplementedAuthServiceHandler{}
 	}
 	log.Warn("AUTH_DEV_MODE=1: dev attestation and log-only code delivery; never use in production")
-	base := os.Getenv("PUBLIC_BASE_URL")
+	base := strings.TrimRight(os.Getenv("PUBLIC_BASE_URL"), "/")
 	if base == "" {
 		base = "http://localhost:8081"
 	}

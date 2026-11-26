@@ -3,8 +3,6 @@ package main
 import (
 	"crypto/ed25519"
 	"errors"
-	"fmt"
-	"strings"
 	"time"
 )
 
@@ -21,13 +19,12 @@ func loadGameConfig(getenv func(string) string) (cfg gameConfig, enabled bool, e
 	if cfg.valkeyURL == "" {
 		return cfg, false, nil
 	}
-	cfg.publicBaseURL = strings.TrimRight(getenv("PUBLIC_BASE_URL"), "/")
-	cfg.issuer = getenv("TOKEN_ISSUER")
 	var errs []error
-	for _, f := range [][2]string{{"PUBLIC_BASE_URL", cfg.publicBaseURL}, {"TOKEN_ISSUER", cfg.issuer}} {
-		if f[1] == "" {
-			errs = append(errs, fmt.Errorf("%s is required", f[0]))
-		}
+	if cfg.publicBaseURL, err = origin("PUBLIC_BASE_URL", getenv("PUBLIC_BASE_URL")); err != nil {
+		errs = append(errs, err)
+	}
+	if cfg.issuer, err = origin("TOKEN_ISSUER", getenv("TOKEN_ISSUER")); err != nil {
+		errs = append(errs, err)
 	}
 	if cfg.keys, err = parseKeys(getenv("ACCESS_TOKEN_KEYS")); err != nil {
 		errs = append(errs, err)

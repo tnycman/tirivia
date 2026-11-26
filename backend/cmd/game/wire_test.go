@@ -2,100 +2,69 @@ package main
 
 import (
 	"context"
-	"crypto"
-	"crypto/ecdsa"
-	"crypto/elliptic"
-	"crypto/rand"
-	"encoding/base64"
-	"log/slog"
 	"net/http"
-	"net/http/httptest"
-	"os"
 	"testing"
+	"time"
 
 	"connectrpc.com/connect/v2"
-	"connectrpc.com/connect/v2/connecthttp"
-	"github.com/go-jose/go-jose/v4"
 
+	cuev1 "github.com/tirivia/protocol/gen/go/tirivia/cue/v1"
 	gamev1 "github.com/tirivia/protocol/gen/go/tirivia/game/v1"
 	"github.com/tirivia/protocol/gen/go/tirivia/game/v1/gamev1connect"
 
-	"github.com/tirivia/backend/internal/auth/dpop/dpopclient"
-	"github.com/tirivia/backend/internal/auth/tokens"
-	gameapi "github.com/tirivia/backend/internal/game/api"
-	"github.com/tirivia/backend/internal/platform/switches"
+	"github.com/tirivia/backend/internal/game/live"
+	"github.com/tirivia/backend/internal/platform/livestate"
 )
 
 // TestWiredServerAuthenticates drives the production wiring with a real token and DPoP proof.
 func TestWiredServerAuthenticates(t *testing.T) {
-	url := os.Getenv("TEST_VALKEY_URL")
-	if url == "" {
-		t.Skip("TEST_VALKEY_URL not set (make store-test)")
-	}
-	mux := http.NewServeMux()
-	ts := httptest.NewServer(mux)
-	t.Cleanup(ts.Close)
-	priv, pub := testKey(t)
-	cfg, _, err := loadGameConfig(env(map[string]string{"VALKEY_URL": url, "PUBLIC_BASE_URL": ts.URL, //nolint:gosec // G101: a generated public test key
-		"TOKEN_ISSUER": "https://core.test", "ACCESS_TOKEN_KEYS": "k1=" + pub, "PLAYER_STATE_TTL": "1h"}))
-	if err != nil {
-		t.Fatal(err)
-	}
-	deps, closeKV, err := playerDeps(cfg, true, switches.NewMemory(switches.Snapshot{}), slog.New(slog.DiscardHandler))
-	if err != nil {
-		t.Fatal(err)
-	}
-	t.Cleanup(closeKV)
-	srv := connect.NewServer()
-	gamev1connect.RegisterGameServiceHandler(srv, gameapi.New(deps))
-	connecthttp.Mount(mux, srv)
-	client := gamev1connect.NewGameServiceClient(connect.NewClient(connecthttp.NewTransport(ts.Client(), ts.URL)))
-
-	device, jkt := deviceKey(t)
-	issuer, err := tokens.NewIssuer("k1", priv, "https://core.test", tokens.Audience)
-	if err != nil {
-		t.Fatal(err)
-	}
-	tok, _, err := issuer.Issue("user-1", "device-1", "ios", jkt)
-	if err != nil {
-		t.Fatal(err)
-	}
-	proof, err := device.Proof(dpopclient.ProofParams{Method: http.MethodPost, URL: ts.URL + gamev1connect.GameServiceGetShowStateProcedure, AccessToken: tok})
-	if err != nil {
-		t.Fatal(err)
-	}
+	w := newWired(t)
 	req := &gamev1.GetShowStateRequest{ShowId: "no-such-show"}
-	if _, err := client.GetShowState(signed(tok, proof), req); connect.CodeOf(err) != connect.CodeNotFound {
+	ctx := w.signed(t, gamev1connect.GameServiceGetShowStateProcedure)
+	if _, err := w.client.GetShowState(ctx, req); connect.CodeOf(err) != connect.CodeNotFound {
 		t.Fatalf("authenticated call: %v, want NotFound (show not live)", err)
 	}
-	if _, err := client.GetShowState(signed(tok, proof), req); connect.CodeOf(err) != connect.CodeUnauthenticated {
+	if _, err := w.client.GetShowState(ctx, req); connect.CodeOf(err) != connect.CodeUnauthenticated {
 		t.Fatalf("replayed proof: %v, want Unauthenticated", err)
 	}
-	if _, err := client.GetShowState(context.Background(), req); connect.CodeOf(err) != connect.CodeUnauthenticated {
+	if _, err := w.client.GetShowState(context.Background(), req); connect.CodeOf(err) != connect.CodeUnauthenticated {
 		t.Fatalf("anonymous call: %v, want Unauthenticated", err)
 	}
 }
 
-func deviceKey(t *testing.T) (*dpopclient.Key, string) {
-	t.Helper()
-	priv, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
+// TestWiredAnswerIsTallied sends one answer through the production stores and the tally flush.
+func TestWiredAnswerIsTallied(t *testing.T) {
+	w := newWired(t)
+	bg, show, now := context.Background(), "show-"+w.suffix, time.Now()
+	err := w.deps.Shows.Write(bg, show, livestate.Show{Phase: int32(cuev1.Phase_PHASE_QUESTION_OPEN), QuestionIndex: 1,
+		QuestionID: "q1", TCue: now, CloseAt: now.Add(time.Minute), Deadline: now.Add(time.Minute), CorrectOption: "right", CueSeq: 1})
 	if err != nil {
 		t.Fatal(err)
 	}
-	k, err := dpopclient.New(priv)
-	if err != nil {
+	if _, err := w.deps.Players.Join(bg, show, w.user, 0); err != nil {
 		t.Fatal(err)
 	}
-	tp, err := (&jose.JSONWebKey{Key: &priv.PublicKey}).Thumbprint(crypto.SHA256)
-	if err != nil {
+	res, err := w.client.SubmitAnswer(w.signed(t, gamev1connect.GameServiceSubmitAnswerProcedure),
+		&gamev1.SubmitAnswerRequest{ShowId: show, QuestionId: "q1", OptionId: "right"})
+	if err != nil || res.GetResult() != gamev1.AnswerResult_ANSWER_RESULT_ACCEPTED {
+		t.Fatalf("answer: %v %v", res.GetResult(), err)
+	}
+	if err := w.deps.Tally.Flush(bg); err != nil {
 		t.Fatal(err)
 	}
-	return k, base64.RawURLEncoding.EncodeToString(tp)
+	if got, err := live.Sum(bg, w.kv, show, 1); err != nil || got["right"] != 1 {
+		t.Fatalf("tally = %v, %v; want right=1", got, err)
+	}
 }
 
-func signed(tok, proof string) context.Context {
+func (w wired) signed(t *testing.T, procedure string) context.Context {
+	t.Helper()
+	proof, err := w.device.Proof(dpopProof(http.MethodPost, w.url+procedure, w.token))
+	if err != nil {
+		t.Fatal(err)
+	}
 	ctx, info := connect.NewClientContext(context.Background())
-	info.RequestHeader().Set("Authorization", "DPoP "+tok)
+	info.RequestHeader().Set("Authorization", "DPoP "+w.token)
 	info.RequestHeader().Set("DPoP", proof)
 	return ctx
 }
