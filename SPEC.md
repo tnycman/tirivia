@@ -455,7 +455,7 @@ The owner decided on 2026-11-25:
 Source: [ADR-0005](docs/adr/0005-device-bound-tokens.md), [research 05](docs/research/05-auth-security-compliance-web.md).
 
 1. **Install:**
-   - **iOS:** generate the App Attest key once, attest it, and send assertions after that. Apple asks to keep attestation under 100 requests/s and to ramp up gradually.
+   - **iOS:** generate the App Attest key once, attest it, and send assertions after that. Apple asks to keep attestation under 100 requests/s and to ramp up gradually. Both sign `clientData = challenge ‖ DPoP jkt` (attestation uses its SHA-256).
    - **Android:** Play Integrity standard request, with `requestHash = base64url(SHA-256(challenge ‖ DPoP jkt))`. The check runs before the phone is entered, so it binds the one-time challenge and the device key (docs/research/08).
    - Generate a DPoP key in the Secure Enclave or Keystore, linked to the attested key.
 2. **OTP request**, checked in this order:

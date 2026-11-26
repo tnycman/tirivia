@@ -25,6 +25,15 @@ type Answer struct {
 	ReceivedAt      time.Time
 }
 
+type AppAttestKey struct {
+	KeyID         []byte
+	PublicKey     []byte
+	Counter       int64
+	PrizeEligible bool
+	Receipt       []byte
+	CreatedAt     time.Time
+}
+
 type AuditLog struct {
 	ID         uuid.UUID
 	At         time.Time

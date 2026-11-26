@@ -46,7 +46,7 @@
 6. **WhatsApp OTP:** use authentication templates (zero-tap or one-tap on Android) with an expiry of 5 minutes or less ([Meta](https://developers.facebook.com/docs/whatsapp/business-management-api/authentication-templates)).
 7. **App Attest:**
    - **Attest once per install** and use **assertions** after that. Keep `attestKey` under 100 requests/s and ramp up gradually.
-   - The server performs all 9 attestation checks.
+   - The server performs all 11 attestation checks and 8 assertion checks, binding `clientData = challenge ‖ jkt` ([docs/research/08](../../docs/research/08-device-attestation.md)).
    - ([Apple](https://developer.apple.com/documentation/devicecheck/validating-apps-that-connect-to-your-server.md))
 8. **Play Integrity:**
    - Use standard requests with `requestHash = base64url(SHA-256(challenge ‖ DPoP jkt))`. The check runs before the phone is entered; Google says never to put plaintext identifiers in the hash.

@@ -11,6 +11,7 @@ import (
 
 	"github.com/tirivia/backend/internal/auth/accounts"
 	"github.com/tirivia/backend/internal/auth/accounts/accountstest"
+	"github.com/tirivia/backend/internal/auth/attest/appattest/keystest"
 	"github.com/tirivia/backend/internal/auth/otp"
 	"github.com/tirivia/backend/internal/auth/otp/otptest"
 	"github.com/tirivia/backend/internal/auth/sessions/sessionstest"
@@ -84,3 +85,5 @@ func TestSessions(t *testing.T) {
 	sessionstest.Run(t, pgstore.NewSessions(db), seed)
 	sessionstest.RunRace(t, pgstore.NewSessions(db), seed)
 }
+
+func TestAppAttestKeys(t *testing.T) { keystest.Run(t, pgstore.NewAppAttestKeys(pool(t))) }

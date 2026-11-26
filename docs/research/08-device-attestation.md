@@ -32,3 +32,34 @@ These facts back `backend/internal/auth/attest/{playintegrity,appattest}`. Each 
 **OPEN (owner):** AC-6 ("one prize account per device") **cannot be enforced across reinstalls on Android**.
 - Device recall is unavailable without Play Billing volume, and fingerprinting is forbidden.
 - Today we enforce it per install (the hardware-backed DPoP key), and through the ID check at Tier B/C and at cash-out (ID-5).
+
+## iOS: App Attest
+
+| Fact | Source |
+|---|---|
+| **Attestation has 11 steps:** chain to the App Attest root; nonce = SHA256(authData ‖ clientDataHash) in credCert extension OID 1.2.840.113635.100.8.2; keyID = SHA256(uncompressed point); RP ID = SHA256("TEAMID.bundleID"); counter 0; AAGUID; credentialId = keyID; `apple_validation_category_01`; `apple_bundle_version_01`. **Assertion has 8 steps** | [Validating apps that connect to your server](https://developer.apple.com/documentation/devicecheck/validating-apps-that-connect-to-your-server) |
+| **Validation categories:** 0 invalid, 1 OS executable, 2 TestFlight, 3 development, 4 App Store, 5 enterprise/ad hoc, 6 Developer ID, 7–9 "aren't appropriate", 10 other | Same page |
+| **Root CA:** `Apple_App_Attestation_Root_CA.pem`, valid 2020-03-18 to 2045-03-15. SHA-256 `1cb9823b…6242c932`, computed by us (Apple publishes no fingerprint) | [apple.com/certificateauthority/private](https://www.apple.com/certificateauthority/private/) |
+| **Challenge:** one time, at least 16 bytes. Keys do not survive reinstall, migration or restore, so the app re-attests | [Establishing your app's integrity](https://developer.apple.com/documentation/devicecheck/establishing-your-app-s-integrity) |
+| **Rollout:** keep `attestKey` under 100 requests/s across all installs, and ramp to at most 10M users per day | [Preparing to use App Attest](https://developer.apple.com/documentation/devicecheck/preparing-to-use-the-app-attest-service) |
+| **Receipt** is PKCS #7 under Apple Root CA - G3. The fraud metric (attested keys per device in 30 days) comes from `data.appattest.apple.com` with a DeviceCheck JWT | [Assessing fraud risk](https://developer.apple.com/documentation/devicecheck/assessing-fraud-risk) |
+| **CBOR:** fxamacker/cbor v2.10.0 with duplicate keys rejected, indefinite lengths forbidden, and the library's minimum container limits | [README](https://github.com/fxamacker/cbor) |
+
+**Findings from the test vectors, which differ from Apple's prose:**
+- **Apple's own sample uses the raw challenge as clientDataHash.** The verifier therefore takes clientDataHash directly.
+- **Apple's flags don't follow WebAuthn.**
+  - Extensions appear without the ED flag (`0x80`).
+  - Assertions carry the AT flag (`0x40`) with no credential data.
+  - So the object type decides the layout, not the flags.
+- **The assertion signature is ECDSA-SHA256 over the nonce**, i.e. the digest is SHA256(nonce). This is confirmed by a real iOS 14.4 assertion (veehaitch/devicecheck-appattest, Apache-2.0).
+- **A real development attestation carries the AAGUID `appattestdevelop`.** That settles the "appattestsandbox" mention on Apple's preparation page.
+- **Validation category byte order is OPEN.** It arrives as the 4-byte string `01 00 00 00`, read little-endian: big-endian lands outside Apple's table. Values outside the table play for points, so an error shows up in rehearsal, never as a silent prize. Confirm on the first real TestFlight build.
+
+**Our policy:**
+- **Binding:** clientData = challenge ‖ jkt. Attestation uses SHA256(clientData); assertions sign clientData itself. This binds the evidence to the one-time challenge and the DPoP key, the same binding as Android's requestHash.
+- **Rejected:** categories 0, 1 and 7–9.
+- **Prize-eligible** only with the production AAGUID and either category 4 or no category (older iOS). The category cannot be stripped, because the Apple-signed nonce covers it. Everything else plays for points (AC-5).
+- **Counters** only move forward, atomically (`counter < $new`). A replayed assertion fails even under concurrent requests.
+- **OPEN:**
+  - The fraud-metric receipt exchange. Receipts are stored; the DeviceCheck key is needed.
+  - AC-6 on iOS is also per install: App Attest keys do not survive reinstall.
