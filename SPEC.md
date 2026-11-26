@@ -321,8 +321,7 @@ For answers, the natural key (show, question, user) is the final guard against d
 | Key | Type | Notes |
 |---|---|---|
 | `show:{<show>}:state` | hash | phase, q_index, t_cue, deadline, correct_option (game-only), cue_seq |
-| `player:<show>:<user>` | hash | last_ok, life_used. No hash tag, so keys spread across slots |
-| `ans:<show>:<q>:<user>` | string | `SET NX EX`: the natural-key idempotency guard |
+| `player:{<show>:<user>}` | hash | joined_at_q, last_ok, life_used, and `a<q>` = the answer to question q. **The answer field is the natural-key guard** (`HEXISTS` then `HSET` in one script). Tagged per player, so each script stays in one slot while keys still spread across slots. A separate `ans:` key would sit in another slot, and Valkey cluster rejects scripts that touch several slots ([cluster spec](https://valkey.io/topics/cluster-spec/)) |
 | `idem:<user>:<key>` | string | Idempotency-Key record (state plus response hash) |
 | `tally:{<show>:<q>:<shard>}` | hash | option → count. **64 shards with different hash tags**; each `game` task pre-aggregates in memory and flushes every 100–250 ms with pipelined `HINCRBY`. Readers sum the shards |
 | `react:{<show>:<shard>}` | hash | kind → count, sharded the same way |
