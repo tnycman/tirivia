@@ -538,7 +538,7 @@ Source: [ADR-0005](docs/adr/0005-device-bound-tokens.md), [research 05](docs/res
 | NFR | Target | Notes |
 |---|---|---|
 | Concurrent players | 300k design, **600k load-tested** | Assumption (Master Plan) |
-| Answer intake | ~30k req/s peak at 300k (60k at 600k) | Stateless `game` fleet, pre-aggregated Valkey writes |
+| Answer intake | ~30k req/s peak at 300k (60k at 600k) | Stateless `game` fleet, one atomic Valkey script per answer that also counts it (TS-16) |
 | Reaction intake | **≤ 60k req/s at 300k**: 5 s batching with jitter, sent only when the user has tapped, interval tunable from the server | CHANGED from 2 s ([ADR-0006](docs/adr/0006-reaction-batching.md)); at 2 s this would have been the largest request stream (150k/s) |
 | Answer ack latency | p99 < 300 ms server-side at peak | |
 | Cue-to-render | p99 ≤ L_max (6 s DEFAULT) | Measured in rehearsal |

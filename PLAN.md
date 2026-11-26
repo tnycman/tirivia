@@ -75,7 +75,7 @@ Each item below either takes calendar time outside our control or has a default 
 |---|---|
 | IVS ADVANCED_HD channel (dev), looping test stream (ffmpeg), recording configuration | VID INF |
 | `studio`: cue builder, Ed25519 signing, 900 B size guard, ≤ 4 TPS token bucket, retry on 404/429, `T_cue` anchoring | BE |
-| `game`: state machine, `JoinShow`, `SubmitAnswer` (natural-key `SET NX`, server deadline, correctness on intake), sharded tallies with pre-aggregation, `last_ok` elimination, `GetShowState` | BE |
+| `game`: state machine, `JoinShow`, `SubmitAnswer` (natural-key `SET NX`, server deadline, correctness on intake), sharded tallies counted inside the intake script (TS-16), `last_ok` elimination, `GetShowState` | BE |
 | Valkey 9.1 cluster (dev), key design per SPEC §6.7 | BE INF |
 | Question bank v1: CRUD, content limits (question ≤ 240 B, option ≤ 64 B UTF-8; `cuesign.ValidateQuestionContent`), **two-person approval**, KMS vault | WEB BE |
 | Live screen on both apps: IVS player, cue parsing and verification, seq handling, timer from cue render, per-player shuffle, answer bars, resync after a gap | IOS AND |

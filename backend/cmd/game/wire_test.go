@@ -32,7 +32,7 @@ func TestWiredServerAuthenticates(t *testing.T) {
 	}
 }
 
-// TestWiredAnswerIsTallied sends one answer through the production stores and the tally flush.
+// TestWiredAnswerIsTallied sends one answer through the production stores and checks its tally and recount.
 func TestWiredAnswerIsTallied(t *testing.T) {
 	w := newWired(t)
 	bg, show, now := context.Background(), "show-"+w.suffix, time.Now()
