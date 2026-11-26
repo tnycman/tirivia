@@ -10,6 +10,7 @@ import (
 
 	"github.com/tirivia/protocol/gen/go/tirivia/core/v1/corev1connect"
 
+	"github.com/tirivia/backend/internal/auth/accounts"
 	"github.com/tirivia/backend/internal/auth/attest"
 	"github.com/tirivia/backend/internal/auth/dpop"
 	"github.com/tirivia/backend/internal/auth/otp"
@@ -19,7 +20,12 @@ import (
 
 // Users finds or creates the account for a verified phone.
 type Users interface {
-	FindOrCreate(ctx context.Context, phoneHash string) (userID string, isNew bool, err error)
+	FindOrCreate(ctx context.Context, u accounts.NewUser) (userID string, isNew bool, err error)
+}
+
+// Devices records the attested device and its DPoP key for a user.
+type Devices interface {
+	Register(ctx context.Context, userID string, dev otp.Device) (deviceID string, err error)
 }
 
 // Deps wires the handler; PublicBaseURL is the external origin DPoP htu must name.
@@ -31,6 +37,7 @@ type Deps struct {
 	Sessions      *sessions.Manager
 	Tokens        *tokens.Issuer
 	Users         Users
+	Devices       Devices
 }
 
 // Handler implements corev1connect.AuthServiceHandler.

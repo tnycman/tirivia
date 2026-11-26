@@ -9,7 +9,7 @@ import (
 
 	"github.com/tirivia/protocol/gen/go/tirivia/core/v1/corev1connect"
 
-	"github.com/tirivia/backend/internal/auth"
+	"github.com/tirivia/backend/internal/auth/accounts"
 	authapi "github.com/tirivia/backend/internal/auth/api"
 	"github.com/tirivia/backend/internal/auth/attest"
 	"github.com/tirivia/backend/internal/auth/dpop"
@@ -29,8 +29,8 @@ func authHandler(log *slog.Logger) corev1connect.AuthServiceHandler {
 	if base == "" {
 		base = "http://localhost:8081"
 	}
-	users := auth.NewMemUsers()
-	at := must(attest.New(attest.DevVerifier{}, attestTTLs))
+	users := accounts.NewMem()
+	at := must(attest.New(attest.DevVerifier{}, attest.NewMemStore(), attestTTLs))
 	sender := devSender{log: log}
 	o := must(otp.New(otp.Config{
 		Pepper: randomBytes(32), CoreRegions: coreRegions, CoreLimits: coreLimits, OtherLimits: otherLimits,
@@ -43,7 +43,7 @@ func authHandler(log *slog.Logger) corev1connect.AuthServiceHandler {
 		panic(err)
 	}
 	return authapi.New(authapi.Deps{
-		PublicBaseURL: base, Attest: at, OTP: o, Users: users,
+		PublicBaseURL: base, Attest: at, OTP: o, Users: users, Devices: users,
 		DPoP:     must(dpop.NewVerifier(dpop.NewMemoryReplayCache(), dpopWindow)),
 		Sessions: sessions.NewManager(sessions.NewMemStore()),
 		Tokens:   must(tokens.NewIssuer("dev-1", key, base, "tirivia-api")),

@@ -17,6 +17,7 @@ type Challenge struct {
 	ID        string
 	PhoneE164 string
 	PhoneHash string
+	Region    string
 	Device    Device
 	CodeMAC   []byte
 	ExpiresAt time.Time

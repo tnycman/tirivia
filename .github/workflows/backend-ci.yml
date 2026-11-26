@@ -20,6 +20,31 @@ jobs:
     runs-on: ubuntu-24.04
     permissions:
       contents: read
+    services:
+      postgres:
+        image: postgres:17-alpine@sha256:f9cf3e1f0066f0eb0c48707d864f0ac5941e9ff454a072077d97a4d278d07d73
+        env:
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: tirivia
+        options: >-
+          --health-cmd "pg_isready -U postgres -d tirivia"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      valkey:
+        image: valkey/valkey:9.1-alpine@sha256:56729e68bdda139cbd3f6a2538683dc3523325fc5711ea1a379938f1b37893f0
+        options: >-
+          --health-cmd "valkey-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+    env:
+      TEST_DATABASE_URL: postgres://postgres:test@localhost:5432/tirivia?sslmode=disable
+      TEST_VALKEY_URL: valkey://localhost:6379
     defaults:
       run:
         working-directory: backend
@@ -33,7 +58,11 @@ jobs:
           cache-dependency-path: backend/go.sum
       - name: Build
         run: go build ./...
-      - name: Unit tests (race detector)
+      - name: Generated queries are up to date (sqlc)
+        run: make sqlc-check
+      - name: Migrate service database
+        run: make migrate DB_URL="$TEST_DATABASE_URL"
+      - name: Unit and store tests (race detector; Postgres 17 and Valkey 9.1 services)
         run: go test -race -count=1 ./...
       - name: golangci-lint (incl. depguard module boundaries)
         run: go run github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.15.0 run ./...
@@ -74,7 +103,7 @@ jobs:
           PORT: ${{ matrix.cmd == 'game' && '8080' || '8081' }}
         run: |
           docker run -d --name smoke -e ADDR=":${PORT}" -p "${PORT}:${PORT}" "$IMAGE"
-          for i in $(seq 1 20); do curl -fs "localhost:${PORT}/readyz" && break; sleep 1; done
+          for _ in $(seq 1 20); do curl -fs "localhost:${PORT}/readyz" && break; sleep 1; done
           curl -fs "localhost:${PORT}/readyz"
           docker stop -t 30 smoke
           test "$(docker inspect smoke --format '{{.State.ExitCode}}')" = "0"

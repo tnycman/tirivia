@@ -18,7 +18,7 @@ import (
 
 	"github.com/tirivia/protocol/gen/go/tirivia/core/v1/corev1connect"
 
-	"github.com/tirivia/backend/internal/auth"
+	"github.com/tirivia/backend/internal/auth/accounts"
 	"github.com/tirivia/backend/internal/auth/api"
 	"github.com/tirivia/backend/internal/auth/attest"
 	"github.com/tirivia/backend/internal/auth/dpop"
@@ -79,8 +79,8 @@ func must[T any](v T, err error) T {
 func newHarness(t *testing.T) harness {
 	t.Helper()
 	sms := &captureSender{last: map[string]string{}}
-	users, lim := auth.NewMemUsers(), otp.NewMemLimiter()
-	at := must(attest.New(attest.DevVerifier{}, attest.TTLs{Challenge: 5 * time.Minute, Ticket: 10 * time.Minute}))
+	users, lim := accounts.NewMem(), otp.NewMemLimiter()
+	at := must(attest.New(attest.DevVerifier{}, attest.NewMemStore(), attest.TTLs{Challenge: 5 * time.Minute, Ticket: 10 * time.Minute}))
 	o := must(otp.New(otp.Config{
 		Pepper: []byte(strings.Repeat("k", 32)), CoreRegions: []string{"AL"}, CoreLimits: testLimits, OtherLimits: testLimits,
 		Failures: otp.NewMemFailures(),
@@ -96,7 +96,7 @@ func newHarness(t *testing.T) harness {
 	t.Cleanup(ts.Close)
 	srv := connect.NewServer()
 	corev1connect.RegisterAuthServiceHandler(srv, api.New(api.Deps{PublicBaseURL: ts.URL, Attest: at, OTP: o, DPoP: verifier,
-		Sessions: sessions.NewManager(sessions.NewMemStore()), Tokens: issuer, Users: users}))
+		Sessions: sessions.NewManager(sessions.NewMemStore()), Tokens: issuer, Users: users, Devices: users}))
 	connecthttp.Mount(mux, srv)
 	return harness{
 		client: corev1connect.NewAuthServiceClient(connect.NewClient(connecthttp.NewTransport(ts.Client(), ts.URL))),

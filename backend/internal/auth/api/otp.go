@@ -9,6 +9,7 @@ import (
 	corev1 "github.com/tirivia/protocol/gen/go/tirivia/core/v1"
 	"github.com/tirivia/protocol/gen/go/tirivia/core/v1/corev1connect"
 
+	"github.com/tirivia/backend/internal/auth/accounts"
 	"github.com/tirivia/backend/internal/auth/otp"
 )
 
@@ -68,11 +69,15 @@ func (h *Handler) VerifyOtp(ctx context.Context, req *corev1.VerifyOtpRequest) (
 	case ch.Device.JKT != p.JKT:
 		return nil, errUnauth
 	}
-	userID, isNew, err := h.d.Users.FindOrCreate(ctx, ch.PhoneHash)
+	userID, isNew, err := h.d.Users.FindOrCreate(ctx, accounts.NewUser{PhoneHash: ch.PhoneHash, PhoneE164: ch.PhoneE164, Country: ch.Region})
 	if err != nil {
 		return nil, connect.NewError(connect.CodeInternal, "sign-in failed")
 	}
-	refresh, s, err := h.d.Sessions.Create(ctx, userID, ch.Device.ID, p.JKT)
+	deviceID, err := h.d.Devices.Register(ctx, userID, ch.Device)
+	if err != nil {
+		return nil, errUnauth
+	}
+	refresh, s, err := h.d.Sessions.Create(ctx, userID, deviceID, p.JKT)
 	if err != nil {
 		return nil, connect.NewError(connect.CodeInternal, "sign-in failed")
 	}

@@ -5,6 +5,8 @@ import (
 	"context"
 	"errors"
 	"time"
+
+	"github.com/tirivia/backend/internal/auth/otp"
 )
 
 // ChallengeBytes exceeds Apple's 16-byte minimum for App Attest challenges.
@@ -41,4 +43,12 @@ type Verifier interface {
 type TTLs struct {
 	Challenge time.Duration
 	Ticket    time.Duration
+}
+
+// Store keeps single-use challenges and tickets with expiry.
+type Store interface {
+	PutChallenge(ctx context.Context, challenge []byte, ttl time.Duration) error
+	ConsumeChallenge(ctx context.Context, challenge []byte) (bool, error)
+	PutTicket(ctx context.Context, token string, dev otp.Device, ttl time.Duration) error
+	Ticket(ctx context.Context, token string) (otp.Device, bool, error)
 }

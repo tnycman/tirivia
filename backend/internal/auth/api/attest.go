@@ -14,8 +14,8 @@ import (
 var platforms = map[corev1.Platform]string{corev1.Platform_PLATFORM_IOS: "ios", corev1.Platform_PLATFORM_ANDROID: "android"}
 
 // GetAttestationChallenge implements AuthServiceHandler.
-func (h *Handler) GetAttestationChallenge(_ context.Context, _ *corev1.GetAttestationChallengeRequest) (*corev1.GetAttestationChallengeResponse, error) {
-	c, ttl, err := h.d.Attest.Challenge()
+func (h *Handler) GetAttestationChallenge(ctx context.Context, _ *corev1.GetAttestationChallengeRequest) (*corev1.GetAttestationChallengeResponse, error) {
+	c, ttl, err := h.d.Attest.Challenge(ctx)
 	if err != nil {
 		return nil, connect.NewError(connect.CodeInternal, "challenge unavailable")
 	}

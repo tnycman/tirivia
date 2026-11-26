@@ -37,7 +37,7 @@ func (s *Service) Start(ctx context.Context, phone, ticket string, channel Chann
 	if blocked, err := s.numberBlocked(ctx, l, phone); err != nil || blocked {
 		return StartResult{}, firstErr(err, ErrNumberNotAllowed)
 	}
-	return s.issue(ctx, phone, phoneHash, dev, channel, locale, l.Resend.Window)
+	return s.issue(ctx, Challenge{PhoneE164: phone, PhoneHash: phoneHash, Region: region, Device: dev}, channel, locale, l.Resend.Window)
 }
 
 func (s *Service) checkSignups(ctx context.Context, phoneHash string) error {
@@ -54,7 +54,7 @@ func (s *Service) checkSignups(ctx context.Context, phoneHash string) error {
 	return nil
 }
 
-func (s *Service) issue(ctx context.Context, phone, phoneHash string, dev Device, channel Channel, locale string, resend time.Duration) (StartResult, error) {
+func (s *Service) issue(ctx context.Context, ch Challenge, channel Channel, locale string, resend time.Duration) (StartResult, error) {
 	code, err := newCode()
 	if err != nil {
 		return StartResult{}, err
@@ -63,12 +63,11 @@ func (s *Service) issue(ctx context.Context, phone, phoneHash string, dev Device
 	if err != nil {
 		return StartResult{}, err
 	}
-	ch := Challenge{ID: id.String(), PhoneE164: phone, PhoneHash: phoneHash, Device: dev,
-		CodeMAC: s.codeMAC(id.String(), code), ExpiresAt: s.now().Add(CodeTTL)}
+	ch.ID, ch.CodeMAC, ch.ExpiresAt = id.String(), s.codeMAC(id.String(), code), s.now().Add(CodeTTL)
 	if err := s.cfg.Store.Put(ctx, ch, CodeTTL); err != nil {
 		return StartResult{}, err
 	}
-	used, provider, err := s.send(ctx, channel, phone, code, locale)
+	used, provider, err := s.send(ctx, channel, ch.PhoneE164, code, locale)
 	if err != nil {
 		_ = s.cfg.Store.Delete(ctx, ch.ID)
 		return StartResult{}, err
