@@ -1,0 +1,9 @@
+{
+  "name": "@tirivia/ui",
+  "private": true,
+  "type": "module",
+  "description": "Shared console UI. Design tokens are generated from design-tokens/ (do not edit src/tokens by hand).",
+  "exports": {
+    "./tokens.css": "./src/tokens/index.css"
+  }
+}

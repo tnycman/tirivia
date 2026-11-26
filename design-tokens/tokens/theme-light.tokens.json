@@ -1,0 +1,19 @@
+{
+  "$description": "Semantic colours, light theme. App code uses ONLY these names; primitives may change with the brand.",
+  "theme": {
+    "$type": "color",
+    "bg":              { "$value": "{color.neutral.0}" },
+    "surface":         { "$value": "{color.neutral.50}" },
+    "border":          { "$value": "{color.neutral.200}" },
+    "text":            { "$value": "{color.neutral.900}" },
+    "textMuted":       { "$value": "{color.neutral.600}" },
+    "primary":         { "$value": "{color.red.600}" },
+    "onPrimary":       { "$value": "{color.neutral.0}" },
+    "primaryText":     { "$value": "{color.red.600}", "$description": "Red for text and links on bg. The primary fill stays for buttons." },
+    "correct":         { "$value": "{color.green.600}" },
+    "onCorrect":       { "$value": "{color.neutral.0}" },
+    "wrong":           { "$value": "{color.red.700}" },
+    "onWrong":         { "$value": "{color.neutral.0}" },
+    "warningText":     { "$value": "{color.amber.700}", "$description": "Timer under 3 s, on bg." }
+  }
+}

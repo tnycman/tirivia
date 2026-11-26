@@ -1,0 +1,14 @@
+/* Entry point for the generated design tokens (design-tokens/, DTCG 2025.10).
+   Light by default; dark follows the OS unless data-theme="light"; data-theme="dark" forces dark. */
+@import "./tokens-base.css";
+@import "./tokens-light.css";
+@import "./tokens-overlay.css";
+@import "./tokens-dark-auto.css";
+@import "./tokens-dark.css";
+
+body {
+  margin: 0;
+  background: var(--theme-bg);
+  color: var(--theme-text);
+  font-family: var(--font-family-base);
+}

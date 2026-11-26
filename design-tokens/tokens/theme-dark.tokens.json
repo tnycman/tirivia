@@ -1,0 +1,19 @@
+{
+  "$description": "Semantic colours, dark theme. Same names as theme-light.",
+  "theme": {
+    "$type": "color",
+    "bg":              { "$value": "{color.neutral.900}" },
+    "surface":         { "$value": "{color.neutral.800}" },
+    "border":          { "$value": "{color.neutral.700}" },
+    "text":            { "$value": "{color.neutral.50}" },
+    "textMuted":       { "$value": "{color.neutral.400}" },
+    "primary":         { "$value": "{color.red.600}" },
+    "onPrimary":       { "$value": "{color.neutral.0}" },
+    "primaryText":     { "$value": "{color.red.300}", "$description": "Lighter red for text and links on the dark bg (red.600 is only 3:1 there)." },
+    "correct":         { "$value": "{color.green.600}" },
+    "onCorrect":       { "$value": "{color.neutral.0}" },
+    "wrong":           { "$value": "{color.red.700}" },
+    "onWrong":         { "$value": "{color.neutral.0}" },
+    "warningText":     { "$value": "{color.amber.400}", "$description": "Timer under 3 s, on bg." }
+  }
+}

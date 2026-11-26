@@ -48,7 +48,7 @@ Each item below either takes calendar time outside our control or has a default 
 | `backend/`: module skeleton, `go-arch-lint`, `golangci-lint` (depguard), health endpoints, OTel wiring, container build (ARM64) with attestation, deploy to dev on ECS | BE |
 | `ios/` and `android/` shells: module structure, design-system package, CI build, Sentry | IOS AND |
 | `web-consoles/` workspace: pnpm + Vite + TS7 (TS6 alias for lint), shared `ui`, `auth` (BFF) and `api-client` packages | WEB |
-| Design system v0: tokens, typography (Albanian glyphs ë/ç), light and dark | Design |
+| **Done:** design-tokens v0 (DTCG 2025.10 → Swift/Compose/CSS via Style Dictionary 5.8), WCAG 2.2 AA contrast gate (25 pairings), light/dark/overlay, Albanian glyph rule. Brand re-skin follows LG-3 | Design |
 | File long-lead items L1–L5 and L13 | INF AND VID |
 
 ## Phase 1: Foundation
