@@ -81,7 +81,7 @@
 ## Sources
 [docs/research/05-auth-security-compliance-web.md](../../docs/research/05-auth-security-compliance-web.md), [docs/research/04-native-mobile.md](../../docs/research/04-native-mobile.md)
 
-## Sourced values (used by `backend/cmd/core/policy.go`, verified 2026-11-25)
+## Sourced values (used by `backend/cmd/core/policy.go` and `backend/cmd/game/policy.go`, verified 2026-11-25)
 
 **Standard** means the value is fixed by a standard or a vendor's documented default. **Policy** means no published standard exists; the value is our design decision, tuned from production data.
 

@@ -46,7 +46,7 @@ func authHandler(log *slog.Logger) corev1connect.AuthServiceHandler {
 		PublicBaseURL: base, Attest: at, OTP: o, Users: users, Devices: users,
 		DPoP:     must(dpop.NewVerifier(dpop.NewMemoryReplayCache(), dpopWindow)),
 		Sessions: sessions.NewManager(sessions.NewMemStore()),
-		Tokens:   must(tokens.NewIssuer("dev-1", key, base, "tirivia-api")),
+		Tokens:   must(tokens.NewIssuer("dev-1", key, base, tokens.Audience)),
 	})
 }
 
