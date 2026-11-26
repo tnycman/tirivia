@@ -1,0 +1,69 @@
+syntax = "proto3";
+
+package tirivia.core.v1;
+
+import "google/protobuf/timestamp.proto";
+import "tirivia/common/v1/common.proto";
+
+service WalletService {
+  rpc GetWallet(GetWalletRequest) returns (GetWalletResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+  }
+  rpc SubmitClaim(SubmitClaimRequest) returns (SubmitClaimResponse);
+}
+
+enum VerificationTier {
+  VERIFICATION_TIER_UNSPECIFIED = 0;
+  VERIFICATION_TIER_A = 1; // < EUR 50: verified phone; ID at cash-out
+  VERIFICATION_TIER_B = 2; // EUR 50-500: ID + selfie + hold + manual review
+  VERIFICATION_TIER_C = 3; // > EUR 500 or flagged: B + live video verification
+}
+
+enum CollectionOption {
+  COLLECTION_OPTION_UNSPECIFIED = 0;
+  COLLECTION_OPTION_BANK_TRANSFER_AL = 1;
+  COLLECTION_OPTION_IN_PERSON_OFFICE = 2;
+  COLLECTION_OPTION_REPRESENTATIVE_POA = 3;
+  COLLECTION_OPTION_CHARITY_DONATION = 4;
+  COLLECTION_OPTION_SPONSOR_PICKUP_OR_DELIVERY = 5;
+}
+
+enum ClaimStatus {
+  CLAIM_STATUS_UNSPECIFIED = 0;
+  CLAIM_STATUS_OPEN = 1;
+  CLAIM_STATUS_VERIFICATION_REQUIRED = 2;
+  CLAIM_STATUS_UNDER_REVIEW = 3;
+  CLAIM_STATUS_APPROVED = 4;
+  CLAIM_STATUS_PAID = 5;
+  CLAIM_STATUS_EXPIRED = 6;
+  CLAIM_STATUS_REJECTED = 7;
+}
+
+message ClaimCard {
+  string claim_id = 1;
+  tirivia.common.v1.Money amount = 2;
+  google.protobuf.Timestamp deadline = 3;
+  VerificationTier tier = 4;
+  ClaimStatus status = 5;
+  repeated CollectionOption available_options = 6;
+}
+
+message GetWalletRequest {}
+
+message GetWalletResponse {
+  tirivia.common.v1.Money balance = 1;
+  tirivia.common.v1.Money cash_out_minimum = 2;
+  repeated ClaimCard claims = 3;
+}
+
+message SubmitClaimRequest {
+  string claim_id = 1;
+  CollectionOption option = 2;
+  // IBAN for COLLECTION_OPTION_BANK_TRANSFER_AL; account holder must match the verified ID.
+  string iban = 3;
+  string charity_id = 4;
+}
+
+message SubmitClaimResponse {
+  ClaimCard claim = 1;
+}

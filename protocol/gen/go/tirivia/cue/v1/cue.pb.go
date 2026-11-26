@@ -396,11 +396,9 @@ type QuestionOpen struct {
 	Index uint32 `protobuf:"varint,2,opt,name=index,proto3" json:"index,omitempty"`
 	// Client timer duration; the timer starts when this cue is rendered in the player's own video.
 	DurationMs uint32 `protobuf:"varint,3,opt,name=duration_ms,json=durationMs,proto3" json:"duration_ms,omitempty"`
-	// Question text in the show language. Max 240 UTF-8 bytes (question bank enforces it;
-	// worst-case cue measured at 845 B in backend/internal/platform/cuesign tests).
+	// Question text in the show language.
 	Text string `protobuf:"bytes,4,opt,name=text,proto3" json:"text,omitempty"`
-	// Exactly three options in canonical order. Clients shuffle per player using
-	// JoinShowResponse.shuffle_seed and always submit option_id, never a position.
+	// Exactly three options in canonical order.
 	Options []*Option `protobuf:"bytes,5,rep,name=options,proto3" json:"options,omitempty"`
 	// True on the final question: extra lives cannot be used (Master Plan §1).
 	IsFinal bool `protobuf:"varint,6,opt,name=is_final,json=isFinal,proto3" json:"is_final,omitempty"`
@@ -668,11 +666,9 @@ type Pulse struct {
 	QuestionIndex uint32 `protobuf:"varint,5,opt,name=question_index,json=questionIndex,proto3" json:"question_index,omitempty"`
 	// If a question is open: milliseconds left on the server's clock at emit time.
 	RemainingMs uint32 `protobuf:"varint,6,opt,name=remaining_ms,json=remainingMs,proto3" json:"remaining_ms,omitempty"`
-	// False while a question is open (reactions pause; Master Plan §2.3) or when the
-	// reactions kill switch is on.
+	// False while a question is open (reactions pause; Master Plan §2.3) or when the reactions kill switch is on.
 	ReactionsEnabled bool `protobuf:"varint,7,opt,name=reactions_enabled,json=reactionsEnabled,proto3" json:"reactions_enabled,omitempty"`
-	// Backend chat switch (SPEC §6.10). Apps show/hide the chat panel within one pulse;
-	// no app release and no rejoin needed. When false, the server also stops minting chat tokens.
+	// Backend chat switch (SPEC §6.10).
 	ChatEnabled   bool `protobuf:"varint,8,opt,name=chat_enabled,json=chatEnabled,proto3" json:"chat_enabled,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache

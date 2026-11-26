@@ -4,20 +4,7 @@ package tirivia.cue.v1;
 
 import "tirivia/common/v1/common.proto";
 
-// ---------------------------------------------------------------------------
-// Timed-metadata cues carried inside the IVS Low-Latency stream (PutMetadata).
-//
-// Hard limits (verified, docs/research/01-live-video-ivs.md):
-//   * payload <= 1 KB, not adjustable  -> our budget is 900 bytes for the TEXT cue
-//   * 5 TPS per channel, not adjustable -> studio uses a <= 4 TPS token bucket
-//   * insertion time not guaranteed; all viewers see it at the same stream position
-//   * cues are kept in recordings and re-fire on VOD -> replay mode ignores gameplay cues
-//
-// Wire format of the text cue:  "t1." + base64url_nopad( SignedCue bytes )
-// The signature is computed over the exact `body` bytes received; clients never re-serialize
-// before verifying, so protobuf's non-canonical encoding is not a problem.
-// Size is enforced by protocol/testvectors (CI) using maximum-length question content.
-// ---------------------------------------------------------------------------
+// Timed-metadata cues in the IVS stream: "t1." + base64url(SignedCue), at most 900 bytes (SPEC §6.4).
 
 message SignedCue {
   // Serialized CueBody.
@@ -54,11 +41,9 @@ message QuestionOpen {
   uint32 index = 2;
   // Client timer duration; the timer starts when this cue is rendered in the player's own video.
   uint32 duration_ms = 3;
-  // Question text in the show language. Max 240 UTF-8 bytes (question bank enforces it;
-  // worst-case cue measured at 845 B in backend/internal/platform/cuesign tests).
+  // Question text in the show language.
   string text = 4;
-  // Exactly three options in canonical order. Clients shuffle per player using
-  // JoinShowResponse.shuffle_seed and always submit option_id, never a position.
+  // Exactly three options in canonical order.
   repeated Option options = 5;
   // True on the final question: extra lives cannot be used (Master Plan §1).
   bool is_final = 6;
@@ -108,11 +93,9 @@ message Pulse {
   uint32 question_index = 5;
   // If a question is open: milliseconds left on the server's clock at emit time.
   uint32 remaining_ms = 6;
-  // False while a question is open (reactions pause; Master Plan §2.3) or when the
-  // reactions kill switch is on.
+  // False while a question is open (reactions pause; Master Plan §2.3) or when the reactions kill switch is on.
   bool reactions_enabled = 7;
-  // Backend chat switch (SPEC §6.10). Apps show/hide the chat panel within one pulse;
-  // no app release and no rejoin needed. When false, the server also stops minting chat tokens.
+  // Backend chat switch (SPEC §6.10).
   bool chat_enabled = 8;
 }
 

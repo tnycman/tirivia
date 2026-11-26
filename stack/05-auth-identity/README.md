@@ -80,3 +80,29 @@
 
 ## Sources
 [docs/research/05-auth-security-compliance-web.md](../../docs/research/05-auth-security-compliance-web.md), [docs/research/04-native-mobile.md](../../docs/research/04-native-mobile.md)
+
+## Sourced values (used by `backend/cmd/core/policy.go`, verified 2026-11-25)
+
+**Standard** means the value is fixed by a standard or a vendor's documented default. **Policy** means no published standard exists; the value is our design decision, tuned from production data.
+
+| Value | Setting | Kind | Source |
+|---|---|---|---|
+| Code length, validity | 6 digits, 5 min (NIST max 10 min) | Standard | NIST SP 800-63B-4 §3.1.3.2 |
+| Attempts per code | 5 | Standard | Twilio Verify error 60202 ("Max (5) verification check attempts") |
+| Consecutive failures per phone | 100; **a new code never resets it**; success resets it | Standard | NIST SP 800-63B-4 §3.2.2 ("SHALL NOT reset the failed authentication count") |
+| Sends per phone (core regions) | 5 per 10 min | Standard | Twilio Verify error 60203 (default send limit) |
+| Resend spacing | 30 s (core) / 60 s (other) | Policy | No published value (NIST, OWASP, Twilio) |
+| Sends per device | 5 / 3 per 10 min | Policy | No published value; mirrors the per-phone default |
+| Number-range throttle | first 7 digits after `+`; 100 / 20 per 10 min | Policy | Twilio recommends prefix throttling but publishes no numbers ([toll fraud](https://www.twilio.com/docs/verify/preventing-toll-fraud)) |
+| Pumping-risk block | ≥ 90 core ("High: Don't send"), ≥ 75 other ("Moderate: treat as suspicious") | Standard | [Twilio SMS Pumping Risk bands](https://www.twilio.com/docs/lookup/v2-api/sms-pumping-risk) |
+| Number validation | libphonenumber `IsValidNumber`; only `MOBILE` and `FIXED_LINE_OR_MOBILE`; canonical E.164 | Standard | ITU-T E.164 (max 15 digits); [nyaruka/phonenumbers v1.8.1](https://github.com/nyaruka/phonenumbers) (libphonenumber port). Probed: AL, XK (+383), MK, IT, US, DE |
+| Countries | **All allowed** (LG-1). Core regions get the standard limits; others get stricter policy limits | Policy | Core list: AL, XK, MK + diaspora destinations named in INSTAT/World Bank 2025 and the Kosovo Migration Profile 2023 (IT, GR, DE, GB, US, FR, CH, SI, HR, FI). The UN DESA 2024 ranking is **OPEN** (its site blocked automated fetch; download by hand) |
+| DPoP `iat` window | ±60 s; jti kept for the window | Standard range | RFC 9449 §11.1 ("on the order of seconds or minutes") |
+| JWT clock leeway | 30 s | Standard range | RFC 7519 §4.1.4 ("usually no more than a few minutes") |
+| App Attest challenge / ticket lifetime | 5 min / 10 min | Policy | Apple: one-time challenge; no lifetime published |
+| Play Integrity freshness | — (slice 2) | Policy | Android docs use a placeholder `ALLOWED_WINDOW_MILLIS` |
+
+**Open follow-ups:**
+
+- **Friction for "Mild/Moderate" pumping scores.** Twilio advises adding friction such as a CAPTCHA. Not built yet.
+- **Diaspora ranking.** Rank the diaspora tier from the UN DESA 2024 workbook.

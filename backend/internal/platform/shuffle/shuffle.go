@@ -1,8 +1,4 @@
-// Package shuffle implements the per-player option order (SPEC §6.3 step 7).
-//
-// Every platform (Go, Swift, Kotlin) must produce the same order for the same inputs;
-// protocol/testvectors/answer pins this. Clients always submit option_id, never a position,
-// so the server never needs to invert the permutation.
+// Package shuffle implements the per-player option order (SPEC §6.3), pinned by protocol/testvectors.
 package shuffle
 
 import (
@@ -13,12 +9,7 @@ import (
 // MaxOptions is the largest n supported (one HMAC byte per swap).
 const MaxOptions = sha256.Size + 1
 
-// Order returns a permutation of [0, n): position p shows option Order(...)[p].
-//
-//	k = HMAC-SHA256(key = seed, msg = questionID)
-//	for i = n-1 down to 1: j = k[n-1-i] mod (i+1); swap(idx[i], idx[j])
-//
-// The modulo bias for n = 3 (256 mod 3 = 1) is irrelevant for display order.
+// Order returns a permutation of [0, n) via HMAC-SHA256(seed, questionID)-driven Fisher-Yates.
 func Order(seed []byte, questionID string, n int) []int {
 	if n < 1 || n > MaxOptions {
 		panic("shuffle: n out of range")

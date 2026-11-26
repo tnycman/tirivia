@@ -15,6 +15,8 @@ import (
 	"github.com/go-jose/go-jose/v4/jwt"
 )
 
+const testLeeway = 30 * time.Second
+
 const (
 	iss = "https://api.tirivia.example"
 	aud = "tirivia-api"
@@ -28,7 +30,7 @@ func setup(t *testing.T) (*Issuer, *Validator, ed25519.PrivateKey) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	return is, NewValidator(map[string]ed25519.PublicKey{"k1": pub}, iss, aud), priv
+	return is, NewValidator(map[string]ed25519.PublicKey{"k1": pub}, iss, aud, testLeeway), priv
 }
 
 func TestIssueAndValidate(t *testing.T) {
@@ -52,11 +54,11 @@ func TestExpiryWithLeeway(t *testing.T) {
 	is.now = func() time.Time { return start }
 	tok, _, _ := is.Issue("u", "d", "c", jkt)
 
-	v.now = func() time.Time { return start.Add(10*time.Minute + 20*time.Second) } // inside 30 s leeway
+	v.now = func() time.Time { return start.Add(DefaultTTL + testLeeway - time.Second) }
 	if _, err := v.Validate(tok); err != nil {
 		t.Fatalf("within leeway rejected: %v", err)
 	}
-	v.now = func() time.Time { return start.Add(10*time.Minute + 31*time.Second) }
+	v.now = func() time.Time { return start.Add(DefaultTTL + testLeeway + time.Second) }
 	if _, err := v.Validate(tok); !errors.Is(err, ErrClaims) {
 		t.Fatalf("expired token accepted: %v", err)
 	}

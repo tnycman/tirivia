@@ -17,11 +17,6 @@ export const file_tirivia_events_v1_events: GenFile = /*@__PURE__*/
 /**
  * Event envelope written to Kinesis Data Streams by `game` and `core`; consumed by `risk`.
  *
- * IMPORTANT (docs/research/02): Firehose record-format conversion to Parquet requires JSON input.
- * Producers therefore write this message using the canonical proto3 JSON mapping
- * (https://protobuf.dev/programming-guides/json/), NOT binary protobuf.
- * Partition key = user_id (high cardinality); never show_id.
- *
  * @generated from message tirivia.events.v1.Event
  */
 export type Event = Message<"tirivia.events.v1.Event"> & {

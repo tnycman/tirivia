@@ -1,9 +1,7 @@
 import XCTest
 @testable import CoreSecurity
 
-/// Runs protocol/testvectors/shuffle_vectors.json (copied into Vectors/ by CI) against the iOS
-/// OptionShuffle. The same file is run by Go (reference) and Kotlin; all must agree.
-/// The cue-verification runner is added with the iOS CueVerifier in Phase 2a.
+/// Runs protocol/testvectors/shuffle_vectors.json (copied to Vectors/ by CI) against OptionShuffle.
 final class ShuffleVectorTests: XCTestCase {
     private struct Suite: Decodable {
         let format_version: Int

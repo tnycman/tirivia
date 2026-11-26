@@ -7,8 +7,7 @@ import (
 	"github.com/google/uuid"
 )
 
-// MemUsers is an in-memory user directory for tests and local development. Production uses the
-// users table (lookup by phone_hash, a keyed HMAC of the E.164 number).
+// MemUsers is an in-memory user directory for tests and local development.
 type MemUsers struct {
 	mu      sync.Mutex
 	byPhone map[string]string

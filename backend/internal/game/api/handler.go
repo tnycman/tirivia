@@ -1,5 +1,4 @@
-// Package api exposes the game module over Connect (GameService). Handlers stay thin:
-// authenticate → authorize → validate → rate limit → app use case → emit event.
+// Package api exposes the game module as GameService.
 package api
 
 import (
@@ -13,13 +12,12 @@ import (
 	"github.com/tirivia/backend/internal/platform/switches"
 )
 
-// ChatTokenMinter is implemented by the chatmod module (Phase 3) via internal/contracts.
+// ChatTokenMinter mints chat tokens (chatmod module).
 type ChatTokenMinter interface {
 	MintChatToken(ctx context.Context, showID string) (token, endpoint string, err error)
 }
 
-// Handler implements gamev1connect.GameServiceHandler. Unimplemented RPCs return
-// CodeUnimplemented until their phase lands (PLAN.md).
+// Handler implements gamev1connect.GameServiceHandler.
 type Handler struct {
 	gamev1connect.UnimplementedGameServiceHandler
 
@@ -32,7 +30,7 @@ func NewHandler(sw switches.Reader, chat ChatTokenMinter) *Handler {
 	return &Handler{switches: sw, chat: chat}
 }
 
-// GetChatToken returns a chat token only while the backend chat switch is on (ADR-0009).
+// GetChatToken mints a token only while the chat switch is on (ADR-0009).
 func (h *Handler) GetChatToken(ctx context.Context, req *gamev1.GetChatTokenRequest) (*gamev1.GetChatTokenResponse, error) {
 	if req.GetShowId() == "" {
 		return nil, connect.NewError(connect.CodeInvalidArgument, "show_id is required")

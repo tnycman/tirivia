@@ -1,6 +1,4 @@
-# One-time bootstrap per account: Terraform state bucket with native S3 locking
-# (use_lockfile; DynamoDB locking is deprecated). KMS CMK, versioning, TLS-only, no public
-# access (AWS Prescriptive Guidance, docs/research/03). Apply with local state, then migrate.
+# One-time bootstrap per account: Terraform state bucket with native S3 locking (use_lockfile; DynamoDB locking is deprecated).
 
 terraform {
   required_version = "~> 1.17"

@@ -2,9 +2,7 @@ syntax = "proto3";
 
 package tirivia.core.v1;
 
-// Auth (core deployable). Order of operations is enforced server-side:
-//   Attest  ->  StartOtp  ->  VerifyOtp  ->  (RefreshSession)*
-// An OTP is never sent without a fresh, verified attestation (Master Plan §7, SIM farms / OTP pumping).
+// Auth (core deployable).
 service AuthService {
   // Returns a server nonce for App Attest / Play Integrity. The nonce is single-use and short-lived.
   rpc GetAttestationChallenge(GetAttestationChallengeRequest) returns (GetAttestationChallengeResponse);

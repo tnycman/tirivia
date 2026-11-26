@@ -71,3 +71,15 @@ Go, built as a **modular monolith in one Go module** with two binaries (Master P
 
 ## Sources
 [docs/research/02-backend-protocol-data.md](../../docs/research/02-backend-protocol-data.md)
+
+## Server timeouts (`internal/platform/httpserver`, verified 2026-11-25)
+
+**Constraint** means an AWS or Go behaviour the value must satisfy. **Policy** means no published value exists, so the setting is our choice.
+
+| Setting | Value | Kind | Source |
+|---|---|---|---|
+| Go defaults | All timeouts 0 = none; `MaxHeaderBytes` 1 MB | Fact | [net/http](https://pkg.go.dev/net/http) |
+| `IdleTimeout` | 120 s, which must exceed the ALB idle timeout (default 60 s) or clients get 502s | Constraint | [ALB attributes](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/edit-load-balancer-attributes.html) |
+| `ReadHeaderTimeout` / `ReadTimeout` / `WriteTimeout` | 5 s / 10 s / 15 s | Policy | No published value. Cloudflare's guide sets both for untrusted clients, with examples of 5 s / 10 s ([guide](https://blog.cloudflare.com/the-complete-guide-to-golang-net-http-timeouts/)) |
+| `MaxHeaderBytes` | 16 KiB (DPoP + JWT headers are a few KB) | Policy | Lowered from Go's 1 MB default |
+| Drain on SIGTERM | 25 s, inside ECS `stopTimeout` (default 30 s, max 120 s) | Constraint | [ECS task definition](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html) |

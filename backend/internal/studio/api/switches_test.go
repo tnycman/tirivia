@@ -100,6 +100,7 @@ func TestSetSwitchRejects(t *testing.T) {
 		"show scope no id": {Key: "chat.enabled", Scope: adminv1.SwitchScope_SWITCH_SCOPE_SHOW, Reason: "x"},
 		"global with id":   {Key: "chat.enabled", Scope: adminv1.SwitchScope_SWITCH_SCOPE_GLOBAL, ShowId: "s", Reason: "x"},
 		"no reason":        {Key: "chat.enabled", Scope: adminv1.SwitchScope_SWITCH_SCOPE_GLOBAL},
+		"log injection":    {Key: "chat.enabled", Scope: adminv1.SwitchScope_SWITCH_SCOPE_GLOBAL, Reason: "ok\nFAKE AUDIT LINE"},
 	}
 	for name, req := range cases {
 		if _, err := h.SetSwitch(ctx, req); code(err) != connect.CodeInvalidArgument {

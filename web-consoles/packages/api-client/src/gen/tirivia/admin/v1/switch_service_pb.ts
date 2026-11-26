@@ -196,9 +196,6 @@ export const SwitchScopeSchema: GenEnum<SwitchScope> = /*@__PURE__*/
 
 /**
  * Back-office feature/kill switches (SPEC §6.10, §9; ADR-0009).
- * Served on the INTERNAL admin listener only (never the public game ALB). Callers are the
- * web-consoles BFF acting for an SSO-authenticated operator (FIDO2 MFA). Every change is
- * written to audit_log with actor, before/after and reason.
  *
  * @generated from service tirivia.admin.v1.SwitchService
  */

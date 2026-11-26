@@ -1,9 +1,4 @@
-// Independent second implementation of the vector runner, using only Node built-ins
-// (node:crypto). Proves the corpus is language-neutral: nothing here shares code with the Go
-// reference. Covers shuffle order, envelope parsing, Ed25519 verification, key lookup, size and
-// prefix rules. CueBody field checks stay in the typed runners (Go/Swift/Kotlin).
-//
-//   node protocol/testvectors/runners/node/verify-vectors.mjs
+// Independent second implementation of the vector runner, using only Node built-ins (node:crypto).
 import { createHmac, createPublicKey, verify } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";

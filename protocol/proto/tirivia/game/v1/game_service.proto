@@ -7,7 +7,6 @@ import "tirivia/common/v1/common.proto";
 import "tirivia/cue/v1/cue.proto";
 
 // Hot-path service, served by the `game` deployable (SPEC §6.1).
-// Transport: Connect protocol (POST, application/proto) over HTTPS; https://connectrpc.com/docs/protocol/
 service GameService {
   // Schedule and countdown. Cacheable (Connect GET) because it has no side effects.
   rpc GetNextShow(GetNextShowRequest) returns (GetNextShowResponse) {
@@ -15,8 +14,7 @@ service GameService {
   }
   // Playback URL, chat token, player state, reaction set. Requires a fresh attestation for prize shows.
   rpc JoinShow(JoinShowRequest) returns (JoinShowResponse);
-  // Idempotent. Natural key (show_id, question_id, user) is the uniqueness guard;
-  // the Idempotency-Key header follows draft-ietf-httpapi-idempotency-key-header-09.
+  // Idempotent.
   rpc SubmitAnswer(SubmitAnswerRequest) returns (SubmitAnswerResponse);
   // Batched reaction counts. Interval is server-tunable (default 5 s + jitter; ADR-0006).
   rpc SubmitReactions(SubmitReactionsRequest) returns (SubmitReactionsResponse);
@@ -70,8 +68,7 @@ message JoinShowResponse {
   bool chat_enabled = 11;
 }
 
-// Fetch a chat token after chat is switched on mid-show (the app calls this when
-// Pulse.chat_enabled flips to true and it holds no valid token).
+// Fetch a chat token after chat is switched on mid-show (the app calls this when Pulse.chat_enabled flips to true and it holds no valid token).
 message GetChatTokenRequest {
   string show_id = 1;
 }
@@ -98,9 +95,7 @@ enum PlayerStatus {
   PLAYER_STATUS_ELIMINATED = 2;
   // Can watch and react but not answer.
   PLAYER_STATUS_SPECTATOR = 3;
-  // Joined after Q1 opened (decision AC-8): answers from the current question on for fun and
-  // stats, but can never win. Excluded from tallies and players-remaining. An extra life cannot
-  // cover questions that opened before the player joined (decision UF-4).
+  // Joined after Q1 opened (decision AC-8): answers from the current question on for fun and stats, but can never win.
   PLAYER_STATUS_PLAY_ALONG = 4;
 }
 

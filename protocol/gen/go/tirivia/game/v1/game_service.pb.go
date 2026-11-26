@@ -32,9 +32,7 @@ const (
 	PlayerStatus_PLAYER_STATUS_ELIMINATED  PlayerStatus = 2
 	// Can watch and react but not answer.
 	PlayerStatus_PLAYER_STATUS_SPECTATOR PlayerStatus = 3
-	// Joined after Q1 opened (decision AC-8): answers from the current question on for fun and
-	// stats, but can never win. Excluded from tallies and players-remaining. An extra life cannot
-	// cover questions that opened before the player joined (decision UF-4).
+	// Joined after Q1 opened (decision AC-8): answers from the current question on for fun and stats, but can never win.
 	PlayerStatus_PLAYER_STATUS_PLAY_ALONG PlayerStatus = 4
 )
 
@@ -486,8 +484,7 @@ func (x *JoinShowResponse) GetChatEnabled() bool {
 	return false
 }
 
-// Fetch a chat token after chat is switched on mid-show (the app calls this when
-// Pulse.chat_enabled flips to true and it holds no valid token).
+// Fetch a chat token after chat is switched on mid-show (the app calls this when Pulse.chat_enabled flips to true and it holds no valid token).
 type GetChatTokenRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ShowId        string                 `protobuf:"bytes,1,opt,name=show_id,json=showId,proto3" json:"show_id,omitempty"`

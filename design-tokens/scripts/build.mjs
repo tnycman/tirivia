@@ -1,13 +1,4 @@
 // Builds design tokens (W3C DTCG 2025.10) into Swift, Jetpack Compose and CSS with Style Dictionary 5.
-//   node scripts/build.mjs          write outputs into the platform folders
-//   node scripts/build.mjs --check  fail if committed outputs are stale (CI)
-//
-// Verified gotchas with style-dictionary 5.8.0 (probed 2026-11-25), handled by custom transforms:
-//  * Dimensions must be authored in rem. Built-in Swift/Compose size transforms treat the number
-//    as rem, so 16px would become 256.
-//  * DTCG duration objects ({value, unit}) print as "[object Object]" in Swift/Compose.
-//  * Compose font sizes need sp (they follow the user's font-scale setting); built-ins emit sp
-//    only for the non-DTCG "fontSize" type, so font.size.* is mapped explicitly.
 import StyleDictionary from "style-dictionary";
 import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync, existsSync } from "node:fs";
 import { dirname, join } from "node:path";

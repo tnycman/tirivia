@@ -1,6 +1,4 @@
 # GitHub Actions -> AWS via OIDC: no long-lived keys (docs/research/03, stack/10-ci-cd).
-# Separate read-only PLAN role (pull requests) and write APPLY role (main + environment only).
-# IAM rejects trust policies without a `sub` condition; we pin repo, environment and ref.
 
 terraform {
   required_version = "~> 1.17"

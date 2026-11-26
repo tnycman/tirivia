@@ -1,13 +1,4 @@
 # Pre-show scaling for an ECS service (Games Industry Lens GAMEOPS03-BP05 "Pre-scale").
-#
-# Show times are NOT fixed in infrastructure: producers schedule each show in the studio
-# console (decision UF-1). Terraform owns only the scalable target and the always-on target
-# tracking. The backend's pre-show orchestrator (studio module) books one-time scheduled
-# actions per show via the Application Auto Scaling API, using `at(...)` expressions:
-#   T-4 h  ALB LCU reservation (can take hours to fulfil)
-#   T-60   MinCapacity -> show_min, KDS re-shard, Valkey scale-out, warm standby in Ireland
-#   T+end  back to baseline after the show is SETTLED
-# Rescheduling or cancelling a show deletes and re-books those actions.
 
 terraform {
   required_version = "~> 1.17"

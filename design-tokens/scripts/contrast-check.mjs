@@ -1,7 +1,4 @@
 // WCAG 2.2 contrast gate for every text/background pairing the apps use.
-// Formula: https://www.w3.org/TR/WCAG22/#dfn-relative-luminance and #dfn-contrast-ratio
-// Thresholds: SC 1.4.3 (AA) 4.5:1 normal text, 3:1 large text (>= 24 px, or >= 18.66 px bold).
-// Overlay text on live video is checked against the WORST case: a pure-white frame behind the scrim.
 import { readFileSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";

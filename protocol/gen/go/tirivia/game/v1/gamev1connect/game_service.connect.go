@@ -101,8 +101,7 @@ type GameServiceClient interface {
 	GetNextShow(context.Context, *v1.GetNextShowRequest) (*v1.GetNextShowResponse, error)
 	// Playback URL, chat token, player state, reaction set. Requires a fresh attestation for prize shows.
 	JoinShow(context.Context, *v1.JoinShowRequest) (*v1.JoinShowResponse, error)
-	// Idempotent. Natural key (show_id, question_id, user) is the uniqueness guard;
-	// the Idempotency-Key header follows draft-ietf-httpapi-idempotency-key-header-09.
+	// Idempotent.
 	SubmitAnswer(context.Context, *v1.SubmitAnswerRequest) (*v1.SubmitAnswerResponse, error)
 	// Batched reaction counts. Interval is server-tunable (default 5 s + jitter; ADR-0006).
 	SubmitReactions(context.Context, *v1.SubmitReactionsRequest) (*v1.SubmitReactionsResponse, error)
@@ -125,8 +124,7 @@ type GameServiceHandler interface {
 	GetNextShow(context.Context, *v1.GetNextShowRequest) (*v1.GetNextShowResponse, error)
 	// Playback URL, chat token, player state, reaction set. Requires a fresh attestation for prize shows.
 	JoinShow(context.Context, *v1.JoinShowRequest) (*v1.JoinShowResponse, error)
-	// Idempotent. Natural key (show_id, question_id, user) is the uniqueness guard;
-	// the Idempotency-Key header follows draft-ietf-httpapi-idempotency-key-header-09.
+	// Idempotent.
 	SubmitAnswer(context.Context, *v1.SubmitAnswerRequest) (*v1.SubmitAnswerResponse, error)
 	// Batched reaction counts. Interval is server-tunable (default 5 s + jitter; ADR-0006).
 	SubmitReactions(context.Context, *v1.SubmitReactionsRequest) (*v1.SubmitReactionsResponse, error)

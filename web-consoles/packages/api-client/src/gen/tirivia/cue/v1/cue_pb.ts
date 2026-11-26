@@ -153,16 +153,14 @@ export type QuestionOpen = Message<"tirivia.cue.v1.QuestionOpen"> & {
   durationMs: number;
 
   /**
-   * Question text in the show language. Max 240 UTF-8 bytes (question bank enforces it;
-   * worst-case cue measured at 845 B in backend/internal/platform/cuesign tests).
+   * Question text in the show language.
    *
    * @generated from field: string text = 4;
    */
   text: string;
 
   /**
-   * Exactly three options in canonical order. Clients shuffle per player using
-   * JoinShowResponse.shuffle_seed and always submit option_id, never a position.
+   * Exactly three options in canonical order.
    *
    * @generated from field: repeated tirivia.cue.v1.Option options = 5;
    */
@@ -312,16 +310,14 @@ export type Pulse = Message<"tirivia.cue.v1.Pulse"> & {
   remainingMs: number;
 
   /**
-   * False while a question is open (reactions pause; Master Plan §2.3) or when the
-   * reactions kill switch is on.
+   * False while a question is open (reactions pause; Master Plan §2.3) or when the reactions kill switch is on.
    *
    * @generated from field: bool reactions_enabled = 7;
    */
   reactionsEnabled: boolean;
 
   /**
-   * Backend chat switch (SPEC §6.10). Apps show/hide the chat panel within one pulse;
-   * no app release and no rejoin needed. When false, the server also stops minting chat tokens.
+   * Backend chat switch (SPEC §6.10).
    *
    * @generated from field: bool chat_enabled = 8;
    */

@@ -1,24 +1,23 @@
-// Package dpopclient builds DPoP proofs the way the iOS and Android apps must (RFC 9449 §4.2).
-// It is the reference for the mobile implementations and is used by tests and load tests.
+// Package dpopclient builds DPoP proofs (RFC 9449 §4.2); the reference for the mobile apps.
 package dpopclient
 
 import (
 	"crypto/ecdsa"
 	"crypto/sha256"
 	"encoding/base64"
+	"encoding/json"
 	"time"
 
 	"github.com/go-jose/go-jose/v4"
 	"github.com/google/uuid"
 )
 
-// Key is a device key: P-256, as created in the Secure Enclave / Android Keystore.
+// Key is a P-256 device key.
 type Key struct {
-	priv   *ecdsa.PrivateKey
 	signer jose.Signer
 }
 
-// New wraps a P-256 private key. The public JWK is embedded in every proof header.
+// New wraps priv; its public JWK is embedded in every proof.
 func New(priv *ecdsa.PrivateKey) (*Key, error) {
 	jwk := jose.JSONWebKey{Key: priv.Public(), Algorithm: string(jose.ES256)}
 	opts := (&jose.SignerOptions{}).WithType("dpop+jwt").WithHeader("jwk", jwk)
@@ -26,20 +25,16 @@ func New(priv *ecdsa.PrivateKey) (*Key, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &Key{priv: priv, signer: s}, nil
+	return &Key{signer: s}, nil
 }
 
-// ProofParams are the claims of one proof.
+// ProofParams are one proof's claims.
 type ProofParams struct {
-	Method      string
-	URL         string // without query/fragment
-	AccessToken string // set when calling with an access token (adds ath)
-	Nonce       string // set when the server returned DPoP-Nonce
-	IssuedAt    time.Time
-	JTI         string // defaults to a fresh UUIDv7
+	Method, URL, AccessToken, Nonce, JTI string
+	IssuedAt                             time.Time
 }
 
-// Proof returns a compact-serialised DPoP proof JWT.
+// Proof returns a compact proof JWT.
 func (k *Key) Proof(p ProofParams) (string, error) {
 	if p.IssuedAt.IsZero() {
 		p.IssuedAt = time.Now()
@@ -51,15 +46,15 @@ func (k *Key) Proof(p ProofParams) (string, error) {
 		}
 		p.JTI = id.String()
 	}
-	claims := map[string]any{"jti": p.JTI, "htm": p.Method, "htu": p.URL, "iat": p.IssuedAt.Unix()}
+	c := map[string]any{"jti": p.JTI, "htm": p.Method, "htu": p.URL, "iat": p.IssuedAt.Unix()}
 	if p.AccessToken != "" {
 		sum := sha256.Sum256([]byte(p.AccessToken))
-		claims["ath"] = base64.RawURLEncoding.EncodeToString(sum[:])
+		c["ath"] = base64.RawURLEncoding.EncodeToString(sum[:])
 	}
 	if p.Nonce != "" {
-		claims["nonce"] = p.Nonce
+		c["nonce"] = p.Nonce
 	}
-	payload, err := jsonMarshal(claims)
+	payload, err := json.Marshal(c)
 	if err != nil {
 		return "", err
 	}

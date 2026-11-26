@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+package tirivia.core.v1;
+
+import "google/protobuf/timestamp.proto";
+
+service ContentService {
+  // Replays, clips, winners wall, question of the day.
+  rpc GetFeed(GetFeedRequest) returns (GetFeedResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+  }
+  // One like per account per item; cosmetic only (Master Plan §2.4).
+  rpc LikeItem(LikeItemRequest) returns (LikeItemResponse);
+  rpc RecordView(RecordViewRequest) returns (RecordViewResponse);
+  rpc GetShareCard(GetShareCardRequest) returns (GetShareCardResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+  }
+}
+
+enum FeedItemKind {
+  FEED_ITEM_KIND_UNSPECIFIED = 0;
+  FEED_ITEM_KIND_REPLAY = 1;
+  FEED_ITEM_KIND_CLIP = 2;
+  FEED_ITEM_KIND_WINNER = 3;
+  FEED_ITEM_KIND_QUESTION_OF_THE_DAY = 4;
+}
+
+message FeedItem {
+  string item_id = 1;
+  FeedItemKind kind = 2;
+  string title = 3;
+  string media_url = 4;
+  string thumbnail_url = 5;
+  uint64 views = 6;
+  uint64 likes = 7;
+  bool liked_by_me = 8;
+  google.protobuf.Timestamp created_at = 9;
+}
+
+message GetFeedRequest {
+  string page_token = 1;
+}
+
+message GetFeedResponse {
+  repeated FeedItem items = 1;
+  string next_page_token = 2;
+}
+
+message LikeItemRequest {
+  string item_id = 1;
+  bool like = 2;
+}
+
+message LikeItemResponse {
+  uint64 likes = 1;
+}
+
+message RecordViewRequest {
+  string item_id = 1;
+}
+
+message RecordViewResponse {}
+
+message GetShareCardRequest {
+  string show_id = 1;
+}
+
+message GetShareCardResponse {
+  // CloudFront URL of the generated image ("I reached question 9" / "I won").
+  string image_url = 1;
+  string deep_link = 2;
+}

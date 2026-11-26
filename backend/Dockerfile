@@ -1,13 +1,5 @@
 # syntax=docker/dockerfile:1
 # Multi-stage, ARM64-first (Fargate Graviton is ~20% cheaper; stack/09-infrastructure-aws).
-# Build from the REPO ROOT (context needs protocol/gen; see /.dockerignore):
-#   docker buildx build --platform linux/arm64 --build-arg CMD=game -f backend/Dockerfile -t game .
-# CMD = game | core | testvectors
-#
-# Base images are pinned to multi-arch index digests (tags are mutable). Renovate updates the
-# tag and digest together. Digests resolved 2026-11-25.
-# Verified 2026-11-25: arm64 + amd64 builds; game image ~4 MB compressed, runs as nonroot,
-# graceful SIGTERM drain exits 0 in ~5 s (ECS stopTimeout default 30 s).
 
 ARG GO_IMAGE=golang:1.27.4-alpine@sha256:70bd7ddea8b6cbe5d6943cde279d6b67feb10cc924fb9100d1d8757c1575b280
 ARG RUNTIME_IMAGE=gcr.io/distroless/static-debian12:nonroot@sha256:afa5c872c891853ca7fcf1f12c3edb23f7eeef36189728842dd51042ff57f7ab
