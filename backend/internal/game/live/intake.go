@@ -32,7 +32,7 @@ var intakeScript = valkey.NewLuaScript(guards + `local joined = tonumber(redis.c
 if not joined then return 'not_joined' end
 local q = tonumber(ARGV[1])
 if redis.call('HEXISTS', KEYS[1], ARGV[4]) == 1 then return 'duplicate' end
-if not counter(KEYS[2], ARGV[2]) or not hashOrNone(KEYS[3]) then return redis.error_reply(malformed) end
+if not counter(KEYS[2], ARGV[2], 1) or not hashOrNone(KEYS[3]) then return redis.error_reply(malformed) end
 local last_ok = tonumber(redis.call('HGET', KEYS[1], 'last_ok'))
 local late = joined > 0
 if late then

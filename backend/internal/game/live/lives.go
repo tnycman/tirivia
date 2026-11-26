@@ -23,14 +23,14 @@ end
 local q, final = tonumber(ARGV[1]), tonumber(ARGV[2])
 local last_ok = tonumber(redis.call('HGET', KEYS[1], 'last_ok'))
 if joined > 0 or q < 1 or q >= final or last_ok ~= q - 1 then return 'not_allowed' end
-if not counter(KEYS[2], ARGV[3]) then return redis.error_reply(malformed) end
+if not counter(KEYS[2], ARGV[3], 1) then return redis.error_reply(malformed) end
 redis.call('HSET', KEYS[1], 'last_ok', q, 'life_used', 1, 'life_q', q, 'life_qid', ARGV[4])
 redis.call('HINCRBY', KEYS[2], ARGV[3], 1)
 return 'ok'`)
 
 // refundScript reverts a life spent on question q exactly once, tally included.
 var refundScript = valkey.NewLuaScript(guards + `if redis.call('HGET', KEYS[1], 'life_q') ~= ARGV[1] then return 0 end
-if not counter(KEYS[2], ARGV[2]) then return redis.error_reply(malformed) end
+if not counter(KEYS[2], ARGV[2], -1) then return redis.error_reply(malformed) end
 redis.call('HSET', KEYS[1], 'last_ok', tonumber(ARGV[1]) - 1, 'life_used', 0)
 redis.call('HDEL', KEYS[1], 'life_q', 'life_qid')
 redis.call('HINCRBY', KEYS[2], ARGV[2], -1)

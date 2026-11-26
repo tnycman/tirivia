@@ -89,7 +89,7 @@ Each item below either takes calendar time outside our control or has a default 
 | Task | Tag |
 |---|---|
 | Studio console: **show scheduling (producers set day/time; weekly show)**, run of show, question release, reveal, burst, **feature switches (chat, reactions, lives, sign-ups, countries)**, rehearsal mode | WEB BE |
-| Reveal runs the tally check `live.Verify` after the answer window closes (TS-16). The action on a mismatch (alert only, or publish the recount) is decided before this task | BE |
+| Reveal runs the tally check `live.Verify` after the answer window closes (TS-16), and only once every accepted answer request has finished: an answer that passed the deadline check can still be running its script, so Verify waits at least the server `WriteTimeout` (15 s, stack/03 "Server timeouts") past the deadline, or uses a closing barrier (Codex review of 4584663). The action on a mismatch (alert only, or publish the recount) is decided before this task | BE |
 | Encoder chain: vMix/OBS → SRT primary (`priority=1`) and RTMPS backup (`priority=2`), identical profiles, failover slate, reconnect window | VID |
 | **TV simulcast path** (if a TV partner is confirmed): studio feed hand-off to the station; broadcast delay set above the app p99 latency; QR/"play in the app" graphics in vMix; delay value recorded in the run-of-show settings | VID OPS |
 | Runbooks: pre-show checklist, encoder failover, cue desync | VID OPS |
