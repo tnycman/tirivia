@@ -25,6 +25,7 @@ All owner decisions were settled on 2026-11-25. They are recorded in the [decisi
 2. **Prize currency** (PR-1). Decided together with the bank partner. The ledger is multi-currency-ready until then.
 3. **Chat in production.** Chat is built, tested and switched from the back office, off by default. Decide at the Phase 7 go/no-go ([ADR-0009](adr/0009-chat-backend-switch.md)).
 4. **Producers** set each weekly show's day and time, the per-question timers (6–10 s), themes and chat slow mode in the studio console. These are not owner decisions.
+5. **(NEW) AC-6 can only be enforced per install.** Neither platform gives a device ID that survives a reinstall. Play Integrity device recall requires Play Billing volume, Google forbids fingerprinting, and App Attest keys are reset on reinstall. Today the limit is the install (the hardware-bound key) plus the ID check before any cash-out (ID-5). Accept this, or require ID verification earlier ([research 08](research/08-device-attestation.md)).
 
 ## Must be verified in testing (UNVERIFIED in research)
 
@@ -34,6 +35,8 @@ All owner decisions were settled on 2026-11-25. They are recorded in the [decisi
 - Which IVS channel types accept SRT ingest.
 - Parameter ranges for the IVS failover slate.
 - Which surface the IVS Android player view uses (affects reaction overlay performance).
-- Whether pgx protocol-level prepared statements pin RDS Proxy sessions.
+- ~~Whether pgx protocol-level prepared statements pin RDS Proxy sessions.~~ Settled: they are multiplexed, but we use exec mode anyway ([research 07](research/07-persistence-sourced-values.md)).
+- App Attest validation-category byte order, confirmed on the first TestFlight build ([research 08](research/08-device-attestation.md)).
+- The Play Integrity verdict on the Galaxy A07 and Redmi A5 reference phones (Android 13+ `MEETS_DEVICE_INTEGRITY`).
 - The exact SwiftPM setting for default MainActor isolation.
 - CLDR plural categories for Albanian.
