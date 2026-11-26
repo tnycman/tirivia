@@ -49,7 +49,7 @@
    - The server performs all 9 attestation checks.
    - ([Apple](https://developer.apple.com/documentation/devicecheck/validating-apps-that-connect-to-your-server.md))
 8. **Play Integrity:**
-   - Use standard requests with `requestHash = SHA-256(phone ‖ server_nonce)`.
+   - Use standard requests with `requestHash = base64url(SHA-256(challenge ‖ DPoP jkt))`. The check runs before the phone is entered; Google says never to put plaintext identifiers in the hash.
    - Decode verdicts on the server and never cache them.
    - The **default quota is 10k per day**, so request an increase in Phase 0 ([standard](https://developer.android.com/google/play/integrity/standard)).
 9. **Access JWT:**
@@ -100,7 +100,8 @@
 | DPoP `iat` window | ±60 s; jti kept for the window | Standard range | RFC 9449 §11.1 ("on the order of seconds or minutes") |
 | JWT clock leeway | 30 s | Standard range | RFC 7519 §4.1.4 ("usually no more than a few minutes") |
 | App Attest challenge / ticket lifetime | 5 min / 10 min | Policy | Apple: one-time challenge; no lifetime published |
-| Play Integrity freshness | — (slice 2) | Policy | Android docs use a placeholder `ALLOWED_WINDOW_MILLIS` |
+| Play Integrity freshness | Token no older than the attestation challenge TTL (5 min); at most 30 s in the future (the JWT leeway) | Derived | Google gives only a placeholder `ALLOWED_WINDOW_MILLIS`. The request hash includes the challenge, so a valid token cannot be older than the challenge |
+| Play Integrity prize eligibility | `PLAY_RECOGNIZED` + `LICENSED` + `MEETS_DEVICE_INTEGRITY` + our package and signing certificate. Anything weaker plays for points only (AC-5) | Standard | Google sample checks ([verdicts](https://developer.android.com/google/play/integrity/verdicts)) |
 
 **Open follow-ups:**
 

@@ -76,14 +76,15 @@ type CountryEligibility struct {
 }
 
 type Device struct {
-	ID          uuid.UUID
-	UserID      uuid.UUID
-	Platform    string
-	AttestKeyID *string
-	DpopJkt     string
-	RiskMetric  *int32
-	FirstSeenAt time.Time
-	LastSeenAt  time.Time
+	ID            uuid.UUID
+	UserID        uuid.UUID
+	Platform      string
+	AttestKeyID   *string
+	DpopJkt       string
+	RiskMetric    *int32
+	FirstSeenAt   time.Time
+	LastSeenAt    time.Time
+	PrizeEligible bool
 }
 
 type DevicePrizeBinding struct {

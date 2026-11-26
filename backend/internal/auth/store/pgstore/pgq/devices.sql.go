@@ -12,18 +12,20 @@ import (
 )
 
 const registerDevice = `-- name: RegisterDevice :one
-INSERT INTO devices (id, user_id, platform, attest_key_id, dpop_jkt)
-VALUES ($1, $2, $3, $4, $5)
-ON CONFLICT (dpop_jkt) DO UPDATE SET last_seen_at = now() WHERE devices.user_id = EXCLUDED.user_id
+INSERT INTO devices (id, user_id, platform, attest_key_id, dpop_jkt, prize_eligible)
+VALUES ($1, $2, $3, $4, $5, $6)
+ON CONFLICT (dpop_jkt) DO UPDATE SET last_seen_at = now(), prize_eligible = EXCLUDED.prize_eligible
+WHERE devices.user_id = EXCLUDED.user_id
 RETURNING id
 `
 
 type RegisterDeviceParams struct {
-	ID          uuid.UUID
-	UserID      uuid.UUID
-	Platform    string
-	AttestKeyID *string
-	DpopJkt     string
+	ID            uuid.UUID
+	UserID        uuid.UUID
+	Platform      string
+	AttestKeyID   *string
+	DpopJkt       string
+	PrizeEligible bool
 }
 
 func (q *Queries) RegisterDevice(ctx context.Context, arg RegisterDeviceParams) (uuid.UUID, error) {
@@ -33,6 +35,7 @@ func (q *Queries) RegisterDevice(ctx context.Context, arg RegisterDeviceParams) 
 		arg.Platform,
 		arg.AttestKeyID,
 		arg.DpopJkt,
+		arg.PrizeEligible,
 	)
 	var id uuid.UUID
 	err := row.Scan(&id)

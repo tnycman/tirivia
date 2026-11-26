@@ -29,7 +29,7 @@ func (d *Devices) Register(ctx context.Context, userID string, dev otp.Device) (
 		return "", err
 	}
 	got, err := d.q.RegisterDevice(ctx, pgq.RegisterDeviceParams{ID: id, UserID: user,
-		Platform: dev.Platform, AttestKeyID: &dev.ID, DpopJkt: dev.JKT})
+		Platform: dev.Platform, AttestKeyID: &dev.ID, DpopJkt: dev.JKT, PrizeEligible: dev.PrizeEligible})
 	if errors.Is(err, pgx.ErrNoRows) {
 		return "", accounts.ErrKeyBound
 	}

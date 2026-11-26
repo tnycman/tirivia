@@ -26,12 +26,14 @@ type Evidence struct {
 	AppAttestObject    []byte
 	AppAttestAssertion []byte
 	PlayIntegrityToken string
+	JKT                string
 }
 
-// Result of a successful verification.
+// Result of a successful verification; Signals feed the risk score (AC-7).
 type Result struct {
 	DeviceRef     string
 	PrizeEligible bool
+	Signals       []string
 }
 
 // Verifier checks platform evidence against a challenge.

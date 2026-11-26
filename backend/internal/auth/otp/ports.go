@@ -5,11 +5,12 @@ import (
 	"time"
 )
 
-// Device is what a verified attestation ticket proves.
+// Device is what a verified attestation ticket proves; PrizeEligible is false for points-only devices (AC-5).
 type Device struct {
-	ID       string
-	Platform string
-	JKT      string
+	ID            string
+	Platform      string
+	JKT           string
+	PrizeEligible bool
 }
 
 // Challenge is a pending code; only its HMAC is stored.

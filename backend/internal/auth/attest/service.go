@@ -49,6 +49,7 @@ func (s *Service) Attest(ctx context.Context, challenge []byte, ev Evidence, jkt
 	if !ok {
 		return "", 0, Result{}, ErrChallenge
 	}
+	ev.JKT = jkt
 	res, err := s.verifier.Verify(ctx, challenge, ev)
 	if err != nil {
 		return "", 0, Result{}, ErrFailed
@@ -58,7 +59,7 @@ func (s *Service) Attest(ctx context.Context, challenge []byte, ev Evidence, jkt
 		return "", 0, Result{}, err
 	}
 	tok := base64.RawURLEncoding.EncodeToString(raw)
-	dev := otp.Device{ID: res.DeviceRef, Platform: ev.Platform, JKT: jkt}
+	dev := otp.Device{ID: res.DeviceRef, Platform: ev.Platform, JKT: jkt, PrizeEligible: res.PrizeEligible}
 	if err := s.store.PutTicket(ctx, tok, dev, s.ttl.Ticket); err != nil {
 		return "", 0, Result{}, err
 	}
