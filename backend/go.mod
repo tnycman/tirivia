@@ -6,6 +6,8 @@ toolchain go1.27.4
 
 require (
 	connectrpc.com/connect/v2 v2.0.2
+	github.com/go-jose/go-jose/v4 v4.1.9
+	github.com/google/uuid v1.6.0
 	github.com/tirivia/protocol/gen v0.0.0
 	google.golang.org/protobuf v1.36.12
 )

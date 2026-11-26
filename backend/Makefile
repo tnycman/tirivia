@@ -16,7 +16,7 @@ lint:
 	go run github.com/golangci/golangci-lint/v2/cmd/golangci-lint@$(GOLANGCI_LINT_VERSION) run ./...
 
 arch:
-	go run github.com/fe3dback/go-arch-lint@latest check
+	go run github.com/fe3dback/go-arch-lint@v1.19.2 check
 
 vuln:
 	go run golang.org/x/vuln/cmd/govulncheck@latest ./...

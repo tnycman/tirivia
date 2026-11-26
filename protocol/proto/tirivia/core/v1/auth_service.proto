@@ -112,6 +112,9 @@ message RefreshSessionResponse {
   Session session = 1;
 }
 
-message SignOutRequest {}
+message SignOutRequest {
+  // The current refresh token; its whole token family is revoked.
+  string refresh_token = 1;
+}
 
 message SignOutResponse {}
