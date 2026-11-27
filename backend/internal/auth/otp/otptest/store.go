@@ -3,6 +3,9 @@ package otptest
 import (
 	"bytes"
 	"context"
+	"errors"
+	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -30,18 +33,38 @@ func RunStore(t *testing.T, s otp.Store) {
 		got.Device != c.Device || !bytes.Equal(got.CodeMAC, c.CodeMAC) || !got.ExpiresAt.Equal(c.ExpiresAt) {
 		t.Fatalf("round trip: %+v %v", got, err)
 	}
-	for want := 1; want <= 2; want++ {
-		if n, err := s.IncrementAttempts(ctx, c.ID); err != nil || n != want {
-			t.Fatalf("attempt %d: %d %v", want, n, err)
-		}
+	if _, err := s.Verify(ctx, c.ID, "other", c.CodeMAC, time.Now(), otp.MaxAttempts); !errors.Is(err, otp.ErrBinding) {
+		t.Fatalf("binding mismatch: %v", err)
 	}
-	if err := s.Delete(ctx, c.ID); err != nil {
-		t.Fatal(err)
+	if got, err := s.Get(ctx, c.ID); err != nil || got.Attempts != 0 {
+		t.Fatalf("binding mismatch altered challenge: %+v %v", got, err)
 	}
+	if got, err := s.Verify(ctx, c.ID, c.Device.JKT, []byte("wrong"), time.Now(), otp.MaxAttempts); !errors.Is(err, otp.ErrWrongCode) || got.Attempts != 1 {
+		t.Fatalf("wrong code: %+v %v", got, err)
+	}
+	runConsumeRace(t, s, c)
 	if _, err := s.Get(ctx, c.ID); err == nil {
-		t.Fatal("deleted challenge still readable")
+		t.Fatal("consumed challenge still readable")
 	}
-	if _, err := s.IncrementAttempts(ctx, c.ID); err == nil {
-		t.Fatal("attempts counted on a deleted challenge")
+}
+
+func runConsumeRace(t *testing.T, s otp.Store, c otp.Challenge) {
+	t.Helper()
+	const racers = 16
+	ready := make(chan struct{})
+	var wg sync.WaitGroup
+	var wins atomic.Int32
+	for range racers {
+		wg.Go(func() {
+			<-ready
+			if _, err := s.Verify(context.Background(), c.ID, c.Device.JKT, c.CodeMAC, time.Now(), otp.MaxAttempts); err == nil {
+				wins.Add(1)
+			}
+		})
+	}
+	close(ready)
+	wg.Wait()
+	if wins.Load() != 1 {
+		t.Fatalf("%d correct verifications succeeded; want 1", wins.Load())
 	}
 }

@@ -67,6 +67,6 @@ type Failures interface {
 type Store interface {
 	Put(ctx context.Context, c Challenge, ttl time.Duration) error
 	Get(ctx context.Context, id string) (Challenge, error)
-	IncrementAttempts(ctx context.Context, id string) (int, error)
+	Verify(ctx context.Context, id, expectedJKT string, codeMAC []byte, now time.Time, maxAttempts int) (Challenge, error)
 	Delete(ctx context.Context, id string) error
 }

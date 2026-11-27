@@ -84,6 +84,7 @@ func TestSessions(t *testing.T) {
 	}
 	sessionstest.Run(t, pgstore.NewSessions(db), seed)
 	sessionstest.RunRace(t, pgstore.NewSessions(db), seed)
+	sessionstest.RunFamilyRevocationRace(t, pgstore.NewSessions(db), seed)
 }
 
 func TestAppAttestKeys(t *testing.T) { keystest.Run(t, pgstore.NewAppAttestKeys(pool(t))) }

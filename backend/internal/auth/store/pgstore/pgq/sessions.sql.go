@@ -12,9 +12,23 @@ import (
 	"github.com/google/uuid"
 )
 
+const applySessionFamilyRevocation = `-- name: ApplySessionFamilyRevocation :exec
+UPDATE sessions s SET revoked_at = r.revoked_at, revoke_reason = r.revoke_reason
+FROM session_family_revocations r
+WHERE s.refresh_family_id = $1 AND r.refresh_family_id = s.refresh_family_id AND s.revoked_at IS NULL
+`
+
+func (q *Queries) ApplySessionFamilyRevocation(ctx context.Context, refreshFamilyID uuid.UUID) error {
+	_, err := q.db.Exec(ctx, applySessionFamilyRevocation, refreshFamilyID)
+	return err
+}
+
 const insertSession = `-- name: InsertSession :exec
-INSERT INTO sessions (id, user_id, device_id, refresh_family_id, refresh_hash, created_at, last_used_at)
-VALUES ($1, $2, $3, $4, $5, $6, $7)
+INSERT INTO sessions (id, user_id, device_id, refresh_family_id, refresh_hash, created_at, last_used_at,
+                      revoked_at, revoke_reason)
+SELECT $1, $2, $3, $4, $5, $6, $7, r.revoked_at, r.revoke_reason
+FROM (SELECT 1) AS seed
+LEFT JOIN session_family_revocations r ON r.refresh_family_id = $4
 `
 
 type InsertSessionParams struct {
@@ -41,7 +55,11 @@ func (q *Queries) InsertSession(ctx context.Context, arg InsertSessionParams) er
 }
 
 const markSessionRotated = `-- name: MarkSessionRotated :execrows
-UPDATE sessions SET rotated_at = $2 WHERE id = $1 AND rotated_at IS NULL
+UPDATE sessions SET rotated_at = $2
+WHERE id = $1 AND rotated_at IS NULL AND revoked_at IS NULL
+  AND NOT EXISTS (
+      SELECT 1 FROM session_family_revocations r WHERE r.refresh_family_id = sessions.refresh_family_id
+  )
 `
 
 type MarkSessionRotatedParams struct {
@@ -57,19 +75,20 @@ func (q *Queries) MarkSessionRotated(ctx context.Context, arg MarkSessionRotated
 	return result.RowsAffected(), nil
 }
 
-const revokeSessionFamily = `-- name: RevokeSessionFamily :exec
-UPDATE sessions SET revoked_at = $3, revoke_reason = $2
-WHERE refresh_family_id = $1 AND revoked_at IS NULL
+const recordSessionFamilyRevocation = `-- name: RecordSessionFamilyRevocation :exec
+INSERT INTO session_family_revocations (refresh_family_id, revoke_reason, revoked_at)
+VALUES ($1, $2, $3)
+ON CONFLICT (refresh_family_id) DO NOTHING
 `
 
-type RevokeSessionFamilyParams struct {
+type RecordSessionFamilyRevocationParams struct {
 	RefreshFamilyID uuid.UUID
-	RevokeReason    *string
-	RevokedAt       *time.Time
+	RevokeReason    string
+	RevokedAt       time.Time
 }
 
-func (q *Queries) RevokeSessionFamily(ctx context.Context, arg RevokeSessionFamilyParams) error {
-	_, err := q.db.Exec(ctx, revokeSessionFamily, arg.RefreshFamilyID, arg.RevokeReason, arg.RevokedAt)
+func (q *Queries) RecordSessionFamilyRevocation(ctx context.Context, arg RecordSessionFamilyRevocationParams) error {
+	_, err := q.db.Exec(ctx, recordSessionFamilyRevocation, arg.RefreshFamilyID, arg.RevokeReason, arg.RevokedAt)
 	return err
 }
 
