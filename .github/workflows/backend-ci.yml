@@ -7,7 +7,7 @@ on:
     paths: ["backend/**", "protocol/**", ".github/workflows/backend-ci.yml"]
   push:
     branches: [main]
-    paths: ["backend/**", "protocol/**"]
+    paths: ["backend/**", "protocol/**", ".github/workflows/backend-ci.yml"]
 
 permissions: {}
 
