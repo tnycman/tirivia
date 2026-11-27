@@ -89,17 +89,19 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+      # AWS login only once the account exists; an unset variable reads as an empty string.
+      - if: vars.AWS_APPLY_ROLE_ARN != ''
+        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
         with:
           role-to-assume: ${{ vars.AWS_APPLY_ROLE_ARN }}
           aws-region: eu-central-1
       - name: Build ARM64 image
-        run: docker build --build-arg CMD=${{ matrix.cmd }} -f backend/Dockerfile -t "$ECR_REPO:${GITHUB_SHA}" .
+        run: docker build --build-arg CMD=${{ matrix.cmd }} -f backend/Dockerfile -t "$IMAGE" .
         env:
-          ECR_REPO: ${{ vars.ECR_REGISTRY }}/tirivia-${{ matrix.cmd }}
+          IMAGE: ${{ vars.ECR_REGISTRY != '' && format('{0}/', vars.ECR_REGISTRY) || '' }}tirivia-${{ matrix.cmd }}:${{ github.sha }}
       - name: Smoke test (health, graceful SIGTERM drain)
         env:
-          IMAGE: ${{ vars.ECR_REGISTRY }}/tirivia-${{ matrix.cmd }}:${{ github.sha }}
+          IMAGE: ${{ vars.ECR_REGISTRY != '' && format('{0}/', vars.ECR_REGISTRY) || '' }}tirivia-${{ matrix.cmd }}:${{ github.sha }}
           PORT: ${{ matrix.cmd == 'game' && '8080' || '8081' }}
         run: |
           docker run -d --name smoke -e ADDR=":${PORT}" -p "${PORT}:${PORT}" "$IMAGE"
