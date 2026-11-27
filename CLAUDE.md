@@ -13,6 +13,16 @@ Sources of truth, in order of precedence:
 - `stack/NN-*/README.md`: one folder per function, with pinned versions, cited best practices, "Rules for this codebase", and tables of sourced values.
 - `docs/build-standards.md`: the 20-point PR acceptance bar.
 
+## Rules for every agent and subagent (owner-set)
+
+These rules bind the main session and every agent it starts, including research agents, Codex and eval runs. The full workflow is in `.claude/skills/building-tirivia-changes/SKILL.md`.
+
+1. **Two corrections, then escalate.** When the same thing has needed correcting twice (a fix that fails review twice, a test that keeps failing, the owner correcting the same point twice), stop. Report what was tried, show the evidence and ask the owner; don't start a third round.
+2. **Fresh reviewers get closed criteria.** Give any reviewer without this session's context the exact commit, numbered checks, what is out of scope, and what "sound" means. Have it answer HOLDS or FAILS for each check. Never send an open "find problems" brief.
+3. **Report artifacts produced, not documents revised.** List commits, new files, test and lint output, measurements, research files and register row IDs, each with its evidence. Don't narrate edits.
+4. **Status before reporting.** The owner runs `pwsh -File .claude/skills/building-tirivia-changes/scripts/status.ps1 -Base <branch below>`. Its numbers go in the report: size against the base branch, Go files over 100 lines, correction count. Two corrections on one branch triggers rule 1.
+5. **The owner runs every shell command.** Give git, go, docker and make commands as copy-paste PowerShell (or one `pwsh -File` line) and claim only what the pasted output shows. Agents that must run commands themselves, like Codex, need the owner's OK and stay read-only.
+
 ## Working rules (owner-set)
 
 - **No guessed values.** Every constant traces to a primary source (an RFC, NIST, Apple, Google, AWS or vendor docs) recorded in `stack/` or `docs/research/`. Constants with no published value are config, not literals (see `stack/05-auth-identity` "Sourced values" → `backend/cmd/core/policy.go`). Use researched practice only.
