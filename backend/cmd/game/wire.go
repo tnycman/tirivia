@@ -1,9 +1,6 @@
 package main
 
 import (
-	"crypto/rand"
-	"math/big"
-
 	"github.com/valkey-io/valkey-go"
 
 	"github.com/tirivia/backend/internal/auth/authn"
@@ -22,14 +19,10 @@ func gameDeps(cfg gameConfig, c valkey.Client, sw switches.Reader) (gameapi.Deps
 	if err != nil {
 		return gameapi.Deps{}, err
 	}
-	shard, err := rand.Int(rand.Reader, big.NewInt(livestate.TallyShards))
-	if err != nil {
-		return gameapi.Deps{}, err
-	}
 	validator := tokens.NewValidator(cfg.keys, cfg.issuer, tokens.Audience, jwtLeeway)
 	return gameapi.Deps{
 		PublicBaseURL: cfg.publicBaseURL, Switches: sw, Authn: authn.New(validator, verifier),
 		Shows: livestate.NewShows(c), Players: live.NewPlayers(c, cfg.playerTTL), Answers: live.NewAnswers(c),
-		Lives: live.NewLives(c), Tally: live.NewTally(c, int(shard.Int64())),
+		Lives: live.NewLives(c),
 	}, nil
 }

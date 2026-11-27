@@ -64,7 +64,7 @@ The game server is fail-closed. Without `VALKEY_URL` it serves only the feature 
 | `ACCESS_TOKEN_KEYS` | `kid=base64url(Ed25519 public key)`, comma-separated for `kid` overlap during rotation |
 | `PLAYER_STATE_TTL` | How long live player state outlives the show (Go duration, e.g. `6h`); no published value, so it is set per environment |
 
-Tallies flush every 100 ms (SPEC §6.7). After the listeners drain, a final flush runs in the time left inside the ECS stop timeout. Extra lives stay off until the referral inventory lands (UF-5).
+Tallies are written inside the answer-intake script, so nothing is held in memory or flushed (TS-16). Extra lives stay off until the referral inventory lands (UF-5).
 
 ## Verified in this workspace on 2026-11-25
 

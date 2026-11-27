@@ -26,11 +26,13 @@ type Outcome struct {
 	Counted bool
 }
 
-// intakeScript mirrors domain.Participant.CanAnswer; a test checks the two agree on every state.
-var intakeScript = valkey.NewLuaScript(`local joined = tonumber(redis.call('HGET', KEYS[1], 'joined_at_q'))
+// intakeScript mirrors domain.Participant.CanAnswer and counts a new on-time answer in the same atomic step (TS-16).
+// Every check runs before the first write, because a script is not rolled back on error.
+var intakeScript = valkey.NewLuaScript(guards + `local joined = tonumber(redis.call('HGET', KEYS[1], 'joined_at_q'))
 if not joined then return 'not_joined' end
 local q = tonumber(ARGV[1])
 if redis.call('HEXISTS', KEYS[1], ARGV[4]) == 1 then return 'duplicate' end
+if not counter(KEYS[2], ARGV[2], 1) or not hashOrNone(KEYS[3]) then return redis.error_reply(malformed) end
 local last_ok = tonumber(redis.call('HGET', KEYS[1], 'last_ok'))
 local late = joined > 0
 if late then
@@ -40,6 +42,10 @@ redis.call('HSET', KEYS[1], ARGV[4], ARGV[2])
 local correct = ARGV[2] == ARGV[3]
 if correct and not late then redis.call('HSET', KEYS[1], 'last_ok', q) end
 if late then return correct and 'late_correct' or 'late_wrong' end
+if ARGV[5] == '1' then
+  redis.call('HINCRBY', KEYS[2], ARGV[2], 1)
+  redis.call('HSET', KEYS[3], ARGV[6], ARGV[2])
+end
 return correct and 'correct' or 'wrong'`)
 
 var outcomes = map[string]Outcome{
@@ -56,19 +62,26 @@ type Answers struct{ c valkey.Client }
 func NewAnswers(c valkey.Client) *Answers { return &Answers{c: c} }
 
 // Submit records option for question q if received by the server deadline; correctness is computed on intake.
-func (a *Answers) Submit(ctx context.Context, show, user string, st livestate.Show, questionID, option string, received time.Time) (Outcome, error) {
+// A voided answer is recorded but never tallied.
+func (a *Answers) Submit(ctx context.Context, show, user string, st livestate.Show, questionID, option string, voided bool, received time.Time) (Outcome, error) {
 	if questionID != st.QuestionID {
 		return Outcome{}, ErrNotQuestion
 	}
 	if received.After(st.Deadline) {
 		return Outcome{}, ErrClosed
 	}
-	res, err := intakeScript.Exec(ctx, a.c, []string{livestate.PlayerKey(show, user)},
-		[]string{strconv.Itoa(st.QuestionIndex), option, st.CorrectOption, livestate.AnswerField(st.QuestionIndex)}).ToString()
+	q, b, count := st.QuestionIndex, livestate.Bucket(user), "1"
+	if voided {
+		count = "0"
+	}
+	res, err := intakeScript.Exec(ctx, a.c,
+		[]string{livestate.PlayerKey(show, user), livestate.TallyKey(show, q, b), livestate.CountedKey(show, q, b)},
+		[]string{strconv.Itoa(q), option, st.CorrectOption, livestate.AnswerField(q), count, user}).ToString()
 	if err != nil {
 		return Outcome{}, err
 	}
 	if o, ok := outcomes[res]; ok {
+		o.Counted = o.Counted && !voided
 		return o, nil
 	}
 	if e, ok := rejections[res]; ok {

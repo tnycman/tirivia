@@ -38,9 +38,10 @@ Go, built as a **modular monolith in one Go module** with two binaries (Master P
    2. [Effective Go](https://go.dev/doc/effective_go)
    3. [Uber Go Style Guide](https://github.com/uber-go/guide/blob/master/style.md) for team conventions
 4. **Idempotency** follows the IETF draft-09 semantics and uses Redis `SET NX EX`. For answers, the natural key (show, question, user) is the real guard. ([draft](https://www.ietf.org/archive/id/draft-ietf-httpapi-idempotency-key-header-09.html), [Stripe](https://stripe.com/blog/idempotency))
-5. **Hot counters are pre-aggregated.**
-   - Each task holds in-memory counters and flushes them every 100–250 ms with pipelined `HINCRBY` into 64 shards, each shard under its own hash tag.
-   - One key per option would hit the per-slot ceiling.
+5. **Hot counters are sharded and written atomically with their source record.**
+   - Answer tallies are incremented inside the intake script, in 64 buckets that share a hash tag with the player keys (TS-16, [research 09](../../docs/research/09-exact-tallies.md)). The earlier in-memory flush every 100–250 ms cited no source and was superseded.
+   - One key per option would hit the per-slot ceiling ([ElastiCache PE pillar](https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/PerformanceEfficiencyPillar.html)).
+   - Reaction counting is not decided yet; settle it in the register before building.
    - ([ElastiCache troubleshooting](https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/wwe-troubleshooting.html))
 6. **The hot path never waits on Postgres.**
    - Answers go to Valkey and Kinesis.
@@ -65,7 +66,7 @@ Go, built as a **modular monolith in one Go module** with two binaries (Master P
 - Every operation is a context-aware function with a deadline.
 
 ## Changes vs Master Plan
-- The tally design uses per-task pre-aggregation plus 64 shards spread across slots.
+- Tallies are incremented inside the atomic answer-intake script, in 64 buckets shared with the player keys, and checked against a recount after each reveal (TS-16, [research 09](../../docs/research/09-exact-tallies.md)).
 - The `studio` module also owns **feature switches**, which include the chat switch.
 
 ## Code

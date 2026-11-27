@@ -93,6 +93,8 @@ Every choice that has to be settled before the build continues. Each row cites w
 | TS-13 | Web consoles | **React SPA + BFF** · Next.js | SPA + BFF (no React Server Components attack surface) | **SETTLED 2026-11-25** |
 | TS-14 | Crash / performance | Sentry | As MP | **SETTLED 2026-11-25** |
 | TS-15 | Capacity target | 300k concurrent players; load test 600k | As MP | **SETTLED 2026-11-25** |
+| TS-16 | Live answer tallies | **The answer-intake script increments the tally in the same atomic step, only when the answer is new** (natural-key guard). After each reveal, the totals are checked against a recount of the stored answers. Player keys and tally shards share a hash tag per bucket so one script touches one slot. Bucket count and script throughput are proven in the 600k load test. Rejected: in-memory counting plus periodic flush (loses counts on a crash, doubles them on a retry); durable log with batch IDs (only correct when written with the answer, adds delay); recount only (unmeasured reveal latency) | MillWheel atomic dedup, DynamoDB conditional writes, Discord/Photon verification ([research 09](research/09-exact-tallies.md)) | **SETTLED 2026-11-26** |
+| TS-17 | Valkey durability | **Evaluate ElastiCache synchronous durability** (Valkey 9.0+, zero loss of acknowledged writes across failover) in the 600k load test. Adopt it if latency and the 100 MBps per-primary write cap pass, then update SPEC §6.7. Alternatives: keep async and rebuild from the answer stream (not built yet); decide only after the load test | Async replication can lose acknowledged answers on failover ([research 09](research/09-exact-tallies.md) §2) | **SETTLED 2026-11-26** (evaluate; adoption follows the load test) |
 
 ## F. Operations, cost and governance
 

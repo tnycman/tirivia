@@ -323,15 +323,16 @@ For answers, the natural key (show, question, user) is the final guard against d
 | Key | Type | Notes |
 |---|---|---|
 | `show:{<show>}:state` | hash | phase, q_index, t_cue, deadline, correct_option (game-only), cue_seq |
-| `player:{<show>:<user>}` | hash | joined_at_q, last_ok, life_used, and `a<q>` = the answer to question q. **The answer field is the natural-key guard** (`HEXISTS` then `HSET` in one script). Tagged per player, so each script stays in one slot while keys still spread across slots. A separate `ans:` key would sit in another slot, and Valkey cluster rejects scripts that touch several slots ([cluster spec](https://valkey.io/topics/cluster-spec/)) |
+| `player:{<show>:<b>}:<user>` | hash | joined_at_q, last_ok, life_used, life_q, and `a<q>` = the answer to question q. **The answer field is the natural-key guard** (`HEXISTS` then `HSET` in one script). `b` = FNV-1a(user) mod 64 is the player's bucket; the player key shares its hash tag with that bucket's tally and counted keys, so the intake script touches one slot. Valkey cluster rejects scripts that touch several slots ([cluster spec](https://valkey.io/topics/cluster-spec/)) |
 | `idem:<user>:<key>` | string | Idempotency-Key record (state plus response hash) |
-| `tally:{<show>:<q>:<shard>}` | hash | option → count. **64 shards with different hash tags**; each `game` task pre-aggregates in memory and flushes every 100–250 ms with pipelined `HINCRBY`. Readers sum the shards |
+| `tally:{<show>:<b>}:<q>` | hash | option → count, plus `_life`. **The intake script increments it in the same atomic step as a new answer**, so a crash cannot lose a count and a retry cannot double one (TS-16, [research 09](docs/research/09-exact-tallies.md)). 64 buckets with different hash tags; readers sum the buckets. The bucket count is a policy value proven in the 600k load test |
+| `counted:{<show>:<b>}:<q>` | hash | user → option for every answer the tally counted. After the reveal, a cursored `HSCAN` recount is checked against the tally (`live.Verify`) |
 | `react:{<show>:<shard>}` | hash | kind → count, sharded the same way |
 | `viewers:<show>` | HyperLogLog or a per-task counter | Viewer count on the server |
 | `rl:<user>:<bucket>` | string | Per-user rate limits for answers, reactions and OTP |
 | `switch:*` | string | Feature-switch cache (TTL 5 s; the source of truth is Postgres) |
 
-Valkey holds state that can be rebuilt. If a node is lost, the state is recovered from the last cue plus the Kinesis/answers stream, which is acceptable because Postgres persists results after every round.
+Live-state scripts validate key types before their first write, because Valkey does not roll a script back. A change to the live-state key format is deployed only between shows: readers do not fall back to an older format. Asynchronous replication can lose acknowledged writes on failover ([cluster spec](https://valkey.io/topics/cluster-spec/)); ElastiCache synchronous durability is being evaluated in the 600k load test (TS-17). Valkey holds state that can be rebuilt. If a node is lost, the state is recovered from the last cue plus the Kinesis/answers stream, which is acceptable because Postgres persists results after every round.
 
 ### 6.8 Event stream
 
@@ -537,7 +538,7 @@ Source: [ADR-0005](docs/adr/0005-device-bound-tokens.md), [research 05](docs/res
 | NFR | Target | Notes |
 |---|---|---|
 | Concurrent players | 300k design, **600k load-tested** | Assumption (Master Plan) |
-| Answer intake | ~30k req/s peak at 300k (60k at 600k) | Stateless `game` fleet, pre-aggregated Valkey writes |
+| Answer intake | ~30k req/s peak at 300k (60k at 600k) | Stateless `game` fleet, one atomic Valkey script per answer that also counts it (TS-16) |
 | Reaction intake | **≤ 60k req/s at 300k**: 5 s batching with jitter, sent only when the user has tapped, interval tunable from the server | CHANGED from 2 s ([ADR-0006](docs/adr/0006-reaction-batching.md)); at 2 s this would have been the largest request stream (150k/s) |
 | Answer ack latency | p99 < 300 ms server-side at peak | |
 | Cue-to-render | p99 ≤ L_max (6 s DEFAULT) | Measured in rehearsal |

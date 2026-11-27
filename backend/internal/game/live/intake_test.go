@@ -22,7 +22,7 @@ func TestIntakeMatchesDomainRules(t *testing.T) {
 				p := domain.Participant{JoinedAtQ: joined, LastOK: lastOK}
 				user := id(t)
 				setPlayer(t, c, show, user, p)
-				out, err := a.Submit(ctx, show, user, openQuestion(q, now), "q"+strconv.Itoa(q), "right", now)
+				out, err := a.Submit(ctx, show, user, openQuestion(q, now), "q"+strconv.Itoa(q), "right", false, now)
 				if accepted := err == nil; accepted != p.CanAnswer(q) {
 					t.Fatalf("joined=%d last_ok=%d q=%d: script accepted=%v (%v), domain=%v", joined, lastOK, q, accepted, err, p.CanAnswer(q))
 				}
@@ -49,25 +49,25 @@ func TestIntakeRejects(t *testing.T) {
 	a, players := NewAnswers(c), NewPlayers(c, time.Hour)
 	ctx, show, user, now := context.Background(), id(t), id(t), time.Now()
 	st := openQuestion(1, now)
-	if _, err := a.Submit(ctx, show, user, st, "q1", "right", now); !errors.Is(err, ErrNotJoined) {
+	if _, err := a.Submit(ctx, show, user, st, "q1", "right", false, now); !errors.Is(err, ErrNotJoined) {
 		t.Fatalf("not joined: %v", err)
 	}
 	if _, err := players.Join(ctx, show, user, 0); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := a.Submit(ctx, show, user, st, "q2", "right", now); !errors.Is(err, ErrNotQuestion) {
+	if _, err := a.Submit(ctx, show, user, st, "q2", "right", false, now); !errors.Is(err, ErrNotQuestion) {
 		t.Fatalf("other question: %v", err)
 	}
-	if _, err := a.Submit(ctx, show, user, st, "q1", "right", st.Deadline.Add(time.Millisecond)); !errors.Is(err, ErrClosed) {
+	if _, err := a.Submit(ctx, show, user, st, "q1", "right", false, st.Deadline.Add(time.Millisecond)); !errors.Is(err, ErrClosed) {
 		t.Fatalf("after deadline: %v", err)
 	}
-	if out, err := a.Submit(ctx, show, user, st, "q1", "wrong-option", st.Deadline); err != nil || out.Correct || !out.Counted {
+	if out, err := a.Submit(ctx, show, user, st, "q1", "wrong-option", false, st.Deadline); err != nil || out.Correct || !out.Counted {
 		t.Fatalf("on the deadline: %+v %v", out, err)
 	}
-	if _, err := a.Submit(ctx, show, user, st, "q1", "right", now); !errors.Is(err, ErrDuplicate) {
+	if _, err := a.Submit(ctx, show, user, st, "q1", "right", false, now); !errors.Is(err, ErrDuplicate) {
 		t.Fatalf("second answer: %v", err)
 	}
-	if _, err := a.Submit(ctx, show, user, openQuestion(2, now), "q2", "right", now); !errors.Is(err, ErrNotAlive) {
+	if _, err := a.Submit(ctx, show, user, openQuestion(2, now), "q2", "right", false, now); !errors.Is(err, ErrNotAlive) {
 		t.Fatalf("eliminated player answered Q2: %v", err)
 	}
 }
@@ -84,7 +84,7 @@ func TestConcurrentAnswersRecordOnce(t *testing.T) {
 	for i := range 16 {
 		wg.Go(func() {
 			opt := map[bool]string{true: "right", false: "wrong"}[i%2 == 0]
-			if _, err := a.Submit(ctx, show, user, openQuestion(1, now), "q1", opt, now); err == nil {
+			if _, err := a.Submit(ctx, show, user, openQuestion(1, now), "q1", opt, false, now); err == nil {
 				ok.Add(1)
 			}
 		})

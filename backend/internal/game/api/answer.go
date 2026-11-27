@@ -54,15 +54,11 @@ func (h *Handler) SubmitAnswer(ctx context.Context, req *gamev1.SubmitAnswerRequ
 	if voided {
 		option = voidedOption
 	}
-	out, err := h.d.Answers.Submit(ctx, req.GetShowId(), p.UserID, st, req.GetQuestionId(), option, received)
-	if err != nil {
+	if _, err := h.d.Answers.Submit(ctx, req.GetShowId(), p.UserID, st, req.GetQuestionId(), option, voided, received); err != nil {
 		return answerResult(err)
 	}
 	if voided {
 		return &gamev1.SubmitAnswerResponse{Result: gamev1.AnswerResult_ANSWER_RESULT_VOIDED_FOCUS_LOSS}, nil
-	}
-	if out.Counted {
-		h.d.Tally.Add(req.GetShowId(), st.QuestionIndex, option)
 	}
 	return &gamev1.SubmitAnswerResponse{Result: gamev1.AnswerResult_ANSWER_RESULT_ACCEPTED}, nil
 }

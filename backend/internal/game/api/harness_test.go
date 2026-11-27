@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/rand"
 	"encoding/hex"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -35,25 +36,38 @@ func (headerAuthn) Authenticate(_ context.Context, h contracts.Headers, _, _ str
 	return contracts.Principal{}, contracts.ErrUnauthenticated
 }
 
+// inventory is idempotent per (user, show) like the real one must be; lostReply debits but reports an error.
 type inventory struct {
-	mu      sync.Mutex
-	n       map[string]int
-	failing bool
+	mu                          sync.Mutex
+	n                           map[string]int
+	consumed                    map[string]bool
+	failing, lostReply, readErr bool
 }
 
 func (i *inventory) Available(_ context.Context, u string) (int, error) {
 	i.mu.Lock()
 	defer i.mu.Unlock()
+	if i.readErr {
+		return 0, errors.New("inventory read failed")
+	}
 	return i.n[u], nil
 }
 
-func (i *inventory) Consume(_ context.Context, u, _ string) (bool, error) {
+func (i *inventory) Consume(_ context.Context, u, show string) (bool, error) {
 	i.mu.Lock()
 	defer i.mu.Unlock()
+	if i.consumed[u+"/"+show] {
+		return true, nil
+	}
 	if i.failing || i.n[u] == 0 {
 		return false, nil
 	}
 	i.n[u]--
+	i.consumed[u+"/"+show] = true
+	if i.lostReply {
+		i.lostReply = false
+		return false, errors.New("reply lost")
+	}
 	return true, nil
 }
 
@@ -62,7 +76,6 @@ type game struct {
 	kv      valkey.Client
 	shows   *livestate.Shows
 	players *live.Players
-	tally   *live.Tally
 	inv     *inventory
 	show    string
 }
@@ -78,15 +91,15 @@ func newGame(t *testing.T) game {
 		t.Fatal(err)
 	}
 	t.Cleanup(c.Close)
-	g := game{kv: c, shows: livestate.NewShows(c), players: live.NewPlayers(c, time.Hour), tally: live.NewTally(c, 7),
-		inv: &inventory{n: map[string]int{}}, show: rnd(t)}
+	g := game{kv: c, shows: livestate.NewShows(c), players: live.NewPlayers(c, time.Hour),
+		inv: &inventory{n: map[string]int{}, consumed: map[string]bool{}}, show: rnd(t)}
 	mux := http.NewServeMux()
 	ts := httptest.NewServer(mux)
 	t.Cleanup(ts.Close)
 	srv := connect.NewServer()
 	gamev1connect.RegisterGameServiceHandler(srv, New(Deps{PublicBaseURL: ts.URL, Switches: switches.NewMemory(switches.Snapshot{}),
 		Authn: headerAuthn{}, Shows: g.shows, Players: g.players, Answers: live.NewAnswers(c), Lives: live.NewLives(c),
-		Tally: g.tally, Inventory: g.inv}))
+		Inventory: g.inv}))
 	connecthttp.Mount(mux, srv)
 	g.client = gamev1connect.NewGameServiceClient(connect.NewClient(connecthttp.NewTransport(ts.Client(), ts.URL)))
 	return g

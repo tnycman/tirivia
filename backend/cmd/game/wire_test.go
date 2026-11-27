@@ -32,7 +32,7 @@ func TestWiredServerAuthenticates(t *testing.T) {
 	}
 }
 
-// TestWiredAnswerIsTallied sends one answer through the production stores and the tally flush.
+// TestWiredAnswerIsTallied sends one answer through the production stores and checks its tally and recount.
 func TestWiredAnswerIsTallied(t *testing.T) {
 	w := newWired(t)
 	bg, show, now := context.Background(), "show-"+w.suffix, time.Now()
@@ -49,11 +49,11 @@ func TestWiredAnswerIsTallied(t *testing.T) {
 	if err != nil || res.GetResult() != gamev1.AnswerResult_ANSWER_RESULT_ACCEPTED {
 		t.Fatalf("answer: %v %v", res.GetResult(), err)
 	}
-	if err := w.deps.Tally.Flush(bg); err != nil {
-		t.Fatal(err)
-	}
 	if got, err := live.Sum(bg, w.kv, show, 1); err != nil || got["right"] != 1 {
 		t.Fatalf("tally = %v, %v; want right=1", got, err)
+	}
+	if err := live.Verify(bg, w.kv, show, 1); err != nil {
+		t.Fatal(err)
 	}
 }
 

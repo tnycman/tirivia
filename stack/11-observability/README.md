@@ -45,7 +45,7 @@ Watch a 20-minute live show as it happens and catch problems before players feel
 | Group | Signals |
 |---|---|
 | Players | joins/s, players remaining, viewer count (server-side), IVS `ConcurrentViews` vs quota |
-| Game | answers/s, acceptance rate by `AnswerResult`, answer ack p50/p99, tally flush lag |
+| Game | answers/s, acceptance rate by `AnswerResult`, answer ack p50/p99, tally/recount mismatches (`live.Verify`) |
 | Cues | PutMetadata latency and errors (404/429), cue size, seq gaps reported by apps |
 | Engage | reactions/s, capped batches, burst meter |
 | Chat | switch state, connections vs quota, review Lambda p99 and fallbacks |
