@@ -25,7 +25,7 @@ protocol/
 | Install tools | `sh scripts/install-tools.sh` (buf 1.75.0, protoc-gen-go 1.36.12, protoc-gen-connect-go 2.0.2) |
 | Lint | `buf lint` |
 | Format check | `buf format -d` |
-| Breaking-change check | `buf breaking --against '.git#branch=main'` |
+| Breaking-change check | `buf breaking` against the PR base commit; a deliberate break needs the visible `buf skip breaking` label (docs/research/07). Used once, pre-release, for the core_services.proto split |
 | Generate Go | `buf generate --template buf.gen.go.yaml` |
 | Generate all | `buf generate` (needs network access for the remote Swift, Kotlin and TS plugins) |
 

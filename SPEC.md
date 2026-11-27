@@ -213,6 +213,8 @@ SCHEDULED → LOBBY → QUESTION_OPEN → QUESTION_CLOSED → REVEAL ─┬→ Q
 6. **Focus-loss rule (AC-3, settled).**
    - On Q10–12, focus loss voids the answer only on `.background` on iOS or `onStop` on Android, or on an `inactive` gap longer than 1.5 s.
    - Shorter `inactive` events, such as a pulled-down notification shade, are only risk signals.
+   - The app reports `went_background` and `longest_inactive_ms` in `IntegritySignals`. A voided answer is stored as no option, so the question counts as missed (`domain.FocusLossVoids`).
+   - Before the reveal, a right and a wrong answer show the same player status, so `GetShowState` never leaks correctness (tested).
    - The rule is explained before every show.
 7. **Per-player shuffle.**
    - `k = HMAC-SHA256(key = shuffle_seed, msg = question_id)`.
@@ -321,8 +323,7 @@ For answers, the natural key (show, question, user) is the final guard against d
 | Key | Type | Notes |
 |---|---|---|
 | `show:{<show>}:state` | hash | phase, q_index, t_cue, deadline, correct_option (game-only), cue_seq |
-| `player:<show>:<user>` | hash | last_ok, life_used. No hash tag, so keys spread across slots |
-| `ans:<show>:<q>:<user>` | string | `SET NX EX`: the natural-key idempotency guard |
+| `player:{<show>:<user>}` | hash | joined_at_q, last_ok, life_used, and `a<q>` = the answer to question q. **The answer field is the natural-key guard** (`HEXISTS` then `HSET` in one script). Tagged per player, so each script stays in one slot while keys still spread across slots. A separate `ans:` key would sit in another slot, and Valkey cluster rejects scripts that touch several slots ([cluster spec](https://valkey.io/topics/cluster-spec/)) |
 | `idem:<user>:<key>` | string | Idempotency-Key record (state plus response hash) |
 | `tally:{<show>:<q>:<shard>}` | hash | option → count. **64 shards with different hash tags**; each `game` task pre-aggregates in memory and flushes every 100–250 ms with pipelined `HINCRBY`. Readers sum the shards |
 | `react:{<show>:<shard>}` | hash | kind → count, sharded the same way |
@@ -455,8 +456,8 @@ The owner decided on 2026-11-25:
 Source: [ADR-0005](docs/adr/0005-device-bound-tokens.md), [research 05](docs/research/05-auth-security-compliance-web.md).
 
 1. **Install:**
-   - **iOS:** generate the App Attest key once, attest it, and send assertions after that. Apple asks to keep attestation under 100 requests/s and to ramp up gradually.
-   - **Android:** Play Integrity standard request, with `requestHash = H(phone, nonce)`.
+   - **iOS:** generate the App Attest key once, attest it, and send assertions after that. Apple asks to keep attestation under 100 requests/s and to ramp up gradually. Both sign `clientData = challenge ‖ DPoP jkt` (attestation uses its SHA-256).
+   - **Android:** Play Integrity standard request, with `requestHash = base64url(SHA-256(challenge ‖ DPoP jkt))`. The check runs before the phone is entered, so it binds the one-time challenge and the device key (docs/research/08).
    - Generate a DPoP key in the Secure Enclave or Keystore, linked to the attested key.
 2. **OTP request**, checked in this order:
    1. attestation ticket

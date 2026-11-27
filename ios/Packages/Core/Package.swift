@@ -23,9 +23,7 @@ let package = Package(
         .package(url: "https://github.com/connectrpc/connect-swift", exact: "1.2.3"),
         .package(url: "https://github.com/apple/swift-protobuf", exact: "1.41.0"),
         .package(url: "https://github.com/getsentry/sentry-cocoa", exact: "9.35.0"),
-        // IVS Player 1.58.1 ships as a local SPM package: download
-        // https://player.live-video.net/1.58.1/Package.swift into ios/Vendor/AmazonIVSPlayer
-        // (CocoaPods distribution ended Feb 2026; docs/research/01).
+        // IVS Player 1.58.1 ships as a local SPM package: download https://player.live-video.net/1.58.1/Package.swift into ios/Vendor/AmazonIVSPlayer (CocoaPods distribution ended Feb 2026; docs/research/01).
         .package(path: "../../Vendor/AmazonIVSPlayer"),
     ],
     targets: [

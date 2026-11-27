@@ -30,6 +30,7 @@ The Master Plan §8 calls for six repositories. Here they are six top-level fold
 ├── android/         Kotlin 2.4 / Compose, minSdk 26, Now-in-Android modules
 ├── web-consoles/    React 19 + Vite back office (studio, question bank, claims, risk, clips) + Astro site
 ├── infra/           Terraform 1.17 / AWS provider 6.x, multi-account, Frankfurt + Ireland
+├── design-tokens/   W3C DTCG 2025.10 tokens → Swift / Compose / CSS, WCAG 2.2 AA contrast gate
 ├── stack/           Tech-stack documentation, one folder per function
 ├── docs/            research/ adr/ runbooks/ open-items, build standards
 └── .github/         CI workflows, every action SHA-pinned

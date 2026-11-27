@@ -1,0 +1,181 @@
+{
+  "format_version": 1,
+  "algorithm": "k = HMAC-SHA256(key=seed, msg=UTF-8(question_id)); for i = n-1 down to 1: j = k[n-1-i] mod (i+1) (k bytes unsigned); swap(idx[i], idx[j])",
+  "vectors": [
+    {
+      "name": "player_00_q1",
+      "seed_hex": "218020e66304e3a79839e7c707074ffa",
+      "question_id": "0193a1b3-0000-7000-8000-000000000000",
+      "n": 3,
+      "order": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "name": "player_01_q2",
+      "seed_hex": "151e56acf6e975470b5a370a1ebbc6f7",
+      "question_id": "0193a1b3-0000-7000-8000-000000000001",
+      "n": 3,
+      "order": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "name": "player_02_q3",
+      "seed_hex": "e524ef300c43795f68106c09c3eda07f",
+      "question_id": "0193a1b3-0000-7000-8000-000000000002",
+      "n": 3,
+      "order": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "name": "player_03_q4",
+      "seed_hex": "3324f5361846d93239086ac5f42baab7",
+      "question_id": "0193a1b3-0000-7000-8000-000000000003",
+      "n": 3,
+      "order": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "name": "player_04_q5",
+      "seed_hex": "312c6518df54bdbe54116ec4f99dc6b9",
+      "question_id": "0193a1b3-0000-7000-8000-000000000004",
+      "n": 3,
+      "order": [
+        1,
+        0,
+        2
+      ]
+    },
+    {
+      "name": "player_05_q6",
+      "seed_hex": "6beeccf414492189c2bb0851ccc9aaae",
+      "question_id": "0193a1b3-0000-7000-8000-000000000005",
+      "n": 3,
+      "order": [
+        2,
+        1,
+        0
+      ]
+    },
+    {
+      "name": "player_06_q7",
+      "seed_hex": "b266ef655e08b80374a215b4ed5c1aaa",
+      "question_id": "0193a1b3-0000-7000-8000-000000000006",
+      "n": 3,
+      "order": [
+        1,
+        2,
+        0
+      ]
+    },
+    {
+      "name": "player_07_q8",
+      "seed_hex": "4b6d7fa58f0b170b39bf1c9f5aebc21b",
+      "question_id": "0193a1b3-0000-7000-8000-000000000007",
+      "n": 3,
+      "order": [
+        0,
+        2,
+        1
+      ]
+    },
+    {
+      "name": "player_08_q9",
+      "seed_hex": "6230f7a0e7bd5c0bbe1d9b5eb9bbe80d",
+      "question_id": "0193a1b3-0000-7000-8000-000000000008",
+      "n": 3,
+      "order": [
+        0,
+        2,
+        1
+      ]
+    },
+    {
+      "name": "player_09_q10",
+      "seed_hex": "61efe1252675452e2288ca4bd95e8b90",
+      "question_id": "0193a1b3-0000-7000-8000-000000000009",
+      "n": 3,
+      "order": [
+        1,
+        2,
+        0
+      ]
+    },
+    {
+      "name": "player_10_q11",
+      "seed_hex": "0e7c772384143925d3cc3cec44a62e33",
+      "question_id": "0193a1b3-0000-7000-8000-000000000010",
+      "n": 3,
+      "order": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "name": "player_11_q12",
+      "seed_hex": "2ec06f7f332862e84a627fe7492371a3",
+      "question_id": "0193a1b3-0000-7000-8000-000000000011",
+      "n": 3,
+      "order": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "name": "utf8_question_id",
+      "seed_hex": "00112233445566778899aabbccddeeff",
+      "question_id": "pyetja-ë-ç-12",
+      "n": 3,
+      "order": [
+        0,
+        2,
+        1
+      ]
+    },
+    {
+      "name": "high_bytes_mask_check",
+      "seed_hex": "ffffffffffffffffffffffffffffffff",
+      "question_id": "q-high-bytes",
+      "n": 3,
+      "order": [
+        2,
+        1,
+        0
+      ]
+    },
+    {
+      "name": "single_option",
+      "seed_hex": "01",
+      "question_id": "q",
+      "n": 1,
+      "order": [
+        0
+      ]
+    },
+    {
+      "name": "four_options",
+      "seed_hex": "deadbeef",
+      "question_id": "q-four",
+      "n": 4,
+      "order": [
+        1,
+        3,
+        2,
+        0
+      ]
+    }
+  ]
+}

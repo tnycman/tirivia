@@ -1,0 +1,29 @@
+# Design tokens: WCAG 2.2 AA contrast gate + generated Swift/Compose/CSS are up to date.
+name: design-tokens-ci
+
+on:
+  pull_request:
+    paths: ["design-tokens/**", "ios/Packages/Core/Sources/DesignSystem/Generated/**", "android/core/designsystem/**", "web-consoles/packages/ui/src/tokens/**", ".github/workflows/design-tokens-ci.yml"]
+
+permissions: {}
+
+jobs:
+  tokens:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: design-tokens
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: design-tokens/package-lock.json
+      - run: npm ci
+      - name: Contrast gate (WCAG 2.2 AA) and generated files are current
+        run: npm run check

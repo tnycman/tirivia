@@ -827,7 +827,9 @@ func (x *RefreshSessionResponse) GetSession() *Session {
 }
 
 type SignOutRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The current refresh token; its whole token family is revoked.
+	RefreshToken  string `protobuf:"bytes,1,opt,name=refresh_token,json=refreshToken,proto3" json:"refresh_token,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -860,6 +862,13 @@ func (x *SignOutRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use SignOutRequest.ProtoReflect.Descriptor instead.
 func (*SignOutRequest) Descriptor() ([]byte, []int) {
 	return file_tirivia_core_v1_auth_service_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *SignOutRequest) GetRefreshToken() string {
+	if x != nil {
+		return x.RefreshToken
+	}
+	return ""
 }
 
 type SignOutResponse struct {
@@ -946,8 +955,9 @@ const file_tirivia_core_v1_auth_service_proto_rawDesc = "" +
 	"\x15RefreshSessionRequest\x12#\n" +
 	"\rrefresh_token\x18\x01 \x01(\tR\frefreshToken\"L\n" +
 	"\x16RefreshSessionResponse\x122\n" +
-	"\asession\x18\x01 \x01(\v2\x18.tirivia.core.v1.SessionR\asession\"\x10\n" +
-	"\x0eSignOutRequest\"\x11\n" +
+	"\asession\x18\x01 \x01(\v2\x18.tirivia.core.v1.SessionR\asession\"5\n" +
+	"\x0eSignOutRequest\x12#\n" +
+	"\rrefresh_token\x18\x01 \x01(\tR\frefreshToken\"\x11\n" +
 	"\x0fSignOutResponse*L\n" +
 	"\bPlatform\x12\x18\n" +
 	"\x14PLATFORM_UNSPECIFIED\x10\x00\x12\x10\n" +

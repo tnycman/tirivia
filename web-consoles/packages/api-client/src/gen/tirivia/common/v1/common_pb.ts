@@ -13,8 +13,7 @@ export const file_tirivia_common_v1_common: GenFile = /*@__PURE__*/
   fileDesc("Ch50aXJpdmlhL2NvbW1vbi92MS9jb21tb24ucHJvdG8SEXRpcml2aWEuY29tbW9uLnYxIi8KBU1vbmV5EhAKCGN1cnJlbmN5GAEgASgJEhQKDGFtb3VudF9taW5vchgCIAEoAyp+CgtFbGlnaWJpbGl0eRIbChdFTElHSUJJTElUWV9VTlNQRUNJRklFRBAAEhgKFEVMSUdJQklMSVRZX0VMSUdJQkxFEAESHwobRUxJR0lCSUxJVFlfUExBWV9GT1JfUE9JTlRTEAISFwoTRUxJR0lCSUxJVFlfQkxPQ0tFRBADKuEBCgxSZWFjdGlvbktpbmQSHQoZUkVBQ1RJT05fS0lORF9VTlNQRUNJRklFRBAAEhcKE1JFQUNUSU9OX0tJTkRfSEVBUlQQARIbChdSRUFDVElPTl9LSU5EX1RIVU1CU19VUBACEhYKElJFQUNUSU9OX0tJTkRfRklSRRADEhcKE1JFQUNUSU9OX0tJTkRfTEFVR0gQBBIWChJSRUFDVElPTl9LSU5EX0NMQVAQBRIZChVSRUFDVElPTl9LSU5EX0ZMQUdfQUwQBhIYChRSRUFDVElPTl9LSU5EX1RIRU1FRBAHYgZwcm90bzM");
 
 /**
- * Money in integer minor units (e.g. cents). Floats are never used for money.
- * https://www.postgresql.org/docs/current/datatype-money.html
+ * Money in integer minor units; never floating point.
  *
  * @generated from message tirivia.common.v1.Money
  */
@@ -81,8 +80,7 @@ export const EligibilitySchema: GenEnum<Eligibility> = /*@__PURE__*/
   enumDesc(file_tirivia_common_v1_common, 0);
 
 /**
- * Reaction kinds. The final set is an owner decision (Master Plan §11); themed sets are
- * delivered per show in JoinShowResponse.reaction_set, so new kinds never need an app release.
+ * Reaction kinds.
  *
  * @generated from enum tirivia.common.v1.ReactionKind
  */

@@ -1,0 +1,169 @@
+{
+  "format_version": 1,
+  "warning": "TEST KEYS ONLY. Derived from a public seed. Never use in any environment.",
+  "public_keys": {
+    "7": "QRn4YQcoRGCGJ47S7C+B2OnAYHS1vlAzMd4puWQF3RE="
+  },
+  "max_text_bytes": 900,
+  "vectors": [
+    {
+      "name": "question_open_albanian",
+      "text": "t1.CrABCiQwMTkzYTFiMi1jM2Q0LTdlNWYtOGE5Yi0wYzFkMmUzZjRhNWIQKhiAvNnynjRSfwokMDE5M2ExYjMtMTExMS03MjIyLTgzMzMtNDQ0NDU1NTU2NjY2EAUYwD4iJ0NpbGkgw6tzaHTDqyBrcnllcXl0ZXRpIGkgU2hxaXDDq3Jpc8OrPyoMCgFhEgdUaXJhbsOrKgwKAWISB0R1cnLDq3MqDQoBYxIIU2hrb2TDq3ISQNhxlxrmNkd0_w8T6EmDefJLDXJOQnhLwmZ9KdA8a6ZeLSIGBayTEBMT8auuSZLbCVKZ7qP8rzsQEeV40adb3AkYBw",
+      "context": {
+        "expected_show_id": "0193a1b2-c3d4-7e5f-8a9b-0c1d2e3f4a5b",
+        "last_seq": "41"
+      },
+      "expect": "valid",
+      "fields": {
+        "duration_ms": "8000",
+        "index": "5",
+        "kind": "question_open",
+        "option_b_text": "Durrës",
+        "question_id": "0193a1b3-1111-7222-8333-444455556666",
+        "seq": "42",
+        "show_id": "0193a1b2-c3d4-7e5f-8a9b-0c1d2e3f4a5b",
+        "text": "Cili është kryeqyteti i Shqipërisë?"
+      }
+    },
+    {
+      "name": "question_open_worst_case_size",
+      "text": "t1.CqUECiQwMTkzYTFiMi1jM2Q0LTdlNWYtOGE5Yi0wYzFkMmUzZjRhNWIQKhiAvNnynjRS8wMKJDAxOTNhMWIzLTExMTEtNzIyMi04MzMzLTQ0NDQ1NTU1NjY2NhAFGMA-IvABw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8OrKkUKAWESQMOnw6fDp8Onw6fDp8Onw6fDp8Onw6fDp8Onw6fDp8Onw6fDp8Onw6fDp8Onw6fDp8Onw6fDp8Onw6fDp8Onw6cqRQoBYhJAw6fDp8Onw6fDp8Onw6fDp8Onw6fDp8Onw6fDp8Onw6fDp8Onw6fDp8Onw6fDp8Onw6fDp8Onw6fDp8Onw6fDpypFCgFjEkDDp8Onw6fDp8Onw6fDp8Onw6fDp8Onw6fDp8Onw6fDp8Onw6fDp8Onw6fDp8Onw6fDp8Onw6fDp8Onw6fDp8OnEkB_v_Idmy4MOzyr3TRzu2zR7YD0Skv1ACvJCcEkJsz6NnOBjjhSvlKJgNQJEgDlX6-4COx_7uCwlH2QjyGb3UIAGAc",
+      "context": {
+        "expected_show_id": "0193a1b2-c3d4-7e5f-8a9b-0c1d2e3f4a5b",
+        "last_seq": "41"
+      },
+      "expect": "valid",
+      "fields": {
+        "kind": "question_open",
+        "seq": "42",
+        "text": "ëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëëë"
+      }
+    },
+    {
+      "name": "pulse",
+      "text": "t1.Ck4KJDAxOTNhMWIyLWMzZDQtN2U1Zi04YTliLTBjMWQyZTNmNGE1YhAqGIC82fKeNGodCJDrBxCekAMaBggBEOPABRoFCAYQ510gBSgFOAESQGric4LzcrXIxgF0bCeDe14EyObeyJRUThMaY18YiTsDZU0qdNfakC28czLWpGCPgtWRy-UDUq7QYcn4wSJX3AQYBw",
+      "context": {
+        "expected_show_id": "0193a1b2-c3d4-7e5f-8a9b-0c1d2e3f4a5b",
+        "last_seq": "41"
+      },
+      "expect": "valid",
+      "fields": {
+        "chat_enabled": "false",
+        "kind": "pulse",
+        "players_remaining": "51230",
+        "reaction_total_1": "90211",
+        "reactions_enabled": "true",
+        "viewers": "128400"
+      }
+    },
+    {
+      "name": "reveal",
+      "text": "t1.CncKJDAxOTNhMWIyLWMzZDQtN2U1Zi04YTliLTBjMWQyZTNmNGE1YhAqGIC82fKeNGJGCiQwMTkzYTFiMy0xMTExLTcyMjItODMzMy00NDQ0NTU1NTY2NjYSAWEaBwoBYRCkuQIaBgoBYhCoRhoGCgFjENIQIKS5AhJAzH6yBSFHWWYrFDXdW-0EKrsJDKU2bw3faDFcdlIiVFyWPU5MCFsnOoZHgry8dHQzmPNeVEsuXE6VtiwdSuMuDRgH",
+      "context": {
+        "expected_show_id": "0193a1b2-c3d4-7e5f-8a9b-0c1d2e3f4a5b",
+        "last_seq": "41"
+      },
+      "expect": "valid",
+      "fields": {
+        "correct_option_id": "a",
+        "kind": "reveal",
+        "option_count_b": "9000",
+        "players_remaining": "40100"
+      }
+    },
+    {
+      "name": "gap_requires_resync",
+      "text": "t1.Cn0KJDAxOTNhMWIyLWMzZDQtN2U1Zi04YTliLTBjMWQyZTNmNGE1YhAtGIC82fKeNFJMCiQwMTkzYTFiMy0xMTExLTcyMjItODMzMy00NDQ0NTU1NTY2NjYQBRjAPiIHUHlldGplPyoGCgFhEgF4KgYKAWISAXkqBgoBYxIBehJAhEvifi9hqdgj-bLMr9YCAWJ8HlLg4k714LZ94GTR0lG9k0jEO-pzurDEO8zB_sXrbBb5w3UvzK6gYQJrX82OCRgH",
+      "context": {
+        "expected_show_id": "0193a1b2-c3d4-7e5f-8a9b-0c1d2e3f4a5b",
+        "last_seq": "41"
+      },
+      "expect": "valid:gap_resync",
+      "fields": {
+        "kind": "question_open",
+        "seq": "45"
+      }
+    },
+    {
+      "name": "unsigned_plain_json",
+      "text": "{\"type\":\"question_open\",\"text\":\"Pyetje?\"}",
+      "context": {
+        "expected_show_id": "0193a1b2-c3d4-7e5f-8a9b-0c1d2e3f4a5b",
+        "last_seq": "41"
+      },
+      "expect": "reject:malformed"
+    },
+    {
+      "name": "bad_base64",
+      "text": "t1.***not-base64***",
+      "context": {
+        "expected_show_id": "0193a1b2-c3d4-7e5f-8a9b-0c1d2e3f4a5b",
+        "last_seq": "41"
+      },
+      "expect": "reject:malformed"
+    },
+    {
+      "name": "wrong_prefix_version",
+      "text": "t9.CrABCiQwMTkzYTFiMi1jM2Q0LTdlNWYtOGE5Yi0wYzFkMmUzZjRhNWIQKhiAvNnynjRSfwokMDE5M2ExYjMtMTExMS03MjIyLTgzMzMtNDQ0NDU1NTU2NjY2EAUYwD4iJ0NpbGkgw6tzaHTDqyBrcnllcXl0ZXRpIGkgU2hxaXDDq3Jpc8OrPyoMCgFhEgdUaXJhbsOrKgwKAWISB0R1cnLDq3MqDQoBYxIIU2hrb2TDq3ISQNhxlxrmNkd0_w8T6EmDefJLDXJOQnhLwmZ9KdA8a6ZeLSIGBayTEBMT8auuSZLbCVKZ7qP8rzsQEeV40adb3AkYBw",
+      "context": {
+        "expected_show_id": "0193a1b2-c3d4-7e5f-8a9b-0c1d2e3f4a5b",
+        "last_seq": "41"
+      },
+      "expect": "reject:malformed"
+    },
+    {
+      "name": "tampered_payload",
+      "text": "t1.CrABCiQwMTkzYTFiMi1jM2Q0LTdlNWYtOGE5Yi0wYzFkMmUzZjRhNWIQKhiAvNnynjRSfwokMDE5M2ExYjMtMTExMS03MjIyLTgzMzMtNDQ0NDU1NTU2NjY2EAUYwD4iJ0NpbGkgw6tzaHTDqyBrcnllcXl0ZXRpIGkgUAhxaXDDq3Jpc8OrPyoMCgFhEgdUaXJhbsOrKgwKAWISB0R1cnLDq3MqDQoBYxIIU2hrb2TDq3ISQNhxlxrmNkd0_w8T6EmDefJLDXJOQnhLwmZ9KdA8a6ZeLSIGBayTEBMT8auuSZLbCVKZ7qP8rzsQEeV40adb3AkYBw",
+      "context": {
+        "expected_show_id": "0193a1b2-c3d4-7e5f-8a9b-0c1d2e3f4a5b",
+        "last_seq": "41"
+      },
+      "expect": "reject:bad_signature|reject:malformed"
+    },
+    {
+      "name": "forged_same_key_id",
+      "text": "t1.CrABCiQwMTkzYTFiMi1jM2Q0LTdlNWYtOGE5Yi0wYzFkMmUzZjRhNWIQKhiAvNnynjRSfwokMDE5M2ExYjMtMTExMS03MjIyLTgzMzMtNDQ0NDU1NTU2NjY2EAUYwD4iJ0NpbGkgw6tzaHTDqyBrcnllcXl0ZXRpIGkgU2hxaXDDq3Jpc8OrPyoMCgFhEgdUaXJhbsOrKgwKAWISB0R1cnLDq3MqDQoBYxIIU2hrb2TDq3ISQKCoMVdnb5vHdKD9xKzB4KOeVQSg0dte6B6dFys1xUYg6OiuwDb_Pa-Io0i0mVSd6SG-4Vedp8B7ojw3ki50XgsYBw",
+      "context": {
+        "expected_show_id": "0193a1b2-c3d4-7e5f-8a9b-0c1d2e3f4a5b",
+        "last_seq": "41"
+      },
+      "expect": "reject:bad_signature"
+    },
+    {
+      "name": "unknown_key_id",
+      "text": "t1.CrABCiQwMTkzYTFiMi1jM2Q0LTdlNWYtOGE5Yi0wYzFkMmUzZjRhNWIQKhiAvNnynjRSfwokMDE5M2ExYjMtMTExMS03MjIyLTgzMzMtNDQ0NDU1NTU2NjY2EAUYwD4iJ0NpbGkgw6tzaHTDqyBrcnllcXl0ZXRpIGkgU2hxaXDDq3Jpc8OrPyoMCgFhEgdUaXJhbsOrKgwKAWISB0R1cnLDq3MqDQoBYxIIU2hrb2TDq3ISQNhxlxrmNkd0_w8T6EmDefJLDXJOQnhLwmZ9KdA8a6ZeLSIGBayTEBMT8auuSZLbCVKZ7qP8rzsQEeV40adb3AkYYw",
+      "context": {
+        "expected_show_id": "0193a1b2-c3d4-7e5f-8a9b-0c1d2e3f4a5b",
+        "last_seq": "41"
+      },
+      "expect": "reject:unknown_key"
+    },
+    {
+      "name": "oversize",
+      "text": "t1.CpgHCiQwMTkzYTFiMi1jM2Q0LTdlNWYtOGE5Yi0wYzFkMmUzZjRhNWIQKhiAvNnynjRS5gYKJDAxOTNhMWIzLTExMTEtNzIyMi04MzMzLTQ0NDQ1NTU1NjY2NhAFGMA-IqAGw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6vDq8Orw6sqBgoBYRIBYSoGCgFiEgFiKgYKAWMSAWMSQDsYn4AuolAZLP5HIPj0uxXIgZuMQKEH_jhHDT_lytxE11QWrq4X5aCd6cC1YirFwfb7yX_VDiKuDj3bZG1A8wAYBw",
+      "context": {
+        "expected_show_id": "0193a1b2-c3d4-7e5f-8a9b-0c1d2e3f4a5b",
+        "last_seq": "41"
+      },
+      "expect": "reject:too_large"
+    },
+    {
+      "name": "other_show",
+      "text": "t1.CqkBCiQwMTkzYTFiMi0wMDAwLTcwMDAtODAwMC0wMDAwMDAwMDAwMDAQKlJ_CiQwMTkzYTFiMy0xMTExLTcyMjItODMzMy00NDQ0NTU1NTY2NjYQBRjAPiInQ2lsaSDDq3NodMOrIGtyeWVxeXRldGkgaSBTaHFpcMOrcmlzw6s_KgwKAWESB1RpcmFuw6sqDAoBYhIHRHVycsOrcyoNCgFjEghTaGtvZMOrchJAY7T8Z6waKp-2LTA5a-oDcrJhB7hXL-bRCGKIj6mUudUePJM6awBpmQGj73Oq9dXnGBDQD2qaVKb1lMg9ypfiDxgH",
+      "context": {
+        "expected_show_id": "0193a1b2-c3d4-7e5f-8a9b-0c1d2e3f4a5b",
+        "last_seq": "41"
+      },
+      "expect": "reject:wrong_show"
+    },
+    {
+      "name": "replayed_seq",
+      "text": "t1.Cn0KJDAxOTNhMWIyLWMzZDQtN2U1Zi04YTliLTBjMWQyZTNmNGE1YhApGIC82fKeNFJMCiQwMTkzYTFiMy0xMTExLTcyMjItODMzMy00NDQ0NTU1NTY2NjYQBRjAPiIHUHlldGplPyoGCgFhEgF4KgYKAWISAXkqBgoBYxIBehJANDH619DJAOaPcs2J8_lesGInhB3YHTWHRIRnqXTgYm8YfM5NJnLXnkTylveMBed7IDGbaI_xrDmmqJtjGLnaCRgH",
+      "context": {
+        "expected_show_id": "0193a1b2-c3d4-7e5f-8a9b-0c1d2e3f4a5b",
+        "last_seq": "41"
+      },
+      "expect": "reject:replay"
+    }
+  ]
+}

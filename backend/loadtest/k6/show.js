@@ -1,7 +1,4 @@
 // k6 2.4.0: one simulated player through a full 12-question show (stack/14-testing-quality).
-// Scale: ~20 runners x 30k VUs = 600k players (k6-operator or EC2 fleet). Never run against prod.
-// Env: BASE_URL (staging game ALB), SHOW_ID, TOKEN_POOL (pre-minted test tokens, DPoP disabled
-// only in the dedicated load-test environment).
 import http from 'k6/http';
 import { check, sleep } from 'k6';
 import { Counter, Trend } from 'k6/metrics';

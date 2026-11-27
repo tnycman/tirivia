@@ -1,5 +1,4 @@
 # IVS Low-Latency channel + auto-record to S3 (stack/02-live-video, ADR-0002, ADR-0003).
-# Instantiate once per region: eu-central-1 (primary) and eu-west-1 (standby). Milan has no IVS.
 
 terraform {
   required_version = "~> 1.17"

@@ -32,9 +32,7 @@ const (
 	PlayerStatus_PLAYER_STATUS_ELIMINATED  PlayerStatus = 2
 	// Can watch and react but not answer.
 	PlayerStatus_PLAYER_STATUS_SPECTATOR PlayerStatus = 3
-	// Joined after Q1 opened (decision AC-8): answers from the current question on for fun and
-	// stats, but can never win. Excluded from tallies and players-remaining. An extra life cannot
-	// cover questions that opened before the player joined (decision UF-4).
+	// Joined after Q1 opened (decision AC-8): answers from the current question on for fun and stats, but can never win.
 	PlayerStatus_PLAYER_STATUS_PLAY_ALONG PlayerStatus = 4
 )
 
@@ -486,8 +484,7 @@ func (x *JoinShowResponse) GetChatEnabled() bool {
 	return false
 }
 
-// Fetch a chat token after chat is switched on mid-show (the app calls this when
-// Pulse.chat_enabled flips to true and it holds no valid token).
+// Fetch a chat token after chat is switched on mid-show (the app calls this when Pulse.chat_enabled flips to true and it holds no valid token).
 type GetChatTokenRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ShowId        string                 `protobuf:"bytes,1,opt,name=show_id,json=showId,proto3" json:"show_id,omitempty"`
@@ -766,8 +763,12 @@ type IntegritySignals struct {
 	ScreenshotTaken                 bool                   `protobuf:"varint,4,opt,name=screenshot_taken,json=screenshotTaken,proto3" json:"screenshot_taken,omitempty"`
 	OverlayDetected                 bool                   `protobuf:"varint,5,opt,name=overlay_detected,json=overlayDetected,proto3" json:"overlay_detected,omitempty"`
 	AccessibilityAutomationDetected bool                   `protobuf:"varint,6,opt,name=accessibility_automation_detected,json=accessibilityAutomationDetected,proto3" json:"accessibility_automation_detected,omitempty"`
-	unknownFields                   protoimpl.UnknownFields
-	sizeCache                       protoimpl.SizeCache
+	// AC-3: the app went to background (iOS .background, Android onStop) during the question window.
+	WentBackground bool `protobuf:"varint,7,opt,name=went_background,json=wentBackground,proto3" json:"went_background,omitempty"`
+	// AC-3: the longest single inactive gap in the window; over 1.5 s voids answers on Q10-12.
+	LongestInactiveMs uint32 `protobuf:"varint,8,opt,name=longest_inactive_ms,json=longestInactiveMs,proto3" json:"longest_inactive_ms,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
 }
 
 func (x *IntegritySignals) Reset() {
@@ -840,6 +841,20 @@ func (x *IntegritySignals) GetAccessibilityAutomationDetected() bool {
 		return x.AccessibilityAutomationDetected
 	}
 	return false
+}
+
+func (x *IntegritySignals) GetWentBackground() bool {
+	if x != nil {
+		return x.WentBackground
+	}
+	return false
+}
+
+func (x *IntegritySignals) GetLongestInactiveMs() uint32 {
+	if x != nil {
+		return x.LongestInactiveMs
+	}
+	return 0
 }
 
 type SubmitAnswerRequest struct {
@@ -1345,14 +1360,16 @@ const file_tirivia_game_v1_game_service_proto_rawDesc = "" +
 	"\x06status\x18\x01 \x01(\x0e2\x1d.tirivia.game.v1.PlayerStatusR\x06status\x122\n" +
 	"\x15extra_lives_available\x18\x02 \x01(\rR\x13extraLivesAvailable\x128\n" +
 	"\x19extra_life_used_this_show\x18\x03 \x01(\bR\x15extraLifeUsedThisShow\x12.\n" +
-	"\x13last_answered_index\x18\x04 \x01(\rR\x11lastAnsweredIndex\"\xb6\x02\n" +
+	"\x13last_answered_index\x18\x04 \x01(\rR\x11lastAnsweredIndex\"\x8f\x03\n" +
 	"\x10IntegritySignals\x12(\n" +
 	"\x10focus_loss_count\x18\x01 \x01(\rR\x0efocusLossCount\x12-\n" +
 	"\x13focus_loss_total_ms\x18\x02 \x01(\rR\x10focusLossTotalMs\x12'\n" +
 	"\x0fscreen_captured\x18\x03 \x01(\bR\x0escreenCaptured\x12)\n" +
 	"\x10screenshot_taken\x18\x04 \x01(\bR\x0fscreenshotTaken\x12)\n" +
 	"\x10overlay_detected\x18\x05 \x01(\bR\x0foverlayDetected\x12J\n" +
-	"!accessibility_automation_detected\x18\x06 \x01(\bR\x1faccessibilityAutomationDetected\"\xee\x01\n" +
+	"!accessibility_automation_detected\x18\x06 \x01(\bR\x1faccessibilityAutomationDetected\x12'\n" +
+	"\x0fwent_background\x18\a \x01(\bR\x0ewentBackground\x12.\n" +
+	"\x13longest_inactive_ms\x18\b \x01(\rR\x11longestInactiveMs\"\xee\x01\n" +
 	"\x13SubmitAnswerRequest\x12\x17\n" +
 	"\ashow_id\x18\x01 \x01(\tR\x06showId\x12\x1f\n" +
 	"\vquestion_id\x18\x02 \x01(\tR\n" +

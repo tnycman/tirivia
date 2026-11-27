@@ -46,10 +46,10 @@
 6. **WhatsApp OTP:** use authentication templates (zero-tap or one-tap on Android) with an expiry of 5 minutes or less ([Meta](https://developers.facebook.com/docs/whatsapp/business-management-api/authentication-templates)).
 7. **App Attest:**
    - **Attest once per install** and use **assertions** after that. Keep `attestKey` under 100 requests/s and ramp up gradually.
-   - The server performs all 9 attestation checks.
+   - The server performs all 11 attestation checks and 8 assertion checks, binding `clientData = challenge ‖ jkt` ([docs/research/08](../../docs/research/08-device-attestation.md)).
    - ([Apple](https://developer.apple.com/documentation/devicecheck/validating-apps-that-connect-to-your-server.md))
 8. **Play Integrity:**
-   - Use standard requests with `requestHash = SHA-256(phone ‖ server_nonce)`.
+   - Use standard requests with `requestHash = base64url(SHA-256(challenge ‖ DPoP jkt))`. The check runs before the phone is entered; Google says never to put plaintext identifiers in the hash.
    - Decode verdicts on the server and never cache them.
    - The **default quota is 10k per day**, so request an increase in Phase 0 ([standard](https://developer.android.com/google/play/integrity/standard)).
 9. **Access JWT:**
@@ -80,3 +80,30 @@
 
 ## Sources
 [docs/research/05-auth-security-compliance-web.md](../../docs/research/05-auth-security-compliance-web.md), [docs/research/04-native-mobile.md](../../docs/research/04-native-mobile.md)
+
+## Sourced values (used by `backend/cmd/core/policy.go`, verified 2026-11-25)
+
+**Standard** means the value is fixed by a standard or a vendor's documented default. **Policy** means no published standard exists; the value is our design decision, tuned from production data.
+
+| Value | Setting | Kind | Source |
+|---|---|---|---|
+| Code length, validity | 6 digits, 5 min (NIST max 10 min) | Standard | NIST SP 800-63B-4 §3.1.3.2 |
+| Attempts per code | 5 | Standard | Twilio Verify error 60202 ("Max (5) verification check attempts") |
+| Consecutive failures per phone | 100; **a new code never resets it**; success resets it | Standard | NIST SP 800-63B-4 §3.2.2 ("SHALL NOT reset the failed authentication count") |
+| Sends per phone (core regions) | 5 per 10 min | Standard | Twilio Verify error 60203 (default send limit) |
+| Resend spacing | 30 s (core) / 60 s (other) | Policy | No published value (NIST, OWASP, Twilio) |
+| Sends per device | 5 / 3 per 10 min | Policy | No published value; mirrors the per-phone default |
+| Number-range throttle | first 7 digits after `+`; 100 / 20 per 10 min | Policy | Twilio recommends prefix throttling but publishes no numbers ([toll fraud](https://www.twilio.com/docs/verify/preventing-toll-fraud)) |
+| Pumping-risk block | ≥ 90 core ("High: Don't send"), ≥ 75 other ("Moderate: treat as suspicious") | Standard | [Twilio SMS Pumping Risk bands](https://www.twilio.com/docs/lookup/v2-api/sms-pumping-risk) |
+| Number validation | libphonenumber `IsValidNumber`; only `MOBILE` and `FIXED_LINE_OR_MOBILE`; canonical E.164 | Standard | ITU-T E.164 (max 15 digits); [nyaruka/phonenumbers v1.8.1](https://github.com/nyaruka/phonenumbers) (libphonenumber port). Probed: AL, XK (+383), MK, IT, US, DE |
+| Countries | **All allowed** (LG-1). Core regions get the standard limits; others get stricter policy limits | Policy | Core list: AL, XK, MK + diaspora destinations named in INSTAT/World Bank 2025 and the Kosovo Migration Profile 2023 (IT, GR, DE, GB, US, FR, CH, SI, HR, FI). The UN DESA 2024 ranking is **OPEN** (its site blocked automated fetch; download by hand) |
+| DPoP `iat` window | ±60 s; jti kept for the window | Standard range | RFC 9449 §11.1 ("on the order of seconds or minutes") |
+| JWT clock leeway | 30 s | Standard range | RFC 7519 §4.1.4 ("usually no more than a few minutes") |
+| App Attest challenge / ticket lifetime | 5 min / 10 min | Policy | Apple: one-time challenge; no lifetime published |
+| Play Integrity freshness | Token no older than the attestation challenge TTL (5 min); at most 30 s in the future (the JWT leeway) | Derived | Google gives only a placeholder `ALLOWED_WINDOW_MILLIS`. The request hash includes the challenge, so a valid token cannot be older than the challenge |
+| Play Integrity prize eligibility | `PLAY_RECOGNIZED` + `LICENSED` + `MEETS_DEVICE_INTEGRITY` + our package and signing certificate. Anything weaker plays for points only (AC-5) | Standard | Google sample checks ([verdicts](https://developer.android.com/google/play/integrity/verdicts)) |
+
+**Open follow-ups:**
+
+- **Friction for "Mild/Moderate" pumping scores.** Twilio advises adding friction such as a CAPTCHA. Not built yet.
+- **Diaspora ranking.** Rank the diaspora tier from the UN DESA 2024 workbook.

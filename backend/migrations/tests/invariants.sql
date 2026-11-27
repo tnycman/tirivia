@@ -1,6 +1,4 @@
--- Schema invariant tests. Run against a freshly migrated database:
---   psql -v ON_ERROR_STOP=0 -f migrations/tests/invariants.sql
--- Every "MUST FAIL" step must print an ERROR; every "MUST PASS" step must not.
+-- Schema invariants: every MUST FAIL step errors, every MUST PASS step succeeds (make db-test).
 
 \echo '--- 1. MUST PASS: balanced transaction (pool -100, user +100)'
 INSERT INTO ledger_accounts (id, owner_kind, currency, allow_negative) VALUES

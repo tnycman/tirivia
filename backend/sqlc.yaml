@@ -1,16 +1,22 @@
-# sqlc 1.31.1: type-safe queries generated from SQL (stack/04-data).
+# sqlc 1.31.1: type-safe queries generated from SQL (stack/04-data). One entry per module with queries; wallet joins when its slice lands.
 version: "2"
 sql:
   - engine: postgresql
     schema: migrations/core
-    queries: internal/wallet/store/queries
+    queries: internal/auth/store/pgstore/queries
     gen:
       go:
-        package: walletdb
-        out: internal/wallet/store/walletdb
+        package: pgq
+        out: internal/auth/store/pgstore/pgq
         sql_package: pgx/v5
-        emit_interface: true
-        emit_json_tags: false
+        emit_pointers_for_null_types: true
         overrides:
           - db_type: uuid
             go_type: github.com/google/uuid.UUID
+          - db_type: timestamptz
+            go_type: time.Time
+          - db_type: timestamptz
+            nullable: true
+            go_type:
+              type: time.Time
+              pointer: true

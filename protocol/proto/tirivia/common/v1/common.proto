@@ -2,8 +2,7 @@ syntax = "proto3";
 
 package tirivia.common.v1;
 
-// Money in integer minor units (e.g. cents). Floats are never used for money.
-// https://www.postgresql.org/docs/current/datatype-money.html
+// Money in integer minor units; never floating point.
 message Money {
   // ISO 4217 code, e.g. "EUR", "ALL".
   string currency = 1;
@@ -22,8 +21,7 @@ enum Eligibility {
   ELIGIBILITY_BLOCKED = 3;
 }
 
-// Reaction kinds. The final set is an owner decision (Master Plan §11); themed sets are
-// delivered per show in JoinShowResponse.reaction_set, so new kinds never need an app release.
+// Reaction kinds.
 enum ReactionKind {
   REACTION_KIND_UNSPECIFIED = 0;
   REACTION_KIND_HEART = 1;

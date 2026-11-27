@@ -28,13 +28,23 @@ jobs:
       - name: Lint
         working-directory: protocol
         run: buf lint && buf format -d --exit-code
-      - name: Breaking changes vs main
-        if: github.event_name == 'pull_request'
+      - name: Breaking changes vs the PR base commit (skipped only by the "buf skip breaking" label)
+        if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'buf skip breaking')
         working-directory: protocol
-        run: buf breaking --against "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}.git#branch=main,subdir=protocol"
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: buf breaking --against "../.git#commit=${BASE_SHA},subdir=protocol"
       - name: Generated Go code is up to date
         working-directory: protocol
         run: buf generate --template buf.gen.go.yaml && git diff --exit-code -- gen/
+      - name: Test vectors are up to date and pass (Go reference)
+        working-directory: backend
+        run: go run ./cmd/testvectors -check
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "24"
+      - name: Test vectors pass an independent implementation (Node)
+        run: node protocol/testvectors/runners/node/verify-vectors.mjs
       - name: Cue size budget + vectors (Go reference)
         working-directory: backend
         run: go test ./internal/platform/cuesign/... ./internal/platform/shuffle/...

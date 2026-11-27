@@ -1,0 +1,12 @@
+{
+  "$description": "Live-show overlay drawn ON TOP OF VIDEO (question card, timer, answer bars, counts). Theme-independent: the video can be any colour, so text sits on a scrim and contrast is checked against a pure-white frame behind the scrim (worst case).",
+  "overlay": {
+    "$type": "color",
+    "scrim":        { "$value": { "colorSpace": "srgb", "components": [0, 0, 0], "alpha": 0.7, "hex": "#000000" }, "$description": "Behind all overlay text on video. 70% so text passes WCAG AA even over a pure-white frame." },
+    "text":         { "$value": "{color.neutral.0}" },
+    "textMuted":    { "$value": "{color.neutral.200}" },
+    "timerWarning": { "$value": "{color.amber.400}" },
+    "correct":      { "$value": "{color.green.300}" },
+    "wrong":        { "$value": "{color.red.200}" }
+  }
+}

@@ -70,13 +70,22 @@ export function FeatureSwitches() {
         </thead>
         <tbody>
           {(switches.data?.switches ?? []).map((sw) => (
-            <tr key={`${sw.key}|${sw.showId}`} style={{ borderTop: "1px solid #ddd" }}>
+            <tr key={`${sw.key}|${sw.showId}`} style={{ borderTop: "1px solid var(--theme-border)" }}>
               <td>
                 <strong>{LABELS[sw.key]?.title ?? sw.key}</strong>
                 <div style={{ fontSize: 12, opacity: 0.75 }}>{LABELS[sw.key]?.help}</div>
               </td>
               <td aria-live="polite">
-                <span style={{ fontWeight: 700, color: sw.effective ? "#0a7d32" : "#a40000" }}>
+                {/* Badge pairs are contrast-gated in design-tokens (onCorrect/correct 5.0:1, onWrong/wrong 8.3:1). */}
+                <span
+                  style={{
+                    fontWeight: 700,
+                    padding: "var(--space-xs) var(--space-sm)",
+                    borderRadius: "var(--radius-sm)",
+                    background: sw.effective ? "var(--theme-correct)" : "var(--theme-wrong)",
+                    color: sw.effective ? "var(--theme-on-correct)" : "var(--theme-on-wrong)",
+                  }}
+                >
                   {sw.effective ? "ON" : "OFF"}
                 </span>
               </td>

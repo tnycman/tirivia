@@ -77,8 +77,7 @@ func (Eligibility) EnumDescriptor() ([]byte, []int) {
 	return file_tirivia_common_v1_common_proto_rawDescGZIP(), []int{0}
 }
 
-// Reaction kinds. The final set is an owner decision (Master Plan §11); themed sets are
-// delivered per show in JoinShowResponse.reaction_set, so new kinds never need an app release.
+// Reaction kinds.
 type ReactionKind int32
 
 const (
@@ -144,8 +143,7 @@ func (ReactionKind) EnumDescriptor() ([]byte, []int) {
 	return file_tirivia_common_v1_common_proto_rawDescGZIP(), []int{1}
 }
 
-// Money in integer minor units (e.g. cents). Floats are never used for money.
-// https://www.postgresql.org/docs/current/datatype-money.html
+// Money in integer minor units; never floating point.
 type Money struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// ISO 4217 code, e.g. "EUR", "ALL".

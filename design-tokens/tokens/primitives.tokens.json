@@ -1,0 +1,83 @@
+{
+  "$description": "Primitive palette and scales. W3C DTCG Format 2025.10 (designtokens.org/TR/2025.10/format). NEUTRAL PLACEHOLDERS until the product name and brand are chosen (decision LG-3); only semantic tokens should be used in app code.",
+  "color": {
+    "$type": "color",
+    "neutral": {
+      "0":    { "$value": { "colorSpace": "srgb", "components": [1, 1, 1], "hex": "#ffffff" } },
+      "50":   { "$value": { "colorSpace": "srgb", "components": [0.965, 0.969, 0.976], "hex": "#f6f7f9" } },
+      "100":  { "$value": { "colorSpace": "srgb", "components": [0.925, 0.933, 0.949], "hex": "#eceef2" } },
+      "200":  { "$value": { "colorSpace": "srgb", "components": [0.835, 0.851, 0.878], "hex": "#d5d9e0" } },
+      "400":  { "$value": { "colorSpace": "srgb", "components": [0.541, 0.576, 0.639], "hex": "#8a93a3" } },
+      "600":  { "$value": { "colorSpace": "srgb", "components": [0.294, 0.325, 0.388], "hex": "#4b5363" } },
+      "700":  { "$value": { "colorSpace": "srgb", "components": [0.204, 0.227, 0.275], "hex": "#343a46" } },
+      "800":  { "$value": { "colorSpace": "srgb", "components": [0.122, 0.141, 0.176], "hex": "#1f242d" } },
+      "900":  { "$value": { "colorSpace": "srgb", "components": [0.071, 0.082, 0.106], "hex": "#12151b" } },
+      "1000": { "$value": { "colorSpace": "srgb", "components": [0, 0, 0], "hex": "#000000" } }
+    },
+    "red": {
+      "$description": "Albanian-flag-inspired red (placeholder brand). 500 is the flag tone, decorative only; 600/700 are text-safe.",
+      "500": { "$value": { "colorSpace": "srgb", "components": [0.894, 0.118, 0.125], "hex": "#e41e20" } },
+      "600": { "$value": { "colorSpace": "srgb", "components": [0.769, 0.086, 0.110], "hex": "#c4161c" } },
+      "700": { "$value": { "colorSpace": "srgb", "components": [0.620, 0.063, 0.082], "hex": "#9e1015" } },
+      "300": { "$value": { "colorSpace": "srgb", "components": [0.988, 0.565, 0.565], "hex": "#fc9090" } },
+      "200": { "$value": { "colorSpace": "srgb", "components": [0.996, 0.792, 0.792], "hex": "#fecaca" } }
+    },
+    "green": {
+      "600": { "$value": { "colorSpace": "srgb", "components": [0.082, 0.502, 0.239], "hex": "#15803d" } },
+      "300": { "$value": { "colorSpace": "srgb", "components": [0.525, 0.937, 0.675], "hex": "#86efac" } }
+    },
+    "amber": {
+      "400": { "$value": { "colorSpace": "srgb", "components": [0.984, 0.749, 0.141], "hex": "#fbbf24" } },
+      "700": { "$value": { "colorSpace": "srgb", "components": [0.706, 0.325, 0.035], "hex": "#b45309" } }
+    }
+  },
+  "space": {
+    "$type": "dimension",
+    "$description": "4-pt grid, authored in rem (1rem = 16 pt iOS / 16 dp Android / 1rem web).",
+    "xs":  { "$value": { "value": 0.25, "unit": "rem" } },
+    "sm":  { "$value": { "value": 0.5,  "unit": "rem" } },
+    "md":  { "$value": { "value": 1,    "unit": "rem" } },
+    "lg":  { "$value": { "value": 1.5,  "unit": "rem" } },
+    "xl":  { "$value": { "value": 2,    "unit": "rem" } }
+  },
+  "radius": {
+    "$type": "dimension",
+    "sm":   { "$value": { "value": 0.5,  "unit": "rem" } },
+    "md":   { "$value": { "value": 0.75, "unit": "rem" } },
+    "pill": { "$value": { "value": 62.5, "unit": "rem" } }
+  },
+  "touch": {
+    "$type": "dimension",
+    "$description": "Minimum hit target: 44 pt (Apple HIG) / 48 dp (Material). 3rem = 48 covers both.",
+    "min": { "$value": { "value": 3, "unit": "rem" } }
+  },
+  "font": {
+    "family": {
+      "$type": "fontFamily",
+      "$description": "System fonts (SF Pro / Roboto / system-ui) all include Albanian ë, ç and Ë, Ç. A brand font must be checked for these glyphs before adoption.",
+      "base": { "$value": ["system-ui", "-apple-system", "Roboto", "Segoe UI", "sans-serif"] }
+    },
+    "size": {
+      "$type": "dimension",
+      "$description": "Text sizes. Android emits sp and iOS should scale with Dynamic Type (UIFontMetrics).",
+      "caption":  { "$value": { "value": 0.8125, "unit": "rem" } },
+      "body":     { "$value": { "value": 1.0625, "unit": "rem" } },
+      "title":    { "$value": { "value": 1.375,  "unit": "rem" } },
+      "question": { "$value": { "value": 1.5,    "unit": "rem" } },
+      "timer":    { "$value": { "value": 2.5,    "unit": "rem" } }
+    },
+    "weight": {
+      "$type": "fontWeight",
+      "regular":  { "$value": 400 },
+      "semibold": { "$value": 600 },
+      "bold":     { "$value": 700 }
+    }
+  },
+  "motion": {
+    "$type": "duration",
+    "fast":          { "$value": { "value": 150,  "unit": "ms" } },
+    "normal":        { "$value": { "value": 250,  "unit": "ms" } },
+    "reactionFloat": { "$value": { "value": 2000, "unit": "ms" }, "$description": "Floating reaction rise-and-fade (SPEC §2.1)." },
+    "revealHold":    { "$value": { "value": 4000, "unit": "ms" } }
+  }
+}

@@ -1,5 +1,4 @@
-// Command core is the non-hot-path deployable: auth, profile, content, wallet, risk, notify
-// and chatmod modules (SPEC §6.1).
+// Command core serves auth, profile, content, wallet, risk, notify and chatmod (SPEC §6.1).
 package main
 
 import (
@@ -9,7 +8,6 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
 
 	"connectrpc.com/connect/v2"
 	"connectrpc.com/connect/v2/connecthttp"
@@ -25,8 +23,7 @@ func main() {
 	defer stop()
 
 	rpc := connect.NewServer()
-	// Handlers are replaced module by module as phases land (PLAN.md).
-	corev1connect.RegisterAuthServiceHandler(rpc, corev1connect.UnimplementedAuthServiceHandler{})
+	corev1connect.RegisterAuthServiceHandler(rpc, authHandler(log))
 	corev1connect.RegisterProfileServiceHandler(rpc, corev1connect.UnimplementedProfileServiceHandler{})
 	corev1connect.RegisterContentServiceHandler(rpc, corev1connect.UnimplementedContentServiceHandler{})
 	corev1connect.RegisterWalletServiceHandler(rpc, corev1connect.UnimplementedWalletServiceHandler{})
@@ -40,7 +37,7 @@ func main() {
 	if addr == "" {
 		addr = ":8081"
 	}
-	if err := httpserver.Run(ctx, httpserver.New(addr, mux), health, 25*time.Second, log); err != nil {
+	if err := httpserver.Run(ctx, httpserver.New(addr, mux), health, httpserver.DrainTimeout, log); err != nil {
 		log.Error("server stopped", "err", err)
 		os.Exit(1)
 	}

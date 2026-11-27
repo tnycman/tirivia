@@ -5,9 +5,6 @@ package tirivia.admin.v1;
 import "google/protobuf/timestamp.proto";
 
 // Back-office feature/kill switches (SPEC §6.10, §9; ADR-0009).
-// Served on the INTERNAL admin listener only (never the public game ALB). Callers are the
-// web-consoles BFF acting for an SSO-authenticated operator (FIDO2 MFA). Every change is
-// written to audit_log with actor, before/after and reason.
 service SwitchService {
   rpc ListSwitches(ListSwitchesRequest) returns (ListSwitchesResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;

@@ -1,6 +1,4 @@
-// Package store persists studio state. MemStore is the Phase 0 / test implementation of the
-// switch store; Phase 2b replaces it with Postgres (feature_switches + audit_log written in
-// one transaction) fronted by a Valkey cache with a <= 5 s TTL.
+// Package store persists studio state.
 package store
 
 import (

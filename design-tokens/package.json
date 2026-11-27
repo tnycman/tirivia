@@ -1,0 +1,13 @@
+{
+  "name": "@tirivia/design-tokens",
+  "private": true,
+  "type": "module",
+  "description": "Single source of design tokens (W3C DTCG 2025.10 format) -> Swift, Compose, CSS. Neutral placeholders until the brand (LG-3) is chosen.",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check": "node scripts/contrast-check.mjs && node scripts/build.mjs --check"
+  },
+  "devDependencies": {
+    "style-dictionary": "5.8.0"
+  }
+}

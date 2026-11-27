@@ -28,7 +28,7 @@
 5. Migrations use goose, run as a one-off ECS task before deploy, expand-then-contract only. **A migration must never take a long lock during a show window** (CI blocks deploys inside show windows).
 6. Use sqlc for type-safe queries. Never build SQL with string concatenation.
 
-**Valkey**
+**Valkey** (key patterns: [docs/research/07](../../docs/research/07-persistence-sourced-values.md))
 
 7. **Hot keys are sharded across slots.** The tally key is `tally:{s:q:N}` with N in 0..63, and each shard uses a different hash tag so the shards land on different slots. Readers sum all shards ([cluster spec](https://valkey.io/topics/cluster-spec/)).
 8. Multi-key commands and Lua scripts only operate on keys that share one slot (same hash tag); anything else fails with `CROSSSLOT`.

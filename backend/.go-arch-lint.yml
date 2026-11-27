@@ -8,31 +8,31 @@ allow:
   depOnAnyVendor: true
 
 components:
-  platform:  { in: platform/** }
+  platform:  { in: [platform, platform/**] }
   contracts: { in: contracts }
-  game:      { in: game/** }
-  studio:    { in: studio/** }
-  engage:    { in: engage/** }
-  auth:      { in: auth/** }
-  profile:   { in: profile/** }
-  content:   { in: content/** }
-  wallet:    { in: wallet/** }
-  risk:      { in: risk/** }
-  notify:    { in: notify/** }
-  chatmod:   { in: chatmod/** }
+  game: { in: [game, game/**] }
+  studio: { in: [studio, studio/**] }
+  engage: { in: [engage, engage/**] }
+  auth: { in: [auth, auth/**] }
+  profile: { in: [profile, profile/**] }
+  content: { in: [content, content/**] }
+  wallet: { in: [wallet, wallet/**] }
+  risk: { in: [risk, risk/**] }
+  notify: { in: [notify, notify/**] }
+  chatmod: { in: [chatmod, chatmod/**] }
 
 commonComponents:
   - platform
   - contracts
 
 deps:
-  game:    { mayDependOn: [] }
-  studio:  { mayDependOn: [] }
-  engage:  { mayDependOn: [] }
-  auth:    { mayDependOn: [] }
-  profile: { mayDependOn: [] }
-  content: { mayDependOn: [] }
-  wallet:  { mayDependOn: [] }
-  risk:    { mayDependOn: [] }
-  notify:  { mayDependOn: [] }
-  chatmod: { mayDependOn: [] }
+  game: { mayDependOn: [game, platform, contracts] }
+  studio: { mayDependOn: [studio, platform, contracts] }
+  engage: { mayDependOn: [engage, platform, contracts] }
+  auth: { mayDependOn: [auth, platform, contracts] }
+  profile: { mayDependOn: [profile, platform, contracts] }
+  content: { mayDependOn: [content, platform, contracts] }
+  wallet: { mayDependOn: [wallet, platform, contracts] }
+  risk: { mayDependOn: [risk, platform, contracts] }
+  notify: { mayDependOn: [notify, platform, contracts] }
+  chatmod: { mayDependOn: [chatmod, platform, contracts] }
