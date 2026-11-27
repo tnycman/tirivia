@@ -9,6 +9,7 @@ import (
 	"os/signal"
 	"sync"
 	"syscall"
+	"time"
 
 	"connectrpc.com/connect/v2"
 	"connectrpc.com/connect/v2/connecthttp"
@@ -25,16 +26,34 @@ import (
 
 func main() {
 	log := slog.New(slog.NewJSONHandler(os.Stdout, nil))
+	cfg, enabled, err := loadGameConfig(os.Getenv)
+	if err != nil {
+		log.Error("game config", "err", err)
+		os.Exit(1)
+	}
+	sw := switches.NewMemory(switches.Snapshot{})
+	deps, closeKV, err := playerDeps(cfg, enabled, sw, log)
+	if err != nil {
+		log.Error("game wiring", "err", err)
+		os.Exit(1)
+	}
+	defer closeKV()
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
-	sw := switches.NewMemory(switches.Snapshot{})
 
 	public := connect.NewServer()
-	gamev1connect.RegisterGameServiceHandler(public, gameapi.New(gameapi.Deps{Switches: sw}))
+	gamev1connect.RegisterGameServiceHandler(public, gameapi.New(deps))
 	admin := connect.NewServer()
 	adminv1connect.RegisterSwitchServiceHandler(admin, studioapi.NewSwitchHandler(studiostore.NewMemStore(log), operatorFromBFF(), sw))
 
 	var wg sync.WaitGroup
+	var killAt time.Time
+	wg.Go(func() { <-ctx.Done(); killAt = time.Now().Add(ecsStopTimeout) })
+	if deps.Tally != nil {
+		wg.Go(func() {
+			deps.Tally.Run(ctx, tallyFlushEvery, func(err error) { log.Warn("tally flush failed", "err", err) })
+		})
+	}
 	for _, l := range []struct {
 		name, addr string
 		srv        *connect.Server
@@ -45,6 +64,9 @@ func main() {
 		wg.Go(func() { serve(ctx, stop, log.With("listener", l.name), l.addr, l.srv) })
 	}
 	wg.Wait()
+	if deps.Tally != nil {
+		finalFlush(deps.Tally, killAt, log)
+	}
 }
 
 func serve(ctx context.Context, stop context.CancelFunc, log *slog.Logger, addr string, srv *connect.Server) {
