@@ -48,7 +48,7 @@ func newWired(t *testing.T) wired {
 	t.Cleanup(ts.Close)
 	priv, pub := testKey(t)
 	cfg, enabled, err := loadGameConfig(env(map[string]string{"VALKEY_URL": url, "PUBLIC_BASE_URL": ts.URL, //nolint:gosec // G101: a generated public test key
-		"TOKEN_ISSUER": "https://core.test", "ACCESS_TOKEN_KEYS": "k1=" + pub, "PLAYER_STATE_TTL": "1h"}))
+		"TOKEN_ISSUER": "https://core.test", "ACCESS_TOKEN_KEYS": "k1=" + pub, "CUE_PUBLIC_KEYS": "1=" + pub, "PLAYER_STATE_TTL": "1h"}))
 	if err != nil || !enabled {
 		t.Fatalf("enabled=%v err=%v", enabled, err)
 	}

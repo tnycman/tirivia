@@ -36,12 +36,17 @@ func TestWiredServerAuthenticates(t *testing.T) {
 func TestWiredAnswerIsTallied(t *testing.T) {
 	w := newWired(t)
 	bg, show, now := context.Background(), "show-"+w.suffix, time.Now()
-	err := w.deps.Shows.Write(bg, show, livestate.Show{Phase: int32(cuev1.Phase_PHASE_QUESTION_OPEN), QuestionIndex: 1,
-		QuestionID: "q1", TCue: now, CloseAt: now.Add(time.Minute), Deadline: now.Add(time.Minute), CorrectOption: "right", CueSeq: 1})
-	if err != nil {
+	if err := w.deps.Shows.Write(bg, show, livestate.Show{Phase: int32(cuev1.Phase_PHASE_LOBBY), CueSeq: 1}); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := w.deps.Players.Join(bg, show, w.user, 0); err != nil {
+	joined, err := w.client.JoinShow(w.signed(t, gamev1connect.GameServiceJoinShowProcedure), &gamev1.JoinShowRequest{ShowId: show})
+	if err != nil || len(joined.GetCueKeys()) != 1 || joined.GetReactionBatchIntervalMs() == 0 ||
+		joined.GetPlayerState().GetStatus() != gamev1.PlayerStatus_PLAYER_STATUS_ALIVE {
+		t.Fatalf("join through the production wiring: %v %v", joined, err)
+	}
+	err = w.deps.Shows.Write(bg, show, livestate.Show{Phase: int32(cuev1.Phase_PHASE_QUESTION_OPEN), QuestionIndex: 1,
+		QuestionID: "q1", TCue: now, CloseAt: now.Add(time.Minute), Deadline: now.Add(time.Minute), CorrectOption: "right", CueSeq: 2})
+	if err != nil {
 		t.Fatal(err)
 	}
 	res, err := w.client.SubmitAnswer(w.signed(t, gamev1connect.GameServiceSubmitAnswerProcedure),

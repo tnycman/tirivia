@@ -32,7 +32,7 @@ func TestConfigPartialIsAnError(t *testing.T) {
 	if !enabled || err == nil {
 		t.Fatalf("enabled=%v err=%v, want an error", enabled, err)
 	}
-	for _, want := range []string{"PUBLIC_BASE_URL", "TOKEN_ISSUER", "ACCESS_TOKEN_KEYS", "PLAYER_STATE_TTL"} {
+	for _, want := range []string{"PUBLIC_BASE_URL", "TOKEN_ISSUER", "ACCESS_TOKEN_KEYS", "CUE_PUBLIC_KEYS", "PLAYER_STATE_TTL"} {
 		if !strings.Contains(err.Error(), want) {
 			t.Errorf("error %q does not name %s", err, want)
 		}
@@ -43,11 +43,12 @@ func TestConfigComplete(t *testing.T) {
 	_, pub := testKey(t)
 	cfg, enabled, err := loadGameConfig(env(map[string]string{"VALKEY_URL": "valkey://localhost:6379", //nolint:gosec // G101: a generated public test key
 		"PUBLIC_BASE_URL": "https://api.example/", "TOKEN_ISSUER": "https://core.example",
-		"ACCESS_TOKEN_KEYS": "k1=" + pub, "PLAYER_STATE_TTL": "6h"}))
+		"ACCESS_TOKEN_KEYS": "k1=" + pub, "CUE_PUBLIC_KEYS": "7=" + pub, "PLAYER_STATE_TTL": "6h"}))
 	if !enabled || err != nil {
 		t.Fatalf("enabled=%v err=%v", enabled, err)
 	}
-	if cfg.publicBaseURL != "https://api.example" || cfg.playerTTL != 6*time.Hour || len(cfg.keys["k1"]) != ed25519.PublicKeySize {
+	if cfg.publicBaseURL != "https://api.example" || cfg.playerTTL != 6*time.Hour || len(cfg.keys["k1"]) != ed25519.PublicKeySize ||
+		len(cfg.cueKeys) != 1 || cfg.cueKeys[0].GetKeyId() != 7 {
 		t.Fatalf("cfg = %+v", cfg)
 	}
 }
@@ -55,13 +56,26 @@ func TestConfigComplete(t *testing.T) {
 func TestParseKeys(t *testing.T) {
 	_, a := testKey(t)
 	_, b := testKey(t)
-	if keys, err := parseKeys("k1=" + a + ", k2=" + b); err != nil || len(keys) != 2 {
+	if keys, err := parseKeys("X", "k1="+a+", k2="+b); err != nil || len(keys) != 2 {
 		t.Fatalf("two keys: %v %v", keys, err)
 	}
 	for name, bad := range map[string]string{"empty": "", "no kid": "=" + a, "short": "k1=AAAA",
 		"not base64": "k1=***", "duplicate": "k1=" + a + ",k1=" + b} {
-		if _, err := parseKeys(bad); err == nil {
+		if _, err := parseKeys("X", bad); err == nil {
 			t.Errorf("%s: accepted %q", name, bad)
+		}
+	}
+}
+
+func TestCueKeys(t *testing.T) {
+	_, a := testKey(t)
+	_, b := testKey(t)
+	if keys, err := cueKeys("1=" + a + ",2=" + b); err != nil || len(keys) != 2 {
+		t.Fatalf("current + next: %v %v", keys, err)
+	}
+	for _, bad := range []string{"k1=" + a, "-1=" + a, "4294967296=" + a} {
+		if _, err := cueKeys(bad); err == nil {
+			t.Errorf("cueKeys(%q) accepted a non-uint32 key id", bad)
 		}
 	}
 }

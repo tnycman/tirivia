@@ -26,7 +26,7 @@ Every choice that has to be settled before the build continues. Each row cites w
 | AC-5 | Device fails attestation | **Can play, but for points only; never wins prizes** | — | **SETTLED 2026-11-25** |
 | AC-6 | Accounts per device | **One prize-eligible account per device**; other accounts on the same device play for points | — | **SETTLED 2026-11-25** |
 | AC-7 | Risk score effect | MP: never eliminates mid-show; decides prize release: `clear` → pay, `review` → hold for manual review, `block` → withhold (unblock needs four-eyes) | As MP | **SETTLED 2026-11-25** |
-| AC-8 | Late joiners | **Can join at any time and answer from the current question on** (play along). A question that opened before they joined counts as missed, and **an extra life cannot cover it**, so late joiners cannot win (see UF-4) | Owner choice | **SETTLED 2026-11-25** |
+| AC-8 | Late joiners | **Can join at any time and answer from the next question on** (play along; wording corrected 2026-11-26 to match SPEC §6.3, owner-confirmed). A question that opened before they joined counts as missed, and **an extra life cannot cover it**, so late joiners cannot win (see UF-4) | Owner choice | **SETTLED 2026-11-25** |
 | AC-9 | Answer timing tolerance (`L_max`) | 6 s latency allowance + 1.5 s upload grace, tuned from rehearsal data | As proposed; revisit after Phase 2a measurements | **SETTLED 2026-11-25** |
 | AC-10 | Jackpot finalists | **Private live video call with staff within 48 h of the show** (Tier C): ID check plus 2–3 fresh questions on the same timer. The producer may choose on-air verification for sponsor shows | — | **SETTLED 2026-11-25** |
 
@@ -73,6 +73,7 @@ Every choice that has to be settled before the build continues. Each row cites w
 | UF-13 | Launch features | as MP §1 "Features at launch" | As MP | **SETTLED 2026-11-25** |
 | UF-14 | Post-launch / later features | as MP §1 | As MP | **SETTLED 2026-11-25** |
 | UF-15 | TV simulcast | **The app is the only place to play; TV is promotion.** The TV feed is deliberately delayed above the app p99 latency (~8–10 s to start), so TV never shows a question before an app timer starts. Apps get a "Watching on TV" companion mode. No microphone sync and no server-pushed questions | ADR-0010 | **SETTLED 2026-11-25** |
+| UF-16 | Join window | **`JoinShow` accepts joins from LOBBY through FINAL.** A show that is SCHEDULED, SETTLED or has no live state is refused as "not live". The join question always comes from the server's show state, never the request; a rejoin keeps the first join (AC-8). Rejected: closing at FINAL; a per-show studio setting (needs Phase 2b show settings) | SPEC §6.2 phases; LOBBY is also when chat tokens start | **SETTLED 2026-11-26** |
 
 ## E. Tech stack
 

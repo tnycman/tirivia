@@ -39,7 +39,11 @@ type Deps struct {
 	Answers       *live.Answers
 	Lives         *live.Lives
 	Inventory     LifeInventory
-	Now           func() time.Time
+	// CueKeys are the public keys apps accept for cue signatures (current + next).
+	CueKeys []*gamev1.CueKey
+	// ReactionBatchInterval is pushed to apps at join (TS-9, ADR-0006).
+	ReactionBatchInterval time.Duration
+	Now                   func() time.Time
 }
 
 // Handler implements gamev1connect.GameServiceHandler.

@@ -23,6 +23,6 @@ func gameDeps(cfg gameConfig, c valkey.Client, sw switches.Reader) (gameapi.Deps
 	return gameapi.Deps{
 		PublicBaseURL: cfg.publicBaseURL, Switches: sw, Authn: authn.New(validator, verifier),
 		Shows: livestate.NewShows(c), Players: live.NewPlayers(c, cfg.playerTTL), Answers: live.NewAnswers(c),
-		Lives: live.NewLives(c),
+		Lives: live.NewLives(c), CueKeys: cfg.cueKeys, ReactionBatchInterval: reactionBatchInterval,
 	}, nil
 }
