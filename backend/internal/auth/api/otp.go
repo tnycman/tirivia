@@ -60,14 +60,12 @@ func (h *Handler) VerifyOtp(ctx context.Context, req *corev1.VerifyOtpRequest) (
 	if err != nil {
 		return nil, err
 	}
-	ch, err := h.d.OTP.Verify(ctx, req.GetOtpRequestId(), req.GetCode())
+	ch, err := h.d.OTP.Verify(ctx, req.GetOtpRequestId(), req.GetCode(), p.JKT)
 	switch {
 	case errors.Is(err, otp.ErrTooManyAttempts):
 		return nil, connect.NewError(connect.CodeResourceExhausted, "too many attempts; request a new code")
 	case err != nil:
 		return nil, connect.NewError(connect.CodeUnauthenticated, "wrong or expired code")
-	case ch.Device.JKT != p.JKT:
-		return nil, errUnauth
 	}
 	userID, isNew, err := h.d.Users.FindOrCreate(ctx, accounts.NewUser{PhoneHash: ch.PhoneHash, PhoneE164: ch.PhoneE164, Country: ch.Region})
 	if err != nil {

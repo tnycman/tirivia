@@ -66,4 +66,8 @@ func TestCodeFromAnotherDeviceRejected(t *testing.T) {
 		&corev1.VerifyOtpRequest{OtpRequestId: st.GetOtpRequestId(), Code: h.sms.code(phone)}); connect.CodeOf(err) != connect.CodeUnauthenticated {
 		t.Fatalf("code accepted from another device key: %v", err)
 	}
+	if _, err := h.client.VerifyOtp(h.withProof(t, dev, corev1connect.AuthServiceVerifyOtpProcedure),
+		&corev1.VerifyOtpRequest{OtpRequestId: st.GetOtpRequestId(), Code: h.sms.code(phone)}); err != nil {
+		t.Fatalf("attacker consumed player's code: %v", err)
+	}
 }

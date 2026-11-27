@@ -260,6 +260,12 @@ type Session struct {
 	CreatedAt       time.Time
 }
 
+type SessionFamilyRevocation struct {
+	RefreshFamilyID uuid.UUID
+	RevokedAt       time.Time
+	RevokeReason    string
+}
+
 type Show struct {
 	ID            uuid.UUID
 	StartsAt      time.Time

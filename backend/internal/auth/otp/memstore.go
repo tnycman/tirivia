@@ -2,6 +2,7 @@ package otp
 
 import (
 	"context"
+	"crypto/hmac"
 	"sync"
 	"time"
 )
@@ -34,17 +35,36 @@ func (s *MemStore) Get(_ context.Context, id string) (Challenge, error) {
 	return c, nil
 }
 
-// IncrementAttempts implements Store.
-func (s *MemStore) IncrementAttempts(_ context.Context, id string) (int, error) {
+// Verify implements Store atomically.
+func (s *MemStore) Verify(_ context.Context, id, expectedJKT string, codeMAC []byte, now time.Time, maxAttempts int) (Challenge, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	c, ok := s.m[id]
 	if !ok {
-		return 0, ErrExpired
+		return Challenge{}, ErrExpired
+	}
+	if now.After(c.ExpiresAt) {
+		delete(s.m, id)
+		return Challenge{}, ErrExpired
+	}
+	if c.Device.JKT != expectedJKT {
+		return Challenge{}, ErrBinding
 	}
 	c.Attempts++
-	s.m[id] = c
-	return c.Attempts, nil
+	if c.Attempts > maxAttempts {
+		delete(s.m, id)
+		return Challenge{}, ErrTooManyAttempts
+	}
+	if !hmac.Equal(codeMAC, c.CodeMAC) {
+		if c.Attempts == maxAttempts {
+			delete(s.m, id)
+		} else {
+			s.m[id] = c
+		}
+		return c, ErrWrongCode
+	}
+	delete(s.m, id)
+	return c, nil
 }
 
 // Delete implements Store.

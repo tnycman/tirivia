@@ -8,17 +8,28 @@ import (
 
 // MemStore is an in-memory Store for tests and local development.
 type MemStore struct {
-	mu   sync.Mutex
-	byID map[string]*Session
+	mu      sync.Mutex
+	byID    map[string]*Session
+	revoked map[string]revocation
+}
+
+type revocation struct {
+	at     time.Time
+	reason string
 }
 
 // NewMemStore returns an empty store.
-func NewMemStore() *MemStore { return &MemStore{byID: map[string]*Session{}} }
+func NewMemStore() *MemStore {
+	return &MemStore{byID: map[string]*Session{}, revoked: map[string]revocation{}}
+}
 
 // Insert implements Store.
 func (m *MemStore) Insert(_ context.Context, s Session) error {
 	m.mu.Lock()
 	defer m.mu.Unlock()
+	if r, ok := m.revoked[s.FamilyID]; ok {
+		s.RevokedAt, s.RevokeReason = &r.at, r.reason
+	}
 	m.byID[s.ID] = &s
 	return nil
 }
@@ -40,7 +51,7 @@ func (m *MemStore) MarkRotated(_ context.Context, id string, at time.Time) (bool
 	m.mu.Lock()
 	defer m.mu.Unlock()
 	s, ok := m.byID[id]
-	if !ok || s.RotatedAt != nil {
+	if !ok || s.RotatedAt != nil || s.RevokedAt != nil {
 		return false, nil
 	}
 	s.RotatedAt, s.LastUsedAt = &at, at
@@ -51,9 +62,14 @@ func (m *MemStore) MarkRotated(_ context.Context, id string, at time.Time) (bool
 func (m *MemStore) RevokeFamily(_ context.Context, familyID, reason string, at time.Time) error {
 	m.mu.Lock()
 	defer m.mu.Unlock()
+	r, ok := m.revoked[familyID]
+	if !ok {
+		r = revocation{at: at, reason: reason}
+		m.revoked[familyID] = r
+	}
 	for _, s := range m.byID {
 		if s.FamilyID == familyID && s.RevokedAt == nil {
-			s.RevokedAt, s.RevokeReason = &at, reason
+			s.RevokedAt, s.RevokeReason = &r.at, r.reason
 		}
 	}
 	return nil

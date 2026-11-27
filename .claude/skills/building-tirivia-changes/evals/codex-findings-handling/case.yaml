@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: codex-findings-handling
+expected_outcome: |
+  Verifies each finding against the code before acting, presents them ranked with a verdict, and asks the owner which to fix instead of fixing automatically.
