@@ -55,6 +55,17 @@ func Run(t *testing.T, s sessions.Store, seed Seed) {
 			t.Fatalf("family member %s not revoked: %+v %v", x.ID, got, err)
 		}
 	}
+	late := session(t, user, device, jkt, a.FamilyID, now)
+	if err := s.Insert(ctx, late); err != nil {
+		t.Fatal(err)
+	}
+	got, err = s.ByRefreshHash(ctx, late.RefreshHash)
+	if err != nil || got.RevokedAt == nil || got.RevokeReason != sessions.ReasonReuse {
+		t.Fatalf("late family member not born revoked: %+v %v", got, err)
+	}
+	if won, markErr := s.MarkRotated(ctx, late.ID, now); markErr != nil || won {
+		t.Fatalf("revoked family member rotated: %v %v", won, markErr)
+	}
 }
 
 func session(t *testing.T, user, device, jkt, family string, now time.Time) sessions.Session {

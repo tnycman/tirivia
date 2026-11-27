@@ -5,7 +5,7 @@ Uses **Terraform 1.17** and **AWS provider 6.x** ([ADR-0008](../docs/adr/0008-te
 ```
 infra/
 ├── bootstrap/                    # run once per account, using local state
-│   ├── state-backend/            #   KMS-encrypted, versioned, TLS-only state bucket (native S3 locking)
+│   ├── state-backend/            #   KMS-encrypted, versioned, TLS-only state bucket (native S3 locking), replicated to eu-west-1 (OP-7)
 │   └── github-oidc/              #   OIDC provider + read-only plan role + apply role (main + environment)
 ├── org/                          # management account: OUs, SCPs (region allow-list), Identity Center
 ├── modules/                      # one module per capability

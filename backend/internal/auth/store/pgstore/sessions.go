@@ -62,5 +62,10 @@ func (s *Sessions) RevokeFamily(ctx context.Context, familyID, reason string, at
 	if err != nil {
 		return err
 	}
-	return s.q.RevokeSessionFamily(ctx, pgq.RevokeSessionFamilyParams{RefreshFamilyID: fid, RevokeReason: &reason, RevokedAt: &at})
+	if err := s.q.RecordSessionFamilyRevocation(ctx, pgq.RecordSessionFamilyRevocationParams{
+		RefreshFamilyID: fid, RevokeReason: reason, RevokedAt: at,
+	}); err != nil {
+		return err
+	}
+	return s.q.ApplySessionFamilyRevocation(ctx, fid)
 }

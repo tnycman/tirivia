@@ -19,15 +19,30 @@ jobs:
       security-events: write
     strategy:
       matrix:
-        language: [go, javascript-typescript, actions]
+        include:
+          - language: go
+            build-mode: manual # Go supports only autobuild or manual
+          - language: javascript-typescript
+            build-mode: none
+          - language: actions
+            build-mode: none
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+      - if: matrix.language == 'go'
+        uses: actions/setup-go@d8cbb8045d7f43706b9177cceb36c1f91a6644d5 # v7.1.0
+        with:
+          go-version-file: backend/go.mod
+          cache-dependency-path: backend/go.sum
       - uses: github/codeql-action/init@915412ff23e8b7659517e607487dbeae018f2934 # v4.39.5
         with:
           languages: ${{ matrix.language }}
-          build-mode: none
+          build-mode: ${{ matrix.build-mode }}
+      - if: matrix.build-mode == 'manual'
+        name: Build Go for CodeQL (backend, protocol/gen via replace)
+        working-directory: backend
+        run: go build ./...
       - uses: github/codeql-action/analyze@915412ff23e8b7659517e607487dbeae018f2934 # v4.39.5
 
   dependency-review:
