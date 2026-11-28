@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/tirivia/backend/internal/platform/switches"
+	"trivia.al/backend/internal/platform/switches"
 )
 
 type failingMinter struct{}

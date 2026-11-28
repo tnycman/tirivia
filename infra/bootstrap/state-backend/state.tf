@@ -9,7 +9,7 @@ resource "aws_kms_key" "state" {
 resource "aws_s3_bucket" "state" {
   #checkov:skip=CKV2_AWS_62:No consumer for state-bucket events; neither AWS nor HashiCorp recommends them here (OP-7)
   #checkov:skip=CKV_AWS_18:Audited by CloudTrail data events from the account baseline, not best-effort access logs (OP-7)
-  bucket = "tirivia-tfstate-${var.env}-${var.account_id}"
+  bucket = "trivia-tfstate-${var.env}-${var.account_id}"
 }
 
 resource "aws_s3_bucket_versioning" "state" {

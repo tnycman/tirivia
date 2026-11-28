@@ -7,9 +7,9 @@ import (
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 
-	"github.com/tirivia/backend/internal/auth/accounts"
-	"github.com/tirivia/backend/internal/auth/store/pgstore/pgq"
-	"github.com/tirivia/backend/internal/platform/seal"
+	"trivia.al/backend/internal/auth/accounts"
+	"trivia.al/backend/internal/auth/store/pgstore/pgq"
+	"trivia.al/backend/internal/platform/seal"
 )
 
 // Users is the accounts directory; phones are stored sealed, bound to their hash.

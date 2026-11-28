@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tirivia/backend/internal/auth/otp"
+	"trivia.al/backend/internal/auth/otp"
 )
 
 // LimiterWindow is short so RunLimiter can wait for expiry.

@@ -6,11 +6,11 @@ import (
 	"strconv"
 	"strings"
 
-	commonv1 "github.com/tirivia/protocol/gen/go/tirivia/common/v1"
-	cuev1 "github.com/tirivia/protocol/gen/go/tirivia/cue/v1"
+	commonv1 "trivia.al/protocol/gen/go/trivia/common/v1"
+	cuev1 "trivia.al/protocol/gen/go/trivia/cue/v1"
 
-	"github.com/tirivia/backend/internal/platform/cuesign"
-	tv "github.com/tirivia/backend/internal/platform/testvectors"
+	"trivia.al/backend/internal/platform/cuesign"
+	tv "trivia.al/backend/internal/platform/testvectors"
 )
 
 func questionOpen(seq uint64, text string, opts [3]string) *cuev1.CueBody {

@@ -7,13 +7,13 @@ protocol/
 ├── buf.yaml                 # Buf v2: lint STANDARD, breaking FILE
 ├── buf.gen.yaml             # all languages (CI): Go (local), Swift, Kotlin, TS (remote BSR plugins)
 ├── buf.gen.go.yaml          # Go only, offline (backend development)
-├── proto/tirivia/
+├── proto/trivia/
 │   ├── common/v1/           # Money, Eligibility, ReactionKind
 │   ├── cue/v1/              # SignedCue / CueBody: question_open, reveal, pulse (incl. chat_enabled), burst, final
 │   ├── game/v1/             # GameService (hot path)
 │   ├── core/v1/             # AuthService, ProfileService, ContentService, WalletService
 │   └── events/v1/           # Kinesis event envelope (written as proto3 JSON)
-├── gen/                     # generated code (Go module github.com/tirivia/protocol/gen)
+├── gen/                     # generated code (Go module trivia.al/protocol/gen)
 ├── testvectors/             # cross-platform conformance corpus (see its README)
 └── scripts/install-tools.sh # pinned buf + plugins
 ```

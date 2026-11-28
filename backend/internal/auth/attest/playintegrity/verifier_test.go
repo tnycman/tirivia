@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tirivia/backend/internal/auth/attest"
+	"trivia.al/backend/internal/auth/attest"
 )
 
 type fakeDecoder struct {

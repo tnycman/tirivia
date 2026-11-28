@@ -7,7 +7,7 @@ import (
 
 	"google.golang.org/protobuf/proto"
 
-	cuev1 "github.com/tirivia/protocol/gen/go/tirivia/cue/v1"
+	cuev1 "trivia.al/protocol/gen/go/trivia/cue/v1"
 )
 
 // Signer produces signed text cues; safe for concurrent use.

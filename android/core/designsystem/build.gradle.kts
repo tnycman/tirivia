@@ -1,6 +1,6 @@
 plugins {
-    alias(libs.plugins.tirivia.android.library)
-    alias(libs.plugins.tirivia.android.compose) // generated tokens use Color, dp, sp
+    alias(libs.plugins.trivia.android.library)
+    alias(libs.plugins.trivia.android.compose) // generated tokens use Color, dp, sp
 }
 
-android { namespace = "com.tirivia.core.designsystem" }
+android { namespace = "al.trivia.core.designsystem" }

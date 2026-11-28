@@ -1,4 +1,4 @@
-module github.com/tirivia/protocol/gen
+module trivia.al/protocol/gen
 
 go 1.26.0
 

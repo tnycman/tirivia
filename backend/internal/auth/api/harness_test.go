@@ -16,16 +16,16 @@ import (
 	"connectrpc.com/connect/v2"
 	"connectrpc.com/connect/v2/connecthttp"
 
-	"github.com/tirivia/protocol/gen/go/tirivia/core/v1/corev1connect"
+	"trivia.al/protocol/gen/go/trivia/core/v1/corev1connect"
 
-	"github.com/tirivia/backend/internal/auth/accounts"
-	"github.com/tirivia/backend/internal/auth/api"
-	"github.com/tirivia/backend/internal/auth/attest"
-	"github.com/tirivia/backend/internal/auth/dpop"
-	"github.com/tirivia/backend/internal/auth/dpop/dpopclient"
-	"github.com/tirivia/backend/internal/auth/otp"
-	"github.com/tirivia/backend/internal/auth/sessions"
-	"github.com/tirivia/backend/internal/auth/tokens"
+	"trivia.al/backend/internal/auth/accounts"
+	"trivia.al/backend/internal/auth/api"
+	"trivia.al/backend/internal/auth/attest"
+	"trivia.al/backend/internal/auth/dpop"
+	"trivia.al/backend/internal/auth/dpop/dpopclient"
+	"trivia.al/backend/internal/auth/otp"
+	"trivia.al/backend/internal/auth/sessions"
+	"trivia.al/backend/internal/auth/tokens"
 )
 
 const phone = "+355691234567"
@@ -88,7 +88,7 @@ func newHarness(t *testing.T) harness {
 		Tickets:  at, Limiter: lim, Intel: allowAll{}, Signups: allowAll{}, Directory: users, Store: otp.NewMemStore(),
 	}))
 	pub, priv, _ := ed25519.GenerateKey(rand.Reader)
-	issuer := must(tokens.NewIssuer("k1", priv, "https://api.test", "tirivia-api"))
+	issuer := must(tokens.NewIssuer("k1", priv, "https://api.test", "trivia-api"))
 	verifier := must(dpop.NewVerifier(dpop.NewMemoryReplayCache(), time.Minute))
 
 	mux := http.NewServeMux()
@@ -101,7 +101,7 @@ func newHarness(t *testing.T) harness {
 	return harness{
 		client: corev1connect.NewAuthServiceClient(connect.NewClient(connecthttp.NewTransport(ts.Client(), ts.URL))),
 		sms:    sms, limiter: lim, base: ts.URL,
-		validator: tokens.NewValidator(map[string]ed25519.PublicKey{"k1": pub}, "https://api.test", "tirivia-api", 30*time.Second),
+		validator: tokens.NewValidator(map[string]ed25519.PublicKey{"k1": pub}, "https://api.test", "trivia-api", 30*time.Second),
 	}
 }
 

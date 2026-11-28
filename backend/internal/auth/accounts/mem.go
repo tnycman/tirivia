@@ -6,7 +6,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/tirivia/backend/internal/auth/otp"
+	"trivia.al/backend/internal/auth/otp"
 )
 
 type memDevice struct{ id, userID string }

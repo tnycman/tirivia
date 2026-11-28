@@ -1,8 +1,8 @@
 plugins {
-    alias(libs.plugins.tirivia.android.library)
+    alias(libs.plugins.trivia.android.library)
 }
 
-android { namespace = "com.tirivia.core.protocol" }
+android { namespace = "al.trivia.core.protocol" }
 
 dependencies {
     testImplementation(libs.junit)

@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tirivia/backend/internal/game/domain"
+	"trivia.al/backend/internal/game/domain"
 )
 
 func TestIntakeMatchesDomainRules(t *testing.T) {

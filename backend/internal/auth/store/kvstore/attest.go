@@ -8,7 +8,7 @@ import (
 
 	"github.com/valkey-io/valkey-go"
 
-	"github.com/tirivia/backend/internal/auth/otp"
+	"trivia.al/backend/internal/auth/otp"
 )
 
 // Attest is an attest.Store; GETDEL makes challenge consumption atomic and single use.

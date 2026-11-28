@@ -7,12 +7,12 @@ import (
 
 	"github.com/valkey-io/valkey-go"
 
-	"github.com/tirivia/backend/internal/auth/attest/attesttest"
-	"github.com/tirivia/backend/internal/auth/dpop/dpoptest"
-	"github.com/tirivia/backend/internal/auth/otp/otptest"
-	"github.com/tirivia/backend/internal/auth/store/kvstore"
-	"github.com/tirivia/backend/internal/platform/kv"
-	"github.com/tirivia/backend/internal/platform/seal"
+	"trivia.al/backend/internal/auth/attest/attesttest"
+	"trivia.al/backend/internal/auth/dpop/dpoptest"
+	"trivia.al/backend/internal/auth/otp/otptest"
+	"trivia.al/backend/internal/auth/store/kvstore"
+	"trivia.al/backend/internal/platform/kv"
+	"trivia.al/backend/internal/platform/seal"
 )
 
 func client(t *testing.T) valkey.Client {

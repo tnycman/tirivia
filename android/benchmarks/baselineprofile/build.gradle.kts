@@ -3,4 +3,4 @@ plugins {
 }
 
 // Generates Baseline + Startup Profiles: launch -> join -> live screen with reactions.
-android { namespace = "com.tirivia.benchmarks.baselineprofile" }
+android { namespace = "al.trivia.benchmarks.baselineprofile" }

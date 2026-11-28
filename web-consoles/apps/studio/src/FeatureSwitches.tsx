@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
-import { switchClient, SwitchScope, type Switch } from "@tirivia/api-client";
+import { switchClient, SwitchScope, type Switch } from "@trivia/api-client";
 
 /**
  * Back-office feature switches (ADR-0009). Chat is fully built but defaults OFF; operators

@@ -7,8 +7,8 @@ import (
 
 	"github.com/valkey-io/valkey-go"
 
-	"github.com/tirivia/backend/internal/game/domain"
-	"github.com/tirivia/backend/internal/platform/livestate"
+	"trivia.al/backend/internal/game/domain"
+	"trivia.al/backend/internal/platform/livestate"
 )
 
 // ErrLifeNotAllowed means UF-4 forbids an extra life here.

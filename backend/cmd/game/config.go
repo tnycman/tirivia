@@ -5,7 +5,7 @@ import (
 	"errors"
 	"time"
 
-	gamev1 "github.com/tirivia/protocol/gen/go/tirivia/game/v1"
+	gamev1 "trivia.al/protocol/gen/go/trivia/game/v1"
 )
 
 // gameConfig is what the player API needs; every field is required once VALKEY_URL is set.

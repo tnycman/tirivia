@@ -9,11 +9,11 @@ import (
 	"connectrpc.com/connect/v2"
 	"google.golang.org/protobuf/proto"
 
-	cuev1 "github.com/tirivia/protocol/gen/go/tirivia/cue/v1"
-	gamev1 "github.com/tirivia/protocol/gen/go/tirivia/game/v1"
+	cuev1 "trivia.al/protocol/gen/go/trivia/cue/v1"
+	gamev1 "trivia.al/protocol/gen/go/trivia/game/v1"
 
-	"github.com/tirivia/backend/internal/game/live"
-	"github.com/tirivia/backend/internal/platform/livestate"
+	"trivia.al/backend/internal/game/live"
+	"trivia.al/backend/internal/platform/livestate"
 )
 
 func (g game) set(t *testing.T, phase cuev1.Phase, q int, closeIn time.Duration) {

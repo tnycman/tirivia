@@ -18,8 +18,8 @@ import (
 const testLeeway = 30 * time.Second
 
 const (
-	iss = "https://api.tirivia.example"
-	aud = "tirivia-api"
+	iss = "https://api.trivia.example"
+	aud = "trivia-api"
 	jkt = "0ZcOCORZNYy-DWpqq30jZyJGHTN0d2HglBV3uiguA4I"
 )
 
@@ -35,7 +35,7 @@ func setup(t *testing.T) (*Issuer, *Validator, ed25519.PrivateKey) {
 
 func TestIssueAndValidate(t *testing.T) {
 	is, v, _ := setup(t)
-	tok, ttl, err := is.Issue("user-1", "dev-1", "tirivia-ios", jkt)
+	tok, ttl, err := is.Issue("user-1", "dev-1", "trivia-ios", jkt)
 	if err != nil || ttl != 10*time.Minute {
 		t.Fatalf("issue: %v %v", err, ttl)
 	}
@@ -43,7 +43,7 @@ func TestIssueAndValidate(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if c.Subject != "user-1" || c.Cnf.JKT != jkt || c.DeviceID != "dev-1" || c.ClientID != "tirivia-ios" || c.ID == "" {
+	if c.Subject != "user-1" || c.Cnf.JKT != jkt || c.DeviceID != "dev-1" || c.ClientID != "trivia-ios" || c.ID == "" {
 		t.Fatalf("claims: %+v", c)
 	}
 }

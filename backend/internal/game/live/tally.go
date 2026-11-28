@@ -6,7 +6,7 @@ import (
 
 	"github.com/valkey-io/valkey-go"
 
-	"github.com/tirivia/backend/internal/platform/livestate"
+	"trivia.al/backend/internal/platform/livestate"
 )
 
 // LifeOption is the tally field counting extra lives used; players remaining = correct + lives (SPEC §6.3).

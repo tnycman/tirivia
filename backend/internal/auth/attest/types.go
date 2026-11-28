@@ -6,7 +6,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/tirivia/backend/internal/auth/otp"
+	"trivia.al/backend/internal/auth/otp"
 )
 
 // ChallengeBytes exceeds Apple's 16-byte minimum for App Attest challenges.

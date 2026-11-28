@@ -9,7 +9,7 @@ import (
 
 var (
 	now    = time.UnixMilli(1_800_000_000_000)
-	expect = Expect{PackageName: "al.tirivia.app", CertDigests: []string{"cert-a"}, Window: 5 * time.Minute, FutureSkew: 30 * time.Second}
+	expect = Expect{PackageName: "al.trivia.app", CertDigests: []string{"cert-a"}, Window: 5 * time.Minute, FutureSkew: 30 * time.Second}
 )
 
 func good(hash string) Verdict {

@@ -6,8 +6,8 @@ import (
 
 	"github.com/jackc/pgx/v5"
 
-	"github.com/tirivia/backend/internal/auth/attest/appattest"
-	"github.com/tirivia/backend/internal/auth/store/pgstore/pgq"
+	"trivia.al/backend/internal/auth/attest/appattest"
+	"trivia.al/backend/internal/auth/store/pgstore/pgq"
 )
 
 // AppAttestKeys stores attested keys; the counter only moves forward, atomically.

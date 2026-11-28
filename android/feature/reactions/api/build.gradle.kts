@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.tirivia.android.library)
+    alias(libs.plugins.trivia.android.library)
 }
 
-android { namespace = "com.tirivia.feature.reactions.api" }
+android { namespace = "al.trivia.feature.reactions.api" }

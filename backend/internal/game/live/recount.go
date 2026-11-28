@@ -9,7 +9,7 @@ import (
 
 	"github.com/valkey-io/valkey-go"
 
-	"github.com/tirivia/backend/internal/platform/livestate"
+	"trivia.al/backend/internal/platform/livestate"
 )
 
 // Recount tallies the stored counted answers with cursored HSCAN, so no single command blocks the server; run it after the window closes.

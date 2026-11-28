@@ -21,7 +21,7 @@ These carry forward from Master Plan v1.1 §11. Items added by this research pas
 
 All owner decisions were settled on 2026-11-25. They are recorded in the [decision register](decision-register.md) (60 items). Still open:
 
-1. **Product name and brand** (LG-3). `tirivia` is a working codename. The name sets the visual design and the store listings.
+1. **Product name and brand** (LG-3). `trivia` is a working codename. The name sets the visual design and the store listings.
 2. **Prize currency** (PR-1). Decided together with the bank partner. The ledger is multi-currency-ready until then.
 3. **Chat in production.** Chat is built, tested and switched from the back office, off by default. Decide at the Phase 7 go/no-go ([ADR-0009](adr/0009-chat-backend-switch.md)).
 4. **Producers** set each weekly show's day and time, the per-question timers (6–10 s), themes and chat slow mode in the studio console. These are not owner decisions.

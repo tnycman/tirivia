@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tirivia/backend/internal/auth/sessions"
+	"trivia.al/backend/internal/auth/sessions"
 )
 
 // Racers is how many concurrent rotations RunRace attempts.

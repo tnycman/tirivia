@@ -1,10 +1,10 @@
 # Owner approves and pushes (Master Plan §8). Replace with real GitHub handles/teams.
-*                       @tirivia/owners
-/protocol/              @tirivia/owners @tirivia/backend @tirivia/mobile
-/backend/               @tirivia/backend
-/backend/migrations/    @tirivia/backend @tirivia/owners
-/infra/                 @tirivia/platform @tirivia/owners
-/ios/                   @tirivia/mobile
-/android/               @tirivia/mobile
-/web-consoles/          @tirivia/web
-/.github/               @tirivia/platform @tirivia/owners
+*                       @tnycman
+/protocol/              @tnycman
+/backend/               @tnycman
+/backend/migrations/    @tnycman
+/infra/                 @tnycman
+/ios/                   @tnycman
+/android/               @tnycman
+/web-consoles/          @tnycman
+/.github/               @tnycman

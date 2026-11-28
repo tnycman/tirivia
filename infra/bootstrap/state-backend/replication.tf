@@ -1,7 +1,7 @@
 # S3 replication of the state bucket to the standby replica, KMS objects and delete markers included (OP-7).
 
 resource "aws_iam_role" "replication" {
-  name = "tirivia-tfstate-replication-${var.env}"
+  name = "trivia-tfstate-replication-${var.env}"
   assume_role_policy = jsonencode({
     Version   = "2012-10-17"
     Statement = [{ Effect = "Allow", Principal = { Service = "s3.amazonaws.com" }, Action = "sts:AssumeRole" }]

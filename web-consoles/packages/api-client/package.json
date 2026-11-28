@@ -1,5 +1,5 @@
 {
-  "name": "@tirivia/api-client",
+  "name": "@trivia/api-client",
   "private": true,
   "type": "module",
   "description": "Typed Connect clients generated from protocol/ with protobuf-es. Never hand-write API types.",

@@ -1,9 +1,9 @@
 import { createClient, type Client } from "@connectrpc/connect";
 import { createConnectTransport } from "@connectrpc/connect-web";
 
-import { SwitchService } from "./gen/tirivia/admin/v1/switch_service_pb";
+import { SwitchService } from "./gen/trivia/admin/v1/switch_service_pb";
 
-export * from "./gen/tirivia/admin/v1/switch_service_pb";
+export * from "./gen/trivia/admin/v1/switch_service_pb";
 
 /**
  * Consoles never call the backend directly: every request goes to the same-origin BFF

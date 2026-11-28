@@ -62,8 +62,8 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "daggerHilt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 # Convention plugins (build-logic/convention)
-tirivia-android-application = { id = "tirivia.android.application" }
-tirivia-android-library = { id = "tirivia.android.library" }
-tirivia-android-feature = { id = "tirivia.android.feature" }
-tirivia-android-compose = { id = "tirivia.android.compose" }
-tirivia-hilt = { id = "tirivia.hilt" }
+trivia-android-application = { id = "trivia.android.application" }
+trivia-android-library = { id = "trivia.android.library" }
+trivia-android-feature = { id = "trivia.android.feature" }
+trivia-android-compose = { id = "trivia.android.compose" }
+trivia-hilt = { id = "trivia.hilt" }

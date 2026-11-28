@@ -10,8 +10,8 @@ import (
 
 // Field names follow the verdicts page example; timestampMillis is a JSON string there.
 const samplePayload = `{
-  "requestDetails": {"requestPackageName": "al.tirivia.app", "requestHash": "h", "timestampMillis": "1800000000000"},
-  "appIntegrity": {"appRecognitionVerdict": "PLAY_RECOGNIZED", "packageName": "al.tirivia.app",
+  "requestDetails": {"requestPackageName": "al.trivia.app", "requestHash": "h", "timestampMillis": "1800000000000"},
+  "appIntegrity": {"appRecognitionVerdict": "PLAY_RECOGNIZED", "packageName": "al.trivia.app",
     "certificateSha256Digest": ["cert-a"], "versionCode": "42"},
   "deviceIntegrity": {"deviceRecognitionVerdict": ["MEETS_DEVICE_INTEGRITY", "MEETS_STRONG_INTEGRITY"],
     "deviceAttributes": {"sdkVersion": 34}, "recentDeviceActivity": {"deviceActivityLevel": "LEVEL_3"}},

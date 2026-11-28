@@ -1,5 +1,5 @@
 {
-  "name": "@tirivia/design-tokens",
+  "name": "@trivia/design-tokens",
   "private": true,
   "type": "module",
   "description": "Single source of design tokens (W3C DTCG 2025.10 format) -> Swift, Compose, CSS. Neutral placeholders until the brand (LG-3) is chosen.",

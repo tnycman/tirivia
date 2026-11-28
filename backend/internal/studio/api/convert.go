@@ -3,9 +3,9 @@ package api
 import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 
-	adminv1 "github.com/tirivia/protocol/gen/go/tirivia/admin/v1"
+	adminv1 "trivia.al/protocol/gen/go/trivia/admin/v1"
 
-	"github.com/tirivia/backend/internal/platform/switches"
+	"trivia.al/backend/internal/platform/switches"
 )
 
 func snapshotOf(rows []Row) switches.Snapshot {

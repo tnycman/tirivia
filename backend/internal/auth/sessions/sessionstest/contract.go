@@ -10,7 +10,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/tirivia/backend/internal/auth/sessions"
+	"trivia.al/backend/internal/auth/sessions"
 )
 
 // Seed returns an existing user, device and the device's DPoP thumbprint.

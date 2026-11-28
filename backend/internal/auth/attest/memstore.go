@@ -5,7 +5,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/tirivia/backend/internal/auth/otp"
+	"trivia.al/backend/internal/auth/otp"
 )
 
 type memTicket struct {

@@ -8,12 +8,12 @@ import (
 
 	"connectrpc.com/connect/v2"
 
-	cuev1 "github.com/tirivia/protocol/gen/go/tirivia/cue/v1"
-	gamev1 "github.com/tirivia/protocol/gen/go/tirivia/game/v1"
-	"github.com/tirivia/protocol/gen/go/tirivia/game/v1/gamev1connect"
+	cuev1 "trivia.al/protocol/gen/go/trivia/cue/v1"
+	gamev1 "trivia.al/protocol/gen/go/trivia/game/v1"
+	"trivia.al/protocol/gen/go/trivia/game/v1/gamev1connect"
 
-	"github.com/tirivia/backend/internal/game/live"
-	"github.com/tirivia/backend/internal/platform/livestate"
+	"trivia.al/backend/internal/game/live"
+	"trivia.al/backend/internal/platform/livestate"
 )
 
 // TestWiredServerAuthenticates drives the production wiring with a real token and DPoP proof.

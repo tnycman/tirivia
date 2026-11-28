@@ -5,7 +5,7 @@ import (
 
 	"connectrpc.com/connect/v2"
 
-	gamev1 "github.com/tirivia/protocol/gen/go/tirivia/game/v1"
+	gamev1 "trivia.al/protocol/gen/go/trivia/game/v1"
 )
 
 // settleLife debits the inventory for a life spent on question q; only a definite refusal is refunded.

@@ -3,9 +3,9 @@ package main
 import (
 	"log/slog"
 
-	gameapi "github.com/tirivia/backend/internal/game/api"
-	"github.com/tirivia/backend/internal/platform/kv"
-	"github.com/tirivia/backend/internal/platform/switches"
+	gameapi "trivia.al/backend/internal/game/api"
+	"trivia.al/backend/internal/platform/kv"
+	"trivia.al/backend/internal/platform/switches"
 )
 
 // playerDeps opens Valkey and wires the player API; disabled, it serves switches only and every player call is rejected.

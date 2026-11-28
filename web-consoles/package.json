@@ -1,5 +1,5 @@
 {
-  "name": "tirivia-web-consoles",
+  "name": "trivia-web-consoles",
   "private": true,
   "description": "Back-office consoles (studio, question bank, claims, risk, clips) and the public website. See stack/08-web-consoles.",
   "workspaces": [
@@ -7,7 +7,7 @@
     "apps/*"
   ],
   "scripts": {
-    "generate": "npm run generate -w @tirivia/api-client",
+    "generate": "npm run generate -w @trivia/api-client",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "build": "npm run build --workspaces --if-present"
   },

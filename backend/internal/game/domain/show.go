@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 
-	cuev1 "github.com/tirivia/protocol/gen/go/tirivia/cue/v1"
+	cuev1 "trivia.al/protocol/gen/go/trivia/cue/v1"
 )
 
 // QuestionsPerShow is fixed by the show format.

@@ -3,8 +3,8 @@ package sessions_test
 import (
 	"testing"
 
-	"github.com/tirivia/backend/internal/auth/sessions"
-	"github.com/tirivia/backend/internal/auth/sessions/sessionstest"
+	"trivia.al/backend/internal/auth/sessions"
+	"trivia.al/backend/internal/auth/sessions/sessionstest"
 )
 
 func TestMemStoreContract(t *testing.T) {

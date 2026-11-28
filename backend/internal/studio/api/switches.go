@@ -6,10 +6,10 @@ import (
 
 	"connectrpc.com/connect/v2"
 
-	adminv1 "github.com/tirivia/protocol/gen/go/tirivia/admin/v1"
-	"github.com/tirivia/protocol/gen/go/tirivia/admin/v1/adminv1connect"
+	adminv1 "trivia.al/protocol/gen/go/trivia/admin/v1"
+	"trivia.al/protocol/gen/go/trivia/admin/v1/adminv1connect"
 
-	"github.com/tirivia/backend/internal/platform/switches"
+	"trivia.al/backend/internal/platform/switches"
 )
 
 // SwitchHandler implements adminv1connect.SwitchServiceHandler.

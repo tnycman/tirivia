@@ -7,13 +7,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tirivia/backend/internal/auth/dpop"
-	"github.com/tirivia/backend/internal/auth/dpop/dpopclient"
+	"trivia.al/backend/internal/auth/dpop"
+	"trivia.al/backend/internal/auth/dpop/dpopclient"
 )
 
 const (
 	post   = "POST"
-	u      = "https://api.tirivia.example/tirivia.core.v1.AuthService/RefreshSession"
+	u      = "https://api.trivia.example/trivia.core.v1.AuthService/RefreshSession"
 	window = 60 * time.Second
 )
 

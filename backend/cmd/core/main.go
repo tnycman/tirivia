@@ -12,9 +12,9 @@ import (
 	"connectrpc.com/connect/v2"
 	"connectrpc.com/connect/v2/connecthttp"
 
-	"github.com/tirivia/protocol/gen/go/tirivia/core/v1/corev1connect"
+	"trivia.al/protocol/gen/go/trivia/core/v1/corev1connect"
 
-	"github.com/tirivia/backend/internal/platform/httpserver"
+	"trivia.al/backend/internal/platform/httpserver"
 )
 
 func main() {

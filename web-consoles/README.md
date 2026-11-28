@@ -33,7 +33,7 @@ npm install
 npm run generate      # regenerate the TS client from protocol/proto (needs buf on PATH)
 npm run typecheck
 npm run build
-npm run dev -w @tirivia/studio   # proxies /api to the admin listener (ADMIN_DEV_MODE=1 locally only)
+npm run dev -w @trivia/studio   # proxies /api to the admin listener (ADMIN_DEV_MODE=1 locally only)
 ```
 
 **Verified on 2026-11-25:**

@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.tirivia.android.library)
+    alias(libs.plugins.trivia.android.library)
 }
 
-android { namespace = "com.tirivia.core.video" }
+android { namespace = "al.trivia.core.video" }

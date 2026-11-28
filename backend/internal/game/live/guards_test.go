@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tirivia/backend/internal/game/domain"
-	"github.com/tirivia/backend/internal/platform/livestate"
+	"trivia.al/backend/internal/game/domain"
+	"trivia.al/backend/internal/platform/livestate"
 )
 
 // TestMalformedKeysWriteNothing: a script that meets a bad tally or counted key fails before its first write.

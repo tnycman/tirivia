@@ -8,15 +8,15 @@ import (
 	"os"
 	"strings"
 
-	"github.com/tirivia/protocol/gen/go/tirivia/core/v1/corev1connect"
+	"trivia.al/protocol/gen/go/trivia/core/v1/corev1connect"
 
-	"github.com/tirivia/backend/internal/auth/accounts"
-	authapi "github.com/tirivia/backend/internal/auth/api"
-	"github.com/tirivia/backend/internal/auth/attest"
-	"github.com/tirivia/backend/internal/auth/dpop"
-	"github.com/tirivia/backend/internal/auth/otp"
-	"github.com/tirivia/backend/internal/auth/sessions"
-	"github.com/tirivia/backend/internal/auth/tokens"
+	"trivia.al/backend/internal/auth/accounts"
+	authapi "trivia.al/backend/internal/auth/api"
+	"trivia.al/backend/internal/auth/attest"
+	"trivia.al/backend/internal/auth/dpop"
+	"trivia.al/backend/internal/auth/otp"
+	"trivia.al/backend/internal/auth/sessions"
+	"trivia.al/backend/internal/auth/tokens"
 )
 
 // authHandler is fail-closed: sign-in runs only with AUTH_DEV_MODE=1 until production adapters exist.

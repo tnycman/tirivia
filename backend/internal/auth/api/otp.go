@@ -6,11 +6,11 @@ import (
 
 	"connectrpc.com/connect/v2"
 
-	corev1 "github.com/tirivia/protocol/gen/go/tirivia/core/v1"
-	"github.com/tirivia/protocol/gen/go/tirivia/core/v1/corev1connect"
+	corev1 "trivia.al/protocol/gen/go/trivia/core/v1"
+	"trivia.al/protocol/gen/go/trivia/core/v1/corev1connect"
 
-	"github.com/tirivia/backend/internal/auth/accounts"
-	"github.com/tirivia/backend/internal/auth/otp"
+	"trivia.al/backend/internal/auth/accounts"
+	"trivia.al/backend/internal/auth/otp"
 )
 
 var channels = map[corev1.OtpChannel]otp.Channel{

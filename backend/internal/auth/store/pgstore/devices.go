@@ -7,9 +7,9 @@ import (
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 
-	"github.com/tirivia/backend/internal/auth/accounts"
-	"github.com/tirivia/backend/internal/auth/otp"
-	"github.com/tirivia/backend/internal/auth/store/pgstore/pgq"
+	"trivia.al/backend/internal/auth/accounts"
+	"trivia.al/backend/internal/auth/otp"
+	"trivia.al/backend/internal/auth/store/pgstore/pgq"
 )
 
 // Devices binds each DPoP key to exactly one user.

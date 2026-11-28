@@ -1,4 +1,4 @@
-// Package api exposes the auth module as tirivia.core.v1.AuthService.
+// Package api exposes the auth module as trivia.core.v1.AuthService.
 package api
 
 import (
@@ -8,14 +8,14 @@ import (
 
 	"connectrpc.com/connect/v2"
 
-	"github.com/tirivia/protocol/gen/go/tirivia/core/v1/corev1connect"
+	"trivia.al/protocol/gen/go/trivia/core/v1/corev1connect"
 
-	"github.com/tirivia/backend/internal/auth/accounts"
-	"github.com/tirivia/backend/internal/auth/attest"
-	"github.com/tirivia/backend/internal/auth/dpop"
-	"github.com/tirivia/backend/internal/auth/otp"
-	"github.com/tirivia/backend/internal/auth/sessions"
-	"github.com/tirivia/backend/internal/auth/tokens"
+	"trivia.al/backend/internal/auth/accounts"
+	"trivia.al/backend/internal/auth/attest"
+	"trivia.al/backend/internal/auth/dpop"
+	"trivia.al/backend/internal/auth/otp"
+	"trivia.al/backend/internal/auth/sessions"
+	"trivia.al/backend/internal/auth/tokens"
 )
 
 // Users finds or creates the account for a verified phone.

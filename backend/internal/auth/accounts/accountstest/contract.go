@@ -8,8 +8,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/tirivia/backend/internal/auth/accounts"
-	"github.com/tirivia/backend/internal/auth/otp"
+	"trivia.al/backend/internal/auth/accounts"
+	"trivia.al/backend/internal/auth/otp"
 )
 
 // Directory is the full surface the stores must provide.

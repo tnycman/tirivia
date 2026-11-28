@@ -4,9 +4,9 @@ import org.gradle.kotlin.dsl.dependencies
 
 class AndroidFeatureConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) = with(target) {
-        pluginManager.apply("tirivia.android.library")
-        pluginManager.apply("tirivia.android.compose")
-        pluginManager.apply("tirivia.hilt")
+        pluginManager.apply("trivia.android.library")
+        pluginManager.apply("trivia.android.compose")
+        pluginManager.apply("trivia.hilt")
         dependencies {
             add("implementation", project(":core:ui"))
             add("implementation", project(":core:designsystem"))

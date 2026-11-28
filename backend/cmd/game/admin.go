@@ -6,7 +6,7 @@ import (
 
 	"connectrpc.com/connect/v2"
 
-	studioapi "github.com/tirivia/backend/internal/studio/api"
+	studioapi "trivia.al/backend/internal/studio/api"
 )
 
 // operatorFromBFF is deny-by-default; X-Operator-Id is trusted only with ADMIN_DEV_MODE=1.

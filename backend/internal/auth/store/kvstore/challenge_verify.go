@@ -8,7 +8,7 @@ import (
 
 	"github.com/valkey-io/valkey-go"
 
-	"github.com/tirivia/backend/internal/auth/otp"
+	"trivia.al/backend/internal/auth/otp"
 )
 
 var verifyChallenge = valkey.NewLuaScript(`if redis.call('HGET', KEYS[1], 'data') ~= ARGV[1] then return -1 end

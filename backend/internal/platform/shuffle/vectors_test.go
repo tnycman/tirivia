@@ -5,7 +5,7 @@ import (
 	"slices"
 	"testing"
 
-	tv "github.com/tirivia/backend/internal/platform/testvectors"
+	tv "trivia.al/backend/internal/platform/testvectors"
 )
 
 func TestSharedShuffleVectors(t *testing.T) {

@@ -6,7 +6,7 @@ managed:
   enabled: true
   override:
     - file_option: go_package_prefix
-      value: github.com/tirivia/protocol/gen/go
+      value: trivia.al/protocol/gen/go
 inputs:
   - directory: proto
 plugins:
