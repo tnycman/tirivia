@@ -25,7 +25,7 @@
 ## Best practices
 1. **Check order before any send:**
    1. Attestation ticket.
-   2. Device, number and range limits.
+   2. Device, number and range limits, then the `signups.enabled` check ([ID-8](../../docs/decision-register.md)).
    3. **Line type.** Block `fixedVoip`, `nonFixedVoip`, `tollFree`, `premium`, `sharedCost`, `uan`, `pager` and `voicemail` ([Line Type Intelligence](https://www.twilio.com/docs/lookup/v2-api/line-type-intelligence)).
    4. Pumping-risk score ([SMS Pumping Risk](https://www.twilio.com/docs/lookup/v2-api/sms-pumping-risk)).
    5. Send.

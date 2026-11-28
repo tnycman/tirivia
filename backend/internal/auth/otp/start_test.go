@@ -83,8 +83,9 @@ func TestSignupsPaused(t *testing.T) {
 	if _, err := r.svc.Start(ctx, al, "good-ticket", ChannelSMS, "sq"); !errors.Is(err, ErrSignupsPaused) {
 		t.Fatalf("new number while paused: %v", err)
 	}
-	r.svc.cfg.Directory = dir{r.svc.PhoneHash(al): true}
-	if _, err := r.svc.Start(ctx, al, "good-ticket", ChannelSMS, "sq"); err != nil {
+	existing := "+355697654321"
+	r.svc.cfg.Directory = dir{r.svc.PhoneHash(existing): true}
+	if _, err := r.svc.Start(ctx, existing, "good-ticket", ChannelSMS, "sq"); err != nil {
 		t.Fatalf("existing user blocked: %v", err)
 	}
 }

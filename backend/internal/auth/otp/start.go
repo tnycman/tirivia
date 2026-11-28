@@ -27,12 +27,12 @@ func (s *Service) Start(ctx context.Context, phone, ticket string, channel Chann
 		return StartResult{}, ErrNumberNotAllowed
 	}
 	phoneHash := s.PhoneHash(phone)
-	if err := s.checkSignups(ctx, phoneHash); err != nil {
-		return StartResult{}, err
-	}
 	l := s.limitsFor(region)
 	if limited, err := s.rateLimited(ctx, l, phoneHash, dev.ID, phone); err != nil || limited {
 		return StartResult{}, firstErr(err, ErrRateLimited)
+	}
+	if err := s.checkSignups(ctx, phoneHash); err != nil {
+		return StartResult{}, err
 	}
 	if blocked, err := s.numberBlocked(ctx, l, phone); err != nil || blocked {
 		return StartResult{}, firstErr(err, ErrNumberNotAllowed)
