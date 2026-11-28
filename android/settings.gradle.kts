@@ -43,4 +43,4 @@ listOf("auth", "home", "liveshow", "reactions", "chat", "wallet", "leaderboards"
         include(":feature:$feature:impl")
     }
 
-include(":benchmarks:baselineprofile", ":benchmarks:macrobenchmark")
+// :benchmarks:baselineprofile and :benchmarks:macrobenchmark join with the reaction benchmark (Phase 3, L11).

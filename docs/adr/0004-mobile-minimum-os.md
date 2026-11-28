@@ -33,7 +33,7 @@ The owner chose iOS 16 to maximise reach.
 **Android:**
 - minSdk 26 (unchanged)
 - targetSdk 36 (required by Play since 2026-08-31)
-- compileSdk 37
+- compileSdk 37 (minor release 37.1, required by Compose 1.13)
 
 ## Consequences
 

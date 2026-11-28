@@ -20,16 +20,19 @@ benchmarkMacro = "1.5.0"      # latest stable on Google Maven (1.6.0 is alpha)
 profileinstaller = "1.4.1"    # Google Maven metadata, 2026-11-25
 junit = "4.13.2"               # Maven Central metadata, 2026-11-25
 orgJson = "20260814"          # real org.json for local unit tests (Android stub is not usable); Maven Central 2026-11-25
+activityCompose = "1.13.0"    # stable per developer.android.com/jetpack/androidx/releases/activity, 2026-11-28
 
 minSdk = "26"                 # ADR-0004
 targetSdk = "36"              # Play requirement since 2026-08-31
 compileSdk = "37"             # AGP 9.5 max API 37
+compileSdkMinor = "1"         # 37.1: Compose 1.13 needs it (compose-ui notes, 1.13.0-alpha03)
 
 [libraries]
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
-androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+androidx-compose-ui-tooling ={ group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxHilt" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "daggerHilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "daggerHilt" }

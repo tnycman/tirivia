@@ -1,6 +1,6 @@
 # android: native Android app
 
-Built with Kotlin 2.4, Jetpack Compose (Material 3) and Hilt. SDK levels: **minSdk 26**, **targetSdk 36**, **compileSdk 37**. Stack and best practices are in [`stack/07-android`](../stack/07-android/README.md).
+Built with Kotlin 2.4, Jetpack Compose (Material 3) and Hilt. SDK levels: **minSdk 26**, **targetSdk 36**, **compileSdk 37.1**. Stack and best practices are in [`stack/07-android`](../stack/07-android/README.md).
 
 ```
 android/
@@ -30,7 +30,6 @@ android/
 
 ## Status
 
-There is no JDK or Android SDK in this workspace, so the Gradle files and `OptionShuffle.kt` were written against the documented APIs but **have not been compiled yet**.
+There is no JDK or Android SDK in this workspace. `.github/workflows/android-ci.yml` compiles the build logic and every module, runs the unit tests (including the shared shuffle vectors), builds the debug APK and runs lint, using Gradle 9.9.2 from `setup-gradle`.
 
-- **Phase 0:** compile both in CI and confirm the KSP/Kotlin pairing (all versions in `libs.versions.toml` were checked against Maven metadata on 2026-11-25).
-- **Then:** confirm through the test vectors that the shuffle matches the Go implementation.
+- **Not yet:** the Gradle wrapper (it needs a Gradle install to generate), and the benchmark modules (Phase 3).

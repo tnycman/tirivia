@@ -8,7 +8,7 @@ The native Android client. It has the same features as iOS and must hold its fra
 - **Play Integrity standard requests** for device attestation.
 - **IVS Player SDK** for video and **connect-kotlin** for the API.
 - Modules follow the **Now in Android** pattern.
-- SDK levels: minSdk **26**, targetSdk **36**, compileSdk **37** ([ADR-0004](../../docs/adr/0004-mobile-minimum-os.md)).
+- SDK levels: minSdk **26**, targetSdk **36**, compileSdk **37.1** (Compose 1.13 requires 37.1) ([ADR-0004](../../docs/adr/0004-mobile-minimum-os.md)).
 
 ## Pinned versions (2026-11-25)
 
