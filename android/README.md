@@ -30,6 +30,6 @@ android/
 
 ## Status
 
-There is no JDK or Android SDK in this workspace. `.github/workflows/android-ci.yml` compiles the build logic and every module, runs the unit tests (including the shared shuffle vectors), builds the debug APK and runs lint, using Gradle 9.9.2 from `setup-gradle`.
+There is no JDK or Android SDK in this workspace. `.github/workflows/android-ci.yml` compiles the build logic and every module, runs the unit tests (including the shared shuffle vectors), builds the debug APK and runs lint, using the committed Gradle 9.9.2 wrapper (`./gradlew`).
 
-- **Not yet:** the Gradle wrapper (it needs a Gradle install to generate), and the benchmark modules (Phase 3).
+- **Not yet:** the benchmark modules (Phase 3).

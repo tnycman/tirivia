@@ -28,4 +28,4 @@
 
 1. Convention plugins configure `ApplicationExtension` and `LibraryExtension` and never apply `org.jetbrains.kotlin.android`.
 2. Gradle 9.9.2 satisfies AGP 9.5.1 (it needs 9.6.0 or later), so the pin stands.
-3. The wrapper (scripts, properties with `distributionSha256Sum`, JAR) belongs in git. Producing it needs a Gradle install, which this workstation lacks, so the first PR runs Gradle 9.9.2 through `setup-gradle` and adds the wrapper later.
+3. The wrapper (scripts, properties with `distributionSha256Sum`, JAR) belongs in git. Producing it needs a Gradle install, which this workstation lacks, so a one-time CI job generated it with the published checksum, and its JAR was checked against Gradle's published wrapper checksum before it was committed.
