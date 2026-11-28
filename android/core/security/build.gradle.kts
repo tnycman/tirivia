@@ -3,3 +3,7 @@ plugins {
 }
 
 android { namespace = "al.trivia.core.security" }
+
+dependencies {
+    testImplementation(libs.junit)
+}
