@@ -5,8 +5,9 @@ This is the single definition of every API message and of the timed-metadata cue
 ```
 protocol/
 ├── buf.yaml                 # Buf v2: lint STANDARD, breaking FILE
-├── buf.gen.yaml             # all languages (CI): Go (local), Swift, Kotlin, TS (remote BSR plugins)
+├── buf.gen.yaml             # Go (local), Swift, TS (remote BSR plugins)
 ├── buf.gen.go.yaml          # Go only, offline (backend development)
+├── buf.gen.kotlin.yaml      # Android, pinned remote plugins, into android/core/protocol/src/gen
 ├── proto/trivia/
 │   ├── common/v1/           # Money, Eligibility, ReactionKind
 │   ├── cue/v1/              # SignedCue / CueBody: question_open, reveal, pulse (incl. chat_enabled), burst, final
@@ -27,7 +28,8 @@ protocol/
 | Format check | `buf format -d` |
 | Breaking-change check | `buf breaking` against the PR base commit; a deliberate break needs the visible `buf skip breaking` label (docs/research/07). Used once, pre-release, for the core_services.proto split |
 | Generate Go | `buf generate --template buf.gen.go.yaml` |
-| Generate all | `buf generate` (needs network access for the remote Swift, Kotlin and TS plugins) |
+| Generate Kotlin (Android) | `buf generate --template buf.gen.kotlin.yaml` (network; CI fails if the committed output is stale) |
+| Generate all | `buf generate` (needs network access for the remote Swift and TS plugins) |
 
 ## Verified on 2026-11-25
 

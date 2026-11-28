@@ -11,4 +11,5 @@
 
 # Generated code: collapse in diffs, mark as generated for GitHub linguist
 protocol/gen/** linguist-generated=true
+android/core/protocol/src/gen/** linguist-generated=true
 web-consoles/packages/api-client/src/gen/** linguist-generated=true

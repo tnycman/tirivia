@@ -1,0 +1,24 @@
+# Android code generation (docs/research/16). Run from protocol/: buf generate --template buf.gen.kotlin.yaml
+# Plugin versions equal the Android runtime pins: protobuf-kotlin-lite 4.36.2, connect-kotlin 0.10.0.
+# Output is committed; CI regenerates it and fails if it is stale.
+version: v2
+clean: true
+managed:
+  enabled: true
+  override:
+    - file_option: java_package_prefix
+      value: al
+inputs:
+  - directory: proto
+plugins:
+  - remote: buf.build/protocolbuffers/java:v36.2
+    out: ../android/core/protocol/src/gen/java
+    opt: lite
+  - remote: buf.build/protocolbuffers/kotlin:v36.2
+    out: ../android/core/protocol/src/gen/kotlin
+    opt: lite
+  - remote: buf.build/connectrpc/kotlin:v0.10.0
+    out: ../android/core/protocol/src/gen/kotlin
+    opt:
+      - generateCallbackMethods=false
+      - generateCoroutineMethods=true
