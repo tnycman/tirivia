@@ -58,6 +58,19 @@ func TestStolenRefreshTokenFromOtherKey(t *testing.T) {
 	}
 }
 
+func TestSignOutFromOtherKeyRefused(t *testing.T) {
+	h := newHarness(t)
+	dev, attacker := deviceKey(t), deviceKey(t)
+	s := h.signIn(t, dev)
+	if _, err := h.client.SignOut(h.withProof(t, attacker, corev1connect.AuthServiceSignOutProcedure),
+		&corev1.SignOutRequest{RefreshToken: s.GetRefreshToken()}); connect.CodeOf(err) != connect.CodeUnauthenticated {
+		t.Fatalf("sign-out from other key: %v", err)
+	}
+	if _, err := h.refresh(t, dev, s.GetRefreshToken()); err != nil {
+		t.Fatalf("refused sign-out ended the session: %v", err)
+	}
+}
+
 func TestCodeFromAnotherDeviceRejected(t *testing.T) {
 	h := newHarness(t)
 	dev, thief := deviceKey(t), deviceKey(t)

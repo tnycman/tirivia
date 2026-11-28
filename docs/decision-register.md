@@ -40,6 +40,7 @@ Every choice that has to be settled before the build continues. Each row cites w
 | ID-4 | Session length | access token 10 min; signed in for 30 days of inactivity | As proposed | **SETTLED 2026-11-25** |
 | ID-5 | Age check | **Self-declared 18+ at sign-up; age is verified by government ID at Tier B/C and at any cash-out** | — | **SETTLED 2026-11-25** |
 | ID-6 | Phone number changes | Re-binding a number triggers a KYC re-check before the next payout (no SIM-swap data exists for AL/XK/MK) | As proposed | **SETTLED 2026-11-25** |
+| ID-7 | Refresh token presented with a different device key (Codex finding #9) | **Refused; the token family stays live.** Applies to `SignOut` (RFC 7009 §2.1: refuse if the token was not issued to the requesting client) and to `RefreshSession` (RFC 9449 §5: the binding MUST be validated; it does not require revocation). An unknown token on `SignOut` still succeeds (RFC 7009 §2.2). Research 11 | Refuse without revoking; SignOut first, RefreshSession in a separate PR | **SETTLED 2026-11-27** |
 
 ## C. Prizes and claims
 

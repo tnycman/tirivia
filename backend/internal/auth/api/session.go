@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"errors"
 
 	"connectrpc.com/connect/v2"
 
@@ -30,10 +31,14 @@ func (h *Handler) RefreshSession(ctx context.Context, req *corev1.RefreshSession
 
 // SignOut implements AuthServiceHandler.
 func (h *Handler) SignOut(ctx context.Context, req *corev1.SignOutRequest) (*corev1.SignOutResponse, error) {
-	if _, err := h.proof(ctx, corev1connect.AuthServiceSignOutProcedure); err != nil {
+	p, err := h.proof(ctx, corev1connect.AuthServiceSignOutProcedure)
+	if err != nil {
 		return nil, err
 	}
-	if err := h.d.Sessions.Revoke(ctx, req.GetRefreshToken()); err != nil {
+	switch err := h.d.Sessions.Revoke(ctx, req.GetRefreshToken(), p.JKT); {
+	case errors.Is(err, sessions.ErrBinding):
+		return nil, errUnauth
+	case err != nil:
 		return nil, connect.NewError(connect.CodeUnavailable, "sign-out failed; try again")
 	}
 	return &corev1.SignOutResponse{}, nil
