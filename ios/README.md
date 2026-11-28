@@ -30,4 +30,6 @@ ios/
 
 ## Status
 
-This workspace runs on Windows, which has no Xcode or Swift toolchain. The two package manifests and `OptionShuffle.swift` were written against the documented APIs but **have not been compiled here**. Phase 0 compiles them on macOS CI with Xcode 27.2, where the shuffle vectors confirm parity with Go.
+This workspace runs on Windows, which has no Xcode or Swift toolchain. `.github/workflows/ios-ci.yml` runs on GitHub's `xcode-27` image with Xcode 27.2. It tests the Core package on the iPhone 17 simulator (including the shared shuffle vectors), generates `Tirivia.xcodeproj` from `project.yml` with XcodeGen 2.49.0, and builds the app unsigned for the simulator ([research 15](../docs/research/15-ios-shell-build.md)). The project file, the generated `Info.plist` and the copied vectors are not committed.
+
+`Vendor/AmazonIVSPlayer/Package.swift` is AWS's published 1.58.1 manifest. SwiftPM downloads the binary and checks its checksum.
