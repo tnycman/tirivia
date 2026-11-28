@@ -22,7 +22,6 @@ var (
 // Revoke reasons.
 const (
 	ReasonReuse      = "refresh_reuse_detected"
-	ReasonBinding    = "dpop_key_mismatch"
 	ReasonInactivity = "inactivity"
 	ReasonSignOut    = "sign_out"
 )

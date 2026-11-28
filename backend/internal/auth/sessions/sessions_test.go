@@ -48,8 +48,8 @@ func TestStolenTokenWithOtherKey(t *testing.T) {
 	if _, _, err := m.Rotate(ctx, r1, attackerJKT); !errors.Is(err, ErrBinding) {
 		t.Fatalf("other key accepted: %v", err)
 	}
-	if _, _, err := m.Rotate(ctx, r1, jkt); !errors.Is(err, ErrRevoked) {
-		t.Fatalf("family must be revoked after a binding mismatch: %v", err)
+	if _, _, err := m.Rotate(ctx, r1, jkt); err != nil {
+		t.Fatalf("refused refresh revoked the family (ID-7): %v", err)
 	}
 }
 

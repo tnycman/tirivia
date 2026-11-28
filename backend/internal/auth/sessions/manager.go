@@ -67,10 +67,10 @@ func (m *Manager) check(ctx context.Context, s Session, proofJKT string) error {
 	switch {
 	case s.RevokedAt != nil:
 		return ErrRevoked
+	case !sameKey(s.JKT, proofJKT):
+		return ErrBinding
 	case s.RotatedAt != nil:
 		return revoke(ReasonReuse, ErrReuse)
-	case !sameKey(s.JKT, proofJKT):
-		return revoke(ReasonBinding, ErrBinding)
 	case now.Sub(s.LastUsedAt) > InactivityTTL:
 		return revoke(ReasonInactivity, ErrExpired)
 	}
