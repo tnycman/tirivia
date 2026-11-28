@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android 12+: the session file never leaves the device (ID-9). android:allowBackup="false" covers Android 11 and lower. -->
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="file" path="datastore/session.bin" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="file" path="datastore/session.bin" />
+    </device-transfer>
+</data-extraction-rules>

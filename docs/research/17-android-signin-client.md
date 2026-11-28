@@ -52,7 +52,25 @@ Settled:
 2. Session files and any keyset file are excluded from cloud backup and device transfer, with both rule sets (API 31+ and ≤ 30).
 3. The token key does not require user authentication (the doc scopes that to a different threat; the step-up key is separate).
 
-Owner decision 2026-11-28 (register ID-9): `datastore-tink`. End-to-end check: the owner runs the app in Android Studio's emulator on the workstation against the dev backend.
+Owner decision 2026-11-28 (register ID-9): `datastore-tink`, refined to Tink `AndroidKeystore` (below).
+
+### Settled by the 1.3.0 / 1.24.0 source jars (Google Maven, Maven Central)
+
+| Source | Text |
+|---|---|
+| `datastore-tink-android-1.3.0.module` | depends on `com.google.crypto.tink:tink-android` `1.20.0` (the Android variant; the JVM variant uses `tink`) |
+| `datastore-tink-android-1.3.0-sources.jar` `AeadSerializer.kt` | `public class AeadSerializer<T>(private val aead: Aead, private val wrappedSerializer: Serializer<T>, private val associatedData: ByteArray = byteArrayOf())`. Decryption failure: `throw CorruptionException("Decryption failed", e)`. An empty file is passed to the wrapped serializer as empty bytes |
+| `tink-android-1.24.0-sources.jar` `AndroidKeysetManager.java` | "We don't recommend using this class. Instead, directly use {@link AndroidKeystore}."; "When Android Keystore is disabled or otherwise unavailable, keysets will be stored in cleartext." |
+| same, `AndroidKeystore.java` | `generateNewAes256GcmKey(alias)`: `setKeySize(256)`, `BLOCK_MODE_GCM`, `ENCRYPTION_PADDING_NONE`; `getAead(alias)`: "All instances of this class use a 12-byte IV and a 16-byte tag"; the IV comes from `cipher.getIV()`; "Warning: This API is not thread-safe." |
+| `datastore-core-android-1.3.0-sources.jar` | `DataStoreFactory.create(serializer, corruptionHandler: ReplaceFileCorruptionHandler<T>? = null, …, produceFile)`; `Serializer.readFrom` "@throws … CorruptionException if the data … is corrupted" |
+| `datastore-android-1.3.0-sources.jar` | `Context.dataStoreFile(fileName)` = `File(applicationContext.filesDir, "datastore/$fileName")` |
+| [Auto Backup](https://developer.android.com/identity/data/autobackup) syntax reference | `<data-extraction-rules><cloud-backup>…</cloud-backup><device-transfer>…</device-transfer></data-extraction-rules>`; "On devices from some device manufacturers, specifying android:allowBackup="false" disables cloud-based backup and restore … but doesn't disable device-to-device transfers" |
+
+This resolves the earlier UNVERIFIED items:
+- **Tag and IV lengths, and key size:** set by Tink's `AndroidKeystore`.
+- **Element name:** `<device-transfer>`, per the syntax reference.
+- **Library versions:** `datastore-tink` 1.3.0 with `tink-android` 1.24.0, the latest release on Maven Central.
+- **When the key is lost or the file is corrupt:** decryption fails with `CorruptionException`, and the replace handler resets to signed-out. End-to-end check: the owner runs the app in Android Studio's emulator on the workstation against the dev backend.
 
 UNVERIFIED:
 - AndroidKeyStore GCM tag and IV lengths.
