@@ -67,7 +67,7 @@ The native Android client. It has the same features as iOS and must hold its fra
 9. **Language.** Use `generateLocaleConfig = true` and `AppCompatDelegate.setApplicationLocales` (sq/en). ([app languages](https://developer.android.com/guide/topics/resources/app-languages))
 10. **Credentials.**
     - The DPoP key is a Keystore EC P-256 key, StrongBox-backed where available, with user authentication required for the step-up key.
-    - Tokens are encrypted with a Keystore key before they are written to DataStore.
+    - Tokens are encrypted before they are written to DataStore: `datastore-tink` `AeadSerializer`, with a Tink keyset wrapped by a Keystore master key (ID-9, research 17).
 
 ## Rules for this codebase
 - No feature module may depend on another feature's `impl`.
