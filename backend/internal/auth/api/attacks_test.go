@@ -53,8 +53,8 @@ func TestStolenRefreshTokenFromOtherKey(t *testing.T) {
 	if _, err := h.refresh(t, attacker, s.GetRefreshToken()); connect.CodeOf(err) != connect.CodeUnauthenticated {
 		t.Fatalf("attacker key accepted: %v", err)
 	}
-	if _, err := h.refresh(t, dev, s.GetRefreshToken()); connect.CodeOf(err) != connect.CodeUnauthenticated {
-		t.Fatalf("family not revoked after theft attempt: %v", err)
+	if _, err := h.refresh(t, dev, s.GetRefreshToken()); err != nil {
+		t.Fatalf("refused refresh ended the session (ID-7): %v", err)
 	}
 }
 
