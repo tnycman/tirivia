@@ -26,7 +26,9 @@ UNVERIFIED: Kotlin-DSL wiring of the protobuf Gradle plugin for proto files outs
 | [RFC 7518 §3.4](https://www.rfc-editor.org/rfc/rfc7518.html#section-3.4) | JWS: R and S "in big-endian order, with each array being be 32 octets long"; "MUST NOT be shortened"; "The JWS Signature value MUST be a 64-octet sequence." |
 | [RFC 9449 §4.2](https://www.rfc-editor.org/rfc/rfc9449.html#section-4.2) | header `typ` `dpop+jwt`, `alg` (not `none`, not MAC), `jwk` that "MUST NOT contain a private key"; claims `jti` (≥ 96 bits random or UUIDv4), `htm`, `htu` "without query and fragment parts", `iat`; `ath` with an access token; `nonce` when the server sends `DPoP-Nonce` |
 | [RFC 7638 §3.2](https://www.rfc-editor.org/rfc/rfc7638.html#section-3.2) | EC thumbprint members in order: `crv`, `kty`, `x`, `y` |
-| RFC 7518 §6.2.1 | EC JWK `kty`/`crv`/`x`/`y`, each coordinate the full curve size (summary only: UNVERIFIED verbatim) |
+| [RFC 7518 §6.2.1.2](https://www.rfc-editor.org/rfc/rfc7518.html#section-6.2.1.2) | "The length of this octet string MUST be the full size of a coordinate for the curve specified in the "crv" parameter." |
+| [KeyGenParameterSpec](https://developer.android.com/reference/android/security/keystore/KeyGenParameterSpec), "Example: NIST P-256 EC key pair for signing/verification using ECDSA" | `KeyPairGenerator.getInstance(KeyProperties.KEY_ALGORITHM_EC, "AndroidKeyStore")`, `.setAlgorithmParameterSpec(new ECGenParameterSpec("secp256r1"))`; the key is read back with `keyStore.getKey(alias, null)` and `keyStore.getCertificate(alias).getPublicKey()` |
+| [RFC 9449](https://www.rfc-editor.org/rfc/rfc9449.txt) Figures 2, 4, 13, 14 | Example proof signed by the key `x` `l8tFrhx-…WBFs`, `y` `9VE4jf_O…GRDA`; access token `Kz~8mXK1EalYznwH-LC-1fBAo.4Ljp~zsPE_NeO.gxU` has `ath` `fUHyO2r2Z3DZ53EsNrWBb0xWXoaNy59IiKCAqksmQEo`. Used as test vectors in `DpopProofsTest` |
 
 ## Settled by the sources
 
@@ -66,4 +68,4 @@ Conclusion: **B**. Option A depends on a path AGP 9 calls unsupported (Kotlin th
 | [BSR authentication](https://buf.build/docs/bsr/authentication/) | "store your token in the provider's secret store and expose it to the job as `BUF_TOKEN`" |
 | [AGP: migrate to built-in Kotlin](https://developer.android.com/build/migrate-to-built-in-kotlin) | `android.sourceSets.named("main") { kotlin.directories += "additionalSourceDirectory/kotlin" }` |
 
-Plugins are pinned by version (`buf.build/<owner>/<plugin>:<version>`), not revision. UNVERIFIED until the first CI run: that AGP 9.5.1 compiles the committed sources added this way (`java.directories` is assumed to work like `kotlin.directories`), and whether the connect-kotlin output needs an opt-in flag.
+Plugins are pinned by version (`buf.build/<owner>/<plugin>:<version>`), not revision. Confirmed by PR #18's CI: AGP 9.5.1 compiles the committed sources added through `java.directories` and `kotlin.directories`, and the generated code carries its own `@OptIn` annotations, so no module flag is needed.
