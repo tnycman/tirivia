@@ -4,8 +4,29 @@ plugins {
 
 dependencies {
     compileOnly(libs.android.gradlePlugin)
-    compileOnly(libs.kotlin.gradlePlugin)
-    compileOnly(libs.compose.gradlePlugin)
 }
 
-// Register tirivia.android.application / library / feature / compose and tirivia.hilt here (Phase 0).
+gradlePlugin {
+    plugins {
+        register("androidApplication") {
+            id = "tirivia.android.application"
+            implementationClass = "AndroidApplicationConventionPlugin"
+        }
+        register("androidLibrary") {
+            id = "tirivia.android.library"
+            implementationClass = "AndroidLibraryConventionPlugin"
+        }
+        register("androidCompose") {
+            id = "tirivia.android.compose"
+            implementationClass = "AndroidComposeConventionPlugin"
+        }
+        register("androidFeature") {
+            id = "tirivia.android.feature"
+            implementationClass = "AndroidFeatureConventionPlugin"
+        }
+        register("hilt") {
+            id = "tirivia.hilt"
+            implementationClass = "HiltConventionPlugin"
+        }
+    }
+}
