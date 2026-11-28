@@ -31,13 +31,11 @@ jobs:
           distribution: temurin
           java-version: "17"
       - uses: gradle/actions/setup-gradle@8da46b539cd8fe6ab27ca75128919a18d757604c # v6.4.1
-        with:
-          gradle-version: "9.9.2"
       - name: Build logic
-        run: gradle :build-logic:convention:check
+        run: ./gradlew :build-logic:convention:check
       - name: Unit tests (includes protocol/testvectors shuffle vectors)
-        run: gradle testDebugUnitTest
+        run: ./gradlew testDebugUnitTest
       - name: Debug APK
-        run: gradle :app:assembleDebug
+        run: ./gradlew :app:assembleDebug
       - name: Lint
-        run: gradle lintDebug
+        run: ./gradlew lintDebug
