@@ -41,7 +41,9 @@ ivs-player = { group = "com.amazonaws", name = "ivs-player", version.ref = "ivsP
 connect-kotlin = { group = "com.connectrpc", name = "connect-kotlin", version.ref = "connectKotlin" }
 connect-kotlin-okhttp = { group = "com.connectrpc", name = "connect-kotlin-okhttp", version.ref = "connectKotlin" }
 connect-kotlin-google-javalite-ext = { group = "com.connectrpc", name = "connect-kotlin-google-javalite-ext", version.ref = "connectKotlin" }
-protobuf-kotlin-lite = { group = "com.google.protobuf", name = "protobuf-kotlin-lite", version.ref = "protobufJavalite" }
+okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
+okhttp-mockwebserver = { group = "com.squareup.okhttp3", name = "mockwebserver3", version.ref = "okhttp" }
+protobuf-kotlin-lite ={ group = "com.google.protobuf", name = "protobuf-kotlin-lite", version.ref = "protobufJavalite" }
 sentry-android = { group = "io.sentry", name = "sentry-android", version.ref = "sentryAndroid" }
 androidx-datastore = { group = "androidx.datastore", name = "datastore", version.ref = "datastore" }
 androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profileinstaller", version.ref = "profileinstaller" }
