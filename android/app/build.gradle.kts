@@ -15,5 +15,9 @@ android {
 
 dependencies {
     implementation(project(":core:designsystem"))
+    implementation(project(":core:data"))
+    implementation(project(":core:datastore"))
+    implementation(project(":core:network"))
+    implementation(project(":feature:auth:impl"))
     implementation(libs.androidx.activity.compose)
 }

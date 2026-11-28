@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sign_in_title">Sign in to Trivia</string>
+    <string name="phone_label">Mobile number</string>
+    <string name="channel_label">Get the code by</string>
+    <string name="send_code">Send code</string>
+    <string name="code_sent_to">Code sent to %1$s</string>
+    <string name="code_label">6-digit code</string>
+    <string name="verify">Continue</string>
+    <string name="resend">Send the code again</string>
+    <string name="resend_in">Send again in %1$d s</string>
+    <string name="change_number">Change number</string>
+    <string name="sign_in_done">You are signed in.</string>
+    <string name="error_rate_limited">Too many requests. Try again a little later.</string>
+    <string name="error_number_not_allowed">This number can\'t be used. Use a mobile number.</string>
+    <string name="error_signups_paused">New sign-ups are paused for now.</string>
+    <string name="error_attestation_failed">This device could not be verified.</string>
+    <string name="error_wrong_code">The code is wrong or has expired.</string>
+    <string name="error_too_many_attempts">Too many attempts. Request a new code.</string>
+    <string name="error_unavailable">Couldn\'t connect. Check your internet and try again.</string>
+</resources>

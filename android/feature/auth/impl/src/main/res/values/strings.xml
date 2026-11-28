@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Albanian is the default language (app/src/main/res/resources.properties). Owner review pending. -->
+<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="sq">
+    <string name="sign_in_title">Hyr në Trivia</string>
+    <string name="phone_label">Numri i celularit</string>
+    <string name="channel_label">Merr kodin me</string>
+    <string name="channel_sms" translatable="false">SMS</string>
+    <string name="channel_whatsapp" translatable="false">WhatsApp</string>
+    <string name="channel_viber" translatable="false">Viber</string>
+    <string name="send_code">Dërgo kodin</string>
+    <string name="code_sent_to">Kodi u dërgua te %1$s</string>
+    <string name="code_label">Kodi me 6 shifra</string>
+    <string name="verify">Vazhdo</string>
+    <string name="resend">Dërgo kodin përsëri</string>
+    <string name="resend_in">Dërgo përsëri pas %1$d s</string>
+    <string name="change_number">Ndrysho numrin</string>
+    <string name="sign_in_done">Hyrja u krye me sukses.</string>
+    <string name="error_rate_limited">Shumë kërkesa. Provo përsëri pak më vonë.</string>
+    <string name="error_number_not_allowed">Ky numër nuk mund të përdoret. Përdor një numër celulari.</string>
+    <string name="error_signups_paused">Regjistrimet e reja janë ndalur përkohësisht.</string>
+    <string name="error_attestation_failed">Kjo pajisje nuk u verifikua.</string>
+    <string name="error_wrong_code">Kodi është i gabuar ose ka skaduar.</string>
+    <string name="error_too_many_attempts">Shumë përpjekje. Kërko një kod të ri.</string>
+    <string name="error_unavailable">Nuk u lidh dot. Kontrollo internetin dhe provo përsëri.</string>
+</resources>

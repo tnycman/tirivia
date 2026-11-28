@@ -77,3 +77,28 @@ UNVERIFIED:
 - The default AES key size.
 - The `<device-transfer>` vs `<device-to-device>` element name. The two official pages differ, so the data-extraction-rules reference must be read before the XML is written.
 - The `datastore-tink` and Tink dependency versions.
+
+## Sign-in screens and wiring (slice 1c-2)
+
+Checked in the published source jars and docs on 2026-11-28:
+
+| Source | Text |
+|---|---|
+| `hilt-lifecycle-viewmodel-compose-1.4.0-sources.jar` | `package androidx.hilt.lifecycle.viewmodel.compose`; `public inline fun <reified VM : ViewModel> hiltViewModel(` |
+| `lifecycle-runtime-compose-android-2.11.1-sources.jar` | `package androidx.lifecycle.compose`; `fun <T> StateFlow<T>.collectAsStateWithLifecycle(` |
+| `material3-android-1.5.0-sources.jar` (Compose BOM 2026.11.01) | `public fun OutlinedTextField(value: String, onValueChange: (String) -> Unit, …, keyboardOptions: KeyboardOptions = KeyboardOptions.Default, …, singleLine: Boolean = false, …)`; `RadioButton(selected, onClick: (() -> Unit)?, …)`; `Button`, `TextButton`, `Surface`, `Text(…, style: TextStyle …)` |
+| `foundation-android-1.13.0` / `ui-text-android-1.13.0` / `ui-android-1.13.0` sources | `Modifier.selectable(selected, enabled, role, onClick)`; `KeyboardOptions(…, keyboardType: KeyboardType …)`; `KeyboardType.Phone`, `KeyboardType.Number`; `stringResource(@StringRes id: Int, vararg formatArgs: Any)`; `LocalConfiguration`; `Role.RadioButton` |
+| [Emulator networking](https://developer.android.com/studio/run/emulator-networking-address) | "10.0.2.2 Special alias to your host loopback interface (127.0.0.1 on your development machine)" |
+| [Network security config](https://developer.android.com/privacy-and-security/security-config) | `<domain-config cleartextTrafficPermitted="true"><domain includeSubdomains="true">insecure.example.com</domain></domain-config>`; the default for API 28+ is `<base-config cleartextTrafficPermitted="false">` |
+| [Build variants](https://developer.android.com/build/build-variants) | Debug-only Kotlin goes in "src/debug/kotlin/ or src/debug/java/"; "Gradle gives files in the build type and product flavor source sets a higher priority than the same files in main/." |
+| [ConnectOkHttpClient.kt v0.10.0](https://github.com/connectrpc/connect-kotlin/blob/v0.10.0/okhttp/src/main/kotlin/com/connectrpc/okhttp/ConnectOkHttpClient.kt) | network `IOException` → `cause = ConnectException(code, …)`, so sign-in sees network failures as Connect codes |
+
+Settled:
+- **Debug-only wiring.** `src/debug` holds the API address (`http://10.0.2.2:8081`), the dev integrity stand-in and the cleartext rule for `10.0.2.2` only. `main` allows HTTPS only.
+- **Release builds stop at compile time.** Hilt cannot satisfy `ApiConfig` and `IntegrityTokens` in release, so a release build fails until the production API and Play Integrity exist. Dev attestation therefore can never ship.
+- **The dev backend must use the address the app signs.** The server checks `htu` against `PUBLIC_BASE_URL`, so the dev backend runs with `PUBLIC_BASE_URL=http://10.0.2.2:8081`.
+- **No navigation library yet.** The two steps are state in one ViewModel. The app owns navigation once more screens exist.
+
+Open:
+- The Albanian strings need the owner's review.
+- The ID-5 self-declared 18+ step needs a backend field. It is not in `VerifyOtp` or any implemented RPC.
