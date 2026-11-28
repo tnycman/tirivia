@@ -32,4 +32,6 @@ android/
 
 There is no JDK or Android SDK in this workspace. `.github/workflows/android-ci.yml` compiles the build logic and every module, runs the unit tests (including the shared shuffle vectors), builds the debug APK and runs lint, using the committed Gradle 9.9.2 wrapper (`./gradlew`).
 
+- **Sign-in (Phase 1):** phone and code screens against the backend's `AuthService`. Debug builds talk to `http://10.0.2.2:8081` (the emulator's alias for this PC) with a dev integrity stand-in. Run the backend with `AUTH_DEV_MODE=1 PUBLIC_BASE_URL=http://10.0.2.2:8081`.
+- **Release builds are blocked on purpose:** they fail at compile time until the production API address and Play Integrity exist (research 17).
 - **Not yet:** the benchmark modules (Phase 3).
