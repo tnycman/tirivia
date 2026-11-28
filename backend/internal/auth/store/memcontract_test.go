@@ -3,12 +3,12 @@ package store_test
 import (
 	"testing"
 
-	"github.com/tirivia/backend/internal/auth/attest"
-	"github.com/tirivia/backend/internal/auth/attest/attesttest"
-	"github.com/tirivia/backend/internal/auth/dpop"
-	"github.com/tirivia/backend/internal/auth/dpop/dpoptest"
-	"github.com/tirivia/backend/internal/auth/otp"
-	"github.com/tirivia/backend/internal/auth/otp/otptest"
+	"trivia.al/backend/internal/auth/attest"
+	"trivia.al/backend/internal/auth/attest/attesttest"
+	"trivia.al/backend/internal/auth/dpop"
+	"trivia.al/backend/internal/auth/dpop/dpoptest"
+	"trivia.al/backend/internal/auth/otp"
+	"trivia.al/backend/internal/auth/otp/otptest"
 )
 
 func TestMemStores(t *testing.T) {

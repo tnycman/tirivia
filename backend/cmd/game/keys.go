@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	gamev1 "github.com/tirivia/protocol/gen/go/tirivia/game/v1"
+	gamev1 "trivia.al/protocol/gen/go/trivia/game/v1"
 )
 
 // parseKeys reads "kid=base64url(Ed25519 public key)" pairs separated by commas; several allow kid overlap on rotation.

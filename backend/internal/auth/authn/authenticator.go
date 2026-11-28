@@ -5,9 +5,9 @@ import (
 	"context"
 	"strings"
 
-	"github.com/tirivia/backend/internal/auth/dpop"
-	"github.com/tirivia/backend/internal/auth/tokens"
-	"github.com/tirivia/backend/internal/contracts"
+	"trivia.al/backend/internal/auth/dpop"
+	"trivia.al/backend/internal/auth/tokens"
+	"trivia.al/backend/internal/contracts"
 )
 
 // Authenticator implements contracts.Authenticator.

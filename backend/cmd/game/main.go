@@ -13,14 +13,14 @@ import (
 	"connectrpc.com/connect/v2"
 	"connectrpc.com/connect/v2/connecthttp"
 
-	"github.com/tirivia/protocol/gen/go/tirivia/admin/v1/adminv1connect"
-	"github.com/tirivia/protocol/gen/go/tirivia/game/v1/gamev1connect"
+	"trivia.al/protocol/gen/go/trivia/admin/v1/adminv1connect"
+	"trivia.al/protocol/gen/go/trivia/game/v1/gamev1connect"
 
-	gameapi "github.com/tirivia/backend/internal/game/api"
-	"github.com/tirivia/backend/internal/platform/httpserver"
-	"github.com/tirivia/backend/internal/platform/switches"
-	studioapi "github.com/tirivia/backend/internal/studio/api"
-	studiostore "github.com/tirivia/backend/internal/studio/store"
+	gameapi "trivia.al/backend/internal/game/api"
+	"trivia.al/backend/internal/platform/httpserver"
+	"trivia.al/backend/internal/platform/switches"
+	studioapi "trivia.al/backend/internal/studio/api"
+	studiostore "trivia.al/backend/internal/studio/store"
 )
 
 func main() {

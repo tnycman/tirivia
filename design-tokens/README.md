@@ -21,8 +21,8 @@ design-tokens/
 | Platform | Files |
 |---|---|
 | iOS | `ios/Packages/Core/Sources/DesignSystem/Generated/Tokens{Base,Light,Dark,Overlay}.swift` |
-| Android | `android/core/designsystem/src/main/kotlin/com/tirivia/core/designsystem/generated/Tokens{Base,Light,Dark,Overlay}.kt` |
-| Web | `web-consoles/packages/ui/src/tokens/tokens-*.css`, imported via `@tirivia/ui/tokens.css`. Dark mode follows the OS, and `data-theme` can force light or dark |
+| Android | `android/core/designsystem/src/main/kotlin/al/trivia/core/designsystem/generated/Tokens{Base,Light,Dark,Overlay}.kt` |
+| Web | `web-consoles/packages/ui/src/tokens/tokens-*.css`, imported via `@trivia/ui/tokens.css`. Dark mode follows the OS, and `data-theme` can force light or dark |
 
 ## Rules
 

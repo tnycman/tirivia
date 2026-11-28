@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tirivia/backend/internal/auth/dpop"
-	"github.com/tirivia/backend/internal/auth/dpop/dpopclient"
+	"trivia.al/backend/internal/auth/dpop"
+	"trivia.al/backend/internal/auth/dpop/dpopclient"
 )
 
 func TestValidProofStableThumbprint(t *testing.T) {
@@ -51,8 +51,8 @@ func TestRFC9449Rejections(t *testing.T) {
 		{"missing", "", dpop.Options{}, dpop.ErrMissing},
 		{"garbage", "x", dpop.Options{}, dpop.ErrMalformed},
 		{"wrong method", proof(t, k, dpopclient.ProofParams{Method: "GET"}), dpop.Options{}, dpop.ErrMethod},
-		{"wrong path", proof(t, k, dpopclient.ProofParams{URL: "https://api.tirivia.example/x"}), dpop.Options{}, dpop.ErrURL},
-		{"other host", proof(t, k, dpopclient.ProofParams{URL: "https://evil.example/tirivia.core.v1.AuthService/RefreshSession"}), dpop.Options{}, dpop.ErrURL},
+		{"wrong path", proof(t, k, dpopclient.ProofParams{URL: "https://api.trivia.example/x"}), dpop.Options{}, dpop.ErrURL},
+		{"other host", proof(t, k, dpopclient.ProofParams{URL: "https://evil.example/trivia.core.v1.AuthService/RefreshSession"}), dpop.Options{}, dpop.ErrURL},
 		{"too old", proof(t, k, dpopclient.ProofParams{IssuedAt: now.Add(-2 * window)}), dpop.Options{}, dpop.ErrTime},
 		{"future", proof(t, k, dpopclient.ProofParams{IssuedAt: now.Add(2 * window)}), dpop.Options{}, dpop.ErrTime},
 		{"replay", replayed, dpop.Options{}, dpop.ErrReplay},

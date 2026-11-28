@@ -7,7 +7,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/tirivia/backend/internal/auth/otp"
+	"trivia.al/backend/internal/auth/otp"
 )
 
 // TicketBytes is the random size of an attestation ticket.

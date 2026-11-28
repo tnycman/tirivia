@@ -5,7 +5,7 @@ Swift 6 language mode with SwiftUI (`ObservableObject` state model). Requires **
 ```
 ios/
 ├── App/                          # thin Xcode app target (created in Phase 0 with Xcode 27.2)
-│   ├── TiriviaApp/                #   app shell: navigation, DI, scene lifecycle, language picker
+│   ├── TriviaApp/                #   app shell: navigation, DI, scene lifecycle, language picker
 │   ├── LiveActivity/             #   widget extension: show countdown (local start on iOS 16.1+, push-to-start on 17.2+)
 │   └── Resources/Localizable.xcstrings   # sq (primary), en
 ├── Packages/
@@ -30,6 +30,6 @@ ios/
 
 ## Status
 
-This workspace runs on Windows, which has no Xcode or Swift toolchain. `.github/workflows/ios-ci.yml` runs on GitHub's `xcode-27` image with Xcode 27.2. It tests the Core package on the iPhone 17 simulator (including the shared shuffle vectors), generates `Tirivia.xcodeproj` from `project.yml` with XcodeGen 2.49.0, and builds the app unsigned for the simulator ([research 15](../docs/research/15-ios-shell-build.md)). The project file, the generated `Info.plist` and the copied vectors are not committed.
+This workspace runs on Windows, which has no Xcode or Swift toolchain. `.github/workflows/ios-ci.yml` runs on GitHub's `xcode-27` image with Xcode 27.2. It tests the Core package on the iPhone 17 simulator (including the shared shuffle vectors), generates `Trivia.xcodeproj` from `project.yml` with XcodeGen 2.49.0, and builds the app unsigned for the simulator ([research 15](../docs/research/15-ios-shell-build.md)). The project file, the generated `Info.plist` and the copied vectors are not committed.
 
 `Vendor/AmazonIVSPlayer/Package.swift` is AWS's published 1.58.1 manifest. SwiftPM downloads the binary and checks its checksum.

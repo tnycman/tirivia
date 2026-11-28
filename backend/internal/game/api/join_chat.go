@@ -3,7 +3,7 @@ package api
 import (
 	"context"
 
-	"github.com/tirivia/backend/internal/platform/switches"
+	"trivia.al/backend/internal/platform/switches"
 )
 
 // joinChat returns the chat switch and, if a mint succeeds, a token; otherwise the app calls GetChatToken (ADR-0009).

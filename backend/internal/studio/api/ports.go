@@ -6,7 +6,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/tirivia/backend/internal/platform/switches"
+	"trivia.al/backend/internal/platform/switches"
 )
 
 // MaxReasonBytes bounds the audit reason (policy; OWASP Logging: limit input size).

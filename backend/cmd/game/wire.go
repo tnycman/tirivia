@@ -3,14 +3,14 @@ package main
 import (
 	"github.com/valkey-io/valkey-go"
 
-	"github.com/tirivia/backend/internal/auth/authn"
-	"github.com/tirivia/backend/internal/auth/dpop"
-	"github.com/tirivia/backend/internal/auth/store/kvstore"
-	"github.com/tirivia/backend/internal/auth/tokens"
-	gameapi "github.com/tirivia/backend/internal/game/api"
-	"github.com/tirivia/backend/internal/game/live"
-	"github.com/tirivia/backend/internal/platform/livestate"
-	"github.com/tirivia/backend/internal/platform/switches"
+	"trivia.al/backend/internal/auth/authn"
+	"trivia.al/backend/internal/auth/dpop"
+	"trivia.al/backend/internal/auth/store/kvstore"
+	"trivia.al/backend/internal/auth/tokens"
+	gameapi "trivia.al/backend/internal/game/api"
+	"trivia.al/backend/internal/game/live"
+	"trivia.al/backend/internal/platform/livestate"
+	"trivia.al/backend/internal/platform/switches"
 )
 
 // gameDeps wires the player API to Valkey; Inventory stays nil until referral lives land (UF-5).

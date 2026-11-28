@@ -8,13 +8,13 @@ import (
 
 	"connectrpc.com/connect/v2"
 
-	gamev1 "github.com/tirivia/protocol/gen/go/tirivia/game/v1"
-	"github.com/tirivia/protocol/gen/go/tirivia/game/v1/gamev1connect"
+	gamev1 "trivia.al/protocol/gen/go/trivia/game/v1"
+	"trivia.al/protocol/gen/go/trivia/game/v1/gamev1connect"
 
-	"github.com/tirivia/backend/internal/contracts"
-	"github.com/tirivia/backend/internal/game/live"
-	"github.com/tirivia/backend/internal/platform/livestate"
-	"github.com/tirivia/backend/internal/platform/switches"
+	"trivia.al/backend/internal/contracts"
+	"trivia.al/backend/internal/game/live"
+	"trivia.al/backend/internal/platform/livestate"
+	"trivia.al/backend/internal/platform/switches"
 )
 
 // ChatTokenMinter mints chat tokens (chatmod module).

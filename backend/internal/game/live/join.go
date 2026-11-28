@@ -9,8 +9,8 @@ import (
 
 	"github.com/valkey-io/valkey-go"
 
-	"github.com/tirivia/backend/internal/game/domain"
-	"github.com/tirivia/backend/internal/platform/livestate"
+	"trivia.al/backend/internal/game/domain"
+	"trivia.al/backend/internal/platform/livestate"
 )
 
 // SeedBytes is the shuffle-seed length: RFC 2104 §2 recommends an HMAC key of at least L bytes, 32 for SHA-256 (SPEC §6.3).

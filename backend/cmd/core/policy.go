@@ -3,8 +3,8 @@ package main
 import (
 	"time"
 
-	"github.com/tirivia/backend/internal/auth/attest"
-	"github.com/tirivia/backend/internal/auth/otp"
+	"trivia.al/backend/internal/auth/attest"
+	"trivia.al/backend/internal/auth/otp"
 )
 
 // Sources for every value: stack/05-auth-identity "Sourced values" table.

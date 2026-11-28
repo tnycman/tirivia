@@ -14,7 +14,7 @@ provider "aws" {
   region              = var.region
   allowed_account_ids = [var.account_id]
   default_tags {
-    tags = { app = "tirivia", env = var.env, owner = "platform", "data-class" = "internal" }
+    tags = { app = "trivia", env = var.env, owner = "platform", "data-class" = "internal" }
   }
 }
 

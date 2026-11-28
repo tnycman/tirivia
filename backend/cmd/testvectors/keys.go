@@ -7,9 +7,9 @@ import (
 
 	"google.golang.org/protobuf/proto"
 
-	cuev1 "github.com/tirivia/protocol/gen/go/tirivia/cue/v1"
+	cuev1 "trivia.al/protocol/gen/go/trivia/cue/v1"
 
-	"github.com/tirivia/backend/internal/platform/cuesign"
+	"trivia.al/backend/internal/platform/cuesign"
 )
 
 const (
@@ -21,7 +21,7 @@ const (
 )
 
 func testKey(label string) ed25519.PrivateKey {
-	seed := sha256.Sum256([]byte("tirivia-testvectors-NOT-FOR-PRODUCTION/" + label))
+	seed := sha256.Sum256([]byte("trivia-testvectors-NOT-FOR-PRODUCTION/" + label))
 	return ed25519.NewKeyFromSeed(seed[:])
 }
 

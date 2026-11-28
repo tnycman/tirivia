@@ -18,13 +18,13 @@ import (
 	"github.com/go-jose/go-jose/v4"
 	"github.com/valkey-io/valkey-go"
 
-	"github.com/tirivia/protocol/gen/go/tirivia/game/v1/gamev1connect"
+	"trivia.al/protocol/gen/go/trivia/game/v1/gamev1connect"
 
-	"github.com/tirivia/backend/internal/auth/dpop/dpopclient"
-	"github.com/tirivia/backend/internal/auth/tokens"
-	gameapi "github.com/tirivia/backend/internal/game/api"
-	"github.com/tirivia/backend/internal/platform/kv"
-	"github.com/tirivia/backend/internal/platform/switches"
+	"trivia.al/backend/internal/auth/dpop/dpopclient"
+	"trivia.al/backend/internal/auth/tokens"
+	gameapi "trivia.al/backend/internal/game/api"
+	"trivia.al/backend/internal/platform/kv"
+	"trivia.al/backend/internal/platform/switches"
 )
 
 // wired is a game server built exactly as main builds it, plus a signed-in test device.

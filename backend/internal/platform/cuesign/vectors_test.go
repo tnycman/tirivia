@@ -8,9 +8,9 @@ import (
 	"strings"
 	"testing"
 
-	cuev1 "github.com/tirivia/protocol/gen/go/tirivia/cue/v1"
+	cuev1 "trivia.al/protocol/gen/go/trivia/cue/v1"
 
-	tv "github.com/tirivia/backend/internal/platform/testvectors"
+	tv "trivia.al/backend/internal/platform/testvectors"
 )
 
 // minCueVectors guards against a runner silently skipping vectors.

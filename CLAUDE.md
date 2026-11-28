@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-Tirivia is a scheduled, live-hosted Albanian trivia show (12 questions; everyone who gets all 12 right splits the prize) played in native iOS and Android apps. It is a monorepo of six self-contained top-level projects, each meant to become its own repository: `protocol/`, `backend/`, `ios/`, `android/`, `web-consoles/`, `infra/`, plus `design-tokens/`.
+Trivia is a scheduled, live-hosted Albanian trivia show (12 questions; everyone who gets all 12 right splits the prize) played in native iOS and Android apps. It is a monorepo of six self-contained top-level projects, each meant to become its own repository: `protocol/`, `backend/`, `ios/`, `android/`, `web-consoles/`, `infra/`, plus `design-tokens/`.
 
 Sources of truth, in order of precedence:
 - `Master Plan/Trivia-Master-Plan-v1.1.pdf`: product scope and locked decisions.
@@ -15,12 +15,12 @@ Sources of truth, in order of precedence:
 
 ## Rules for every agent and subagent (owner-set)
 
-These rules bind the main session and every agent it starts, including research agents, Codex and eval runs. The full workflow is in `.claude/skills/building-tirivia-changes/SKILL.md`.
+These rules bind the main session and every agent it starts, including research agents, Codex and eval runs. The full workflow is in `.claude/skills/building-trivia-changes/SKILL.md`.
 
 1. **Two corrections, then escalate.** When the same thing has needed correcting twice (a fix that fails review twice, a test that keeps failing, the owner correcting the same point twice), stop. Report what was tried, show the evidence and ask the owner; don't start a third round.
 2. **Fresh reviewers get closed criteria.** Give any reviewer without this session's context the exact commit, numbered checks, what is out of scope, and what "sound" means. Have it answer HOLDS or FAILS for each check. Never send an open "find problems" brief.
 3. **Report artifacts produced, not documents revised.** List commits, new files, test and lint output, measurements, research files and register row IDs, each with its evidence. Don't narrate edits.
-4. **Status before reporting.** The owner runs `pwsh -File .claude/skills/building-tirivia-changes/scripts/status.ps1 -Base <branch below>`. Its numbers go in the report: size against the base branch, Go files over 100 lines, correction count. Two corrections on one branch triggers rule 1.
+4. **Status before reporting.** The owner runs `pwsh -File .claude/skills/building-trivia-changes/scripts/status.ps1 -Base <branch below>`. Its numbers go in the report: size against the base branch, Go files over 100 lines, correction count. Two corrections on one branch triggers rule 1.
 5. **The owner runs every shell command.** Give git, go, docker and make commands as copy-paste PowerShell (or one `pwsh -File` line) and claim only what the pasted output shows. Agents that must run commands themselves, like Codex, need the owner's OK and stay read-only.
 
 ## Working rules (owner-set)
@@ -55,7 +55,7 @@ These rules bind the main session and every agent it starts, including research 
 
 - Install the pinned tools with `sh scripts/install-tools.sh`.
 - Lint and format check: `buf lint && buf format -d --exit-code`.
-- After any proto change, regenerate Go with `buf generate --template buf.gen.go.yaml`. The backend consumes `github.com/tirivia/protocol/gen` through a `replace` directive in `backend/go.mod`. CI fails if `gen/` is stale.
+- After any proto change, regenerate Go with `buf generate --template buf.gen.go.yaml`. The backend consumes `trivia.al/protocol/gen` through a `replace` directive in `backend/go.mod`. CI fails if `gen/` is stale.
 - `buf breaking` runs against the PR base. A deliberate break needs the `buf skip breaking` label.
 
 ### Other projects

@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.tirivia.android.library)
+    alias(libs.plugins.trivia.android.library)
 }
 
-android { namespace = "com.tirivia.feature.leaderboards.api" }
+android { namespace = "al.trivia.feature.leaderboards.api" }

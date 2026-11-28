@@ -8,8 +8,8 @@ import (
 
 	"github.com/valkey-io/valkey-go"
 
-	"github.com/tirivia/backend/internal/auth/otp"
-	"github.com/tirivia/backend/internal/platform/seal"
+	"trivia.al/backend/internal/auth/otp"
+	"trivia.al/backend/internal/platform/seal"
 )
 
 var putHash = valkey.NewLuaScript(`redis.call('HSET', KEYS[1], 'data', ARGV[1], 'attempts', 0)

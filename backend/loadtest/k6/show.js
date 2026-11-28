@@ -11,7 +11,7 @@ const lostAnswers = new Counter('answers_not_acked');
 
 const json = { headers: { 'Content-Type': 'application/json', 'Connect-Protocol-Version': '1' } };
 const rpc = (method, body, extraHeaders = {}) =>
-  http.post(`${BASE}/tirivia.game.v1.GameService/${method}`, JSON.stringify(body), {
+  http.post(`${BASE}/trivia.game.v1.GameService/${method}`, JSON.stringify(body), {
     headers: { ...json.headers, Authorization: `Bearer ${__ENV.TOKEN}`, ...extraHeaders },
   });
 

@@ -15,7 +15,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "tirivia"
+rootProject.name = "trivia"
 
 include(":app")
 

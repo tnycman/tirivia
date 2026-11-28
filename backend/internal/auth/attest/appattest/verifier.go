@@ -9,7 +9,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/tirivia/backend/internal/auth/attest"
+	"trivia.al/backend/internal/auth/attest"
 )
 
 // Verifier implements attest.Verifier for iOS: attestation on first use, assertions after (Apple guidance).

@@ -24,16 +24,16 @@ linters:
             - "**/internal/**"
             - "!**/internal/wallet/**"
           deny:
-            - pkg: github.com/tirivia/backend/internal/wallet/store
+            - pkg: trivia.al/backend/internal/wallet/store
               desc: "use internal/contracts; only the wallet module touches the ledger store"
-            - pkg: github.com/tirivia/backend/internal/wallet/domain
+            - pkg: trivia.al/backend/internal/wallet/domain
               desc: "use internal/contracts"
         auth-internals:
           files:
             - "**/internal/**"
             - "!**/internal/auth/**"
           deny:
-            - pkg: github.com/tirivia/backend/internal/auth/store
+            - pkg: trivia.al/backend/internal/auth/store
               desc: "use internal/contracts"
         no-legacy-connect:
           deny:
@@ -54,4 +54,4 @@ formatters:
   settings:
     goimports:
       local-prefixes:
-        - github.com/tirivia
+        - github.al/trivia

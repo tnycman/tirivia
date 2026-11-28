@@ -78,7 +78,7 @@ Tallies are written inside the answer-intake script, so nothing is held in memor
 
 ## Code generation
 
-`protocol/` generates the Go SDK (`github.com/tirivia/protocol/gen`). During local development the backend consumes it through a `replace` directive in `go.mod`. After any proto change, regenerate it:
+`protocol/` generates the Go SDK (`trivia.al/protocol/gen`). During local development the backend consumes it through a `replace` directive in `go.mod`. After any proto change, regenerate it:
 
 ```sh
 cd ../protocol && buf generate --template buf.gen.go.yaml

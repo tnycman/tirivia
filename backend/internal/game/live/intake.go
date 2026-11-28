@@ -8,7 +8,7 @@ import (
 
 	"github.com/valkey-io/valkey-go"
 
-	"github.com/tirivia/backend/internal/platform/livestate"
+	"trivia.al/backend/internal/platform/livestate"
 )
 
 // Errors for answers that are not recorded.

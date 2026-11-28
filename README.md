@@ -1,8 +1,8 @@
-# Tirivia: live Albanian trivia show
+# Trivia: live Albanian trivia show
 
 A scheduled, live-hosted trivia show in Albanian, played in native iOS and Android apps. There are 12 questions per show, and everyone who answers all 12 correctly splits the prize. The audience is Albania, Kosovo, North Macedonia and the diaspora, and prizes are awarded and collected only in Albania.
 
-> `tirivia` is a working codename. The product name and brand are still OPEN (Master Plan §11).
+> `trivia` is a working codename. The product name and brand are still OPEN (Master Plan §11).
 
 ## Start here
 

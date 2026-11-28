@@ -9,15 +9,15 @@ import (
 
 	"github.com/jackc/pgx/v5/pgxpool"
 
-	"github.com/tirivia/backend/internal/auth/accounts"
-	"github.com/tirivia/backend/internal/auth/accounts/accountstest"
-	"github.com/tirivia/backend/internal/auth/attest/appattest/keystest"
-	"github.com/tirivia/backend/internal/auth/otp"
-	"github.com/tirivia/backend/internal/auth/otp/otptest"
-	"github.com/tirivia/backend/internal/auth/sessions/sessionstest"
-	"github.com/tirivia/backend/internal/auth/store/pgstore"
-	"github.com/tirivia/backend/internal/platform/pgdb"
-	"github.com/tirivia/backend/internal/platform/seal"
+	"trivia.al/backend/internal/auth/accounts"
+	"trivia.al/backend/internal/auth/accounts/accountstest"
+	"trivia.al/backend/internal/auth/attest/appattest/keystest"
+	"trivia.al/backend/internal/auth/otp"
+	"trivia.al/backend/internal/auth/otp/otptest"
+	"trivia.al/backend/internal/auth/sessions/sessionstest"
+	"trivia.al/backend/internal/auth/store/pgstore"
+	"trivia.al/backend/internal/platform/pgdb"
+	"trivia.al/backend/internal/platform/seal"
 )
 
 func pool(t *testing.T) *pgxpool.Pool {

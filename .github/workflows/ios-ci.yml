@@ -46,4 +46,4 @@ jobs:
         run: '"$RUNNER_TEMP/xcodegen/.build/release/xcodegen" generate --spec ios/project.yml'
       - name: Build the app for the simulator (unsigned)
         working-directory: ios
-        run: xcodebuild build -project Tirivia.xcodeproj -scheme TiriviaApp -destination "generic/platform=iOS Simulator" CODE_SIGNING_ALLOWED=NO
+        run: xcodebuild build -project Trivia.xcodeproj -scheme TriviaApp -destination "generic/platform=iOS Simulator" CODE_SIGNING_ALLOWED=NO

@@ -94,7 +94,7 @@
 | 1 | Minimum iOS 16 (DEFAULT) | iOS 16 blocks `@Observable` and `sceneCaptureState`, and Xcode 27 cannot debug on it | **Minimum iOS 17.0** ([ADR-0004](../adr/0004-mobile-minimum-os.md)). Push-to-start (17.2) and broadcast channels (18) are gated with `#available`. |
 | 2 | Play Integrity (quota not mentioned) | Default 10k/day; one show could exceed it | Quota request filed in **Phase 0**; one standard request per join; quota alerts. |
 | 3 | IVS views | 15k per region by default | Quota request (see research 01). |
-| 4 | "Correct answer is never sent" | AWS's sample quiz puts `correctIndex` in metadata | Our cue schema has no correct-answer field until `reveal` ([cue.proto](../../protocol/proto/tirivia/cue/v1/cue.proto)). |
+| 4 | "Correct answer is never sent" | AWS's sample quiz puts `correctIndex` in metadata | Our cue schema has no correct-answer field until `reveal` ([cue.proto](../../protocol/proto/trivia/cue/v1/cue.proto)). |
 | 5 | Attestation to join a prize show | `attestKey` must stay under 100 req/s | **Attest at sign-in, assertion at join** (`AuthService.Attest` carries both). |
 | 6 | Albanian primary | iOS has no Albanian system UI | In-app language picker. **Default `sq` when region is AL/XK/MK** (product decision; listed in open items). |
 | 7 | Focus loss voids final-three answers | `.inactive` fires on harmless events; Android shows a system notice on screenshot | Void only on `.background` or on `.inactive` longer than a threshold. The threshold is a DEFAULT to tune in rehearsal. The rule is explained before each show. |

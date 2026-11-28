@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tirivia/backend/internal/auth/attest"
-	"github.com/tirivia/backend/internal/auth/otp"
+	"trivia.al/backend/internal/auth/attest"
+	"trivia.al/backend/internal/auth/otp"
 )
 
 // RunStore checks s: challenges are single use, tickets are readable until they expire.

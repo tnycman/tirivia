@@ -25,9 +25,9 @@ jobs:
         image: postgres:17-alpine@sha256:f9cf3e1f0066f0eb0c48707d864f0ac5941e9ff454a072077d97a4d278d07d73
         env:
           POSTGRES_PASSWORD: test
-          POSTGRES_DB: tirivia
+          POSTGRES_DB: trivia
         options: >-
-          --health-cmd "pg_isready -U postgres -d tirivia"
+          --health-cmd "pg_isready -U postgres -d trivia"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
@@ -43,7 +43,7 @@ jobs:
         ports:
           - 6379:6379
     env:
-      TEST_DATABASE_URL: postgres://postgres:test@localhost:5432/tirivia?sslmode=disable
+      TEST_DATABASE_URL: postgres://postgres:test@localhost:5432/trivia?sslmode=disable
       TEST_VALKEY_URL: valkey://localhost:6379
     defaults:
       run:
@@ -98,10 +98,10 @@ jobs:
       - name: Build ARM64 image
         run: docker build --build-arg CMD=${{ matrix.cmd }} -f backend/Dockerfile -t "$IMAGE" .
         env:
-          IMAGE: ${{ vars.ECR_REGISTRY != '' && format('{0}/', vars.ECR_REGISTRY) || '' }}tirivia-${{ matrix.cmd }}:${{ github.sha }}
+          IMAGE: ${{ vars.ECR_REGISTRY != '' && format('{0}/', vars.ECR_REGISTRY) || '' }}trivia-${{ matrix.cmd }}:${{ github.sha }}
       - name: Smoke test (health, graceful SIGTERM drain)
         env:
-          IMAGE: ${{ vars.ECR_REGISTRY != '' && format('{0}/', vars.ECR_REGISTRY) || '' }}tirivia-${{ matrix.cmd }}:${{ github.sha }}
+          IMAGE: ${{ vars.ECR_REGISTRY != '' && format('{0}/', vars.ECR_REGISTRY) || '' }}trivia-${{ matrix.cmd }}:${{ github.sha }}
           PORT: ${{ matrix.cmd == 'game' && '8080' || '8081' }}
         run: |
           docker run -d --name smoke -e ADDR=":${PORT}" -p "${PORT}:${PORT}" "$IMAGE"

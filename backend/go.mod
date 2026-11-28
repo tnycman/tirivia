@@ -1,4 +1,4 @@
-module github.com/tirivia/backend
+module trivia.al/backend
 
 go 1.27.0
 
@@ -11,7 +11,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/jackc/pgx/v5 v5.13.0
 	github.com/nyaruka/phonenumbers v1.8.1
-	github.com/tirivia/protocol/gen v0.0.0
+	trivia.al/protocol/gen v0.0.0
 	github.com/valkey-io/valkey-go v1.0.80
 	google.golang.org/api v0.317.0
 	google.golang.org/protobuf v1.36.12
@@ -50,4 +50,4 @@ require (
 
 // Local development: the protocol repo is a sibling folder. In CI the generated SDK is
 // consumed at a tagged version instead (see protocol/README.md).
-replace github.com/tirivia/protocol/gen => ../protocol/gen
+replace trivia.al/protocol/gen => ../protocol/gen

@@ -6,7 +6,7 @@ import (
 
 	"github.com/jackc/pgx/v5"
 
-	"github.com/tirivia/backend/internal/auth/store/pgstore/pgq"
+	"trivia.al/backend/internal/auth/store/pgstore/pgq"
 )
 
 // Failures is the durable consecutive-failure counter (NIST SP 800-63B-4 §3.2.2).

@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tirivia/backend/internal/platform/livestate"
+	"trivia.al/backend/internal/platform/livestate"
 )
 
 func TestJoinKeepsFirstJoin(t *testing.T) {

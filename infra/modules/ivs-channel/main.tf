@@ -11,7 +11,7 @@ terraform {
 }
 
 variable "name" {
-  description = "Channel name, e.g. tirivia-prod-main."
+  description = "Channel name, e.g. trivia-prod-main."
   type        = string
 }
 

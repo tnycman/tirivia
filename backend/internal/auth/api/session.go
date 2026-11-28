@@ -6,10 +6,10 @@ import (
 
 	"connectrpc.com/connect/v2"
 
-	corev1 "github.com/tirivia/protocol/gen/go/tirivia/core/v1"
-	"github.com/tirivia/protocol/gen/go/tirivia/core/v1/corev1connect"
+	corev1 "trivia.al/protocol/gen/go/trivia/core/v1"
+	"trivia.al/protocol/gen/go/trivia/core/v1/corev1connect"
 
-	"github.com/tirivia/backend/internal/auth/sessions"
+	"trivia.al/backend/internal/auth/sessions"
 )
 
 // RefreshSession implements AuthServiceHandler.
@@ -45,9 +45,9 @@ func (h *Handler) SignOut(ctx context.Context, req *corev1.SignOutRequest) (*cor
 }
 
 func (h *Handler) session(s sessions.Session, refresh, platform string, isNew bool) (*corev1.Session, error) {
-	client := "tirivia-app"
+	client := "trivia-app"
 	if platform != "" {
-		client = "tirivia-" + platform
+		client = "trivia-" + platform
 	}
 	at, ttl, err := h.d.Tokens.Issue(s.UserID, s.DeviceID, client, s.JKT)
 	if err != nil {

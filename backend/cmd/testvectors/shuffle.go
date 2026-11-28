@@ -5,8 +5,8 @@ import (
 	"encoding/hex"
 	"fmt"
 
-	"github.com/tirivia/backend/internal/platform/shuffle"
-	tv "github.com/tirivia/backend/internal/platform/testvectors"
+	"trivia.al/backend/internal/platform/shuffle"
+	tv "trivia.al/backend/internal/platform/testvectors"
 )
 
 func shuffleSuite() tv.ShuffleSuite {

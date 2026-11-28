@@ -1,6 +1,6 @@
 package cuesign
 
-import cuev1 "github.com/tirivia/protocol/gen/go/tirivia/cue/v1"
+import cuev1 "trivia.al/protocol/gen/go/trivia/cue/v1"
 
 // CheckSequence drops cues for other shows and non-increasing seq; gap reports a needed resync.
 func CheckSequence(body *cuev1.CueBody, expectedShowID string, lastSeq uint64) (gap bool, err error) {

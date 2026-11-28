@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tirivia/backend/internal/auth/dpop"
+	"trivia.al/backend/internal/auth/dpop"
 )
 
 // RunReplay checks c: the first sighting is new, the second is a replay, keys are independent.

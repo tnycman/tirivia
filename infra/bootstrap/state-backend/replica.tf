@@ -12,7 +12,7 @@ resource "aws_s3_bucket" "replica" {
   #checkov:skip=CKV2_AWS_62:No consumer for state-bucket events; neither AWS nor HashiCorp recommends them here (OP-7)
   #checkov:skip=CKV_AWS_18:Audited by CloudTrail data events from the account baseline, not best-effort access logs (OP-7)
   region = var.standby_region
-  bucket = "tirivia-tfstate-${var.env}-${var.account_id}-${var.standby_region}"
+  bucket = "trivia-tfstate-${var.env}-${var.account_id}-${var.standby_region}"
 }
 
 resource "aws_s3_bucket_versioning" "replica" {

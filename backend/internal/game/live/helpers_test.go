@@ -11,9 +11,9 @@ import (
 
 	"github.com/valkey-io/valkey-go"
 
-	"github.com/tirivia/backend/internal/game/domain"
-	"github.com/tirivia/backend/internal/platform/kv"
-	"github.com/tirivia/backend/internal/platform/livestate"
+	"trivia.al/backend/internal/game/domain"
+	"trivia.al/backend/internal/platform/kv"
+	"trivia.al/backend/internal/platform/livestate"
 )
 
 func client(t *testing.T) valkey.Client {

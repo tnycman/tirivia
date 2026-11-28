@@ -10,7 +10,7 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/tirivia/backend/internal/auth/attest/appattest"
+	"trivia.al/backend/internal/auth/attest/appattest"
 )
 
 // Run checks k: single insert per key, round trip, strictly increasing counters, one winner under races.

@@ -1,5 +1,5 @@
 {
-  "name": "@tirivia/studio",
+  "name": "@trivia/studio",
   "private": true,
   "type": "module",
   "description": "Studio console: run of show, question release, bursts, and back-office feature switches (chat etc.).",
@@ -9,8 +9,8 @@
     "build": "tsc -p tsconfig.json && vite build"
   },
   "dependencies": {
-    "@tirivia/api-client": "*",
-    "@tirivia/ui": "*",
+    "@trivia/api-client": "*",
+    "@trivia/ui": "*",
     "@tanstack/react-query": "5.108.4",
     "react": "19.3.1",
     "react-dom": "19.3.1"

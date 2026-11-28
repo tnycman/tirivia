@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tirivia/backend/internal/game/domain"
+	"trivia.al/backend/internal/game/domain"
 )
 
 // TestTallyExactlyOnce: concurrent and repeated submissions of the same answer count once, across buckets.

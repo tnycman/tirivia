@@ -11,13 +11,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tirivia/backend/internal/auth/dpop"
-	"github.com/tirivia/backend/internal/auth/dpop/dpopclient"
-	"github.com/tirivia/backend/internal/auth/tokens"
-	"github.com/tirivia/backend/internal/contracts"
+	"trivia.al/backend/internal/auth/dpop"
+	"trivia.al/backend/internal/auth/dpop/dpopclient"
+	"trivia.al/backend/internal/auth/tokens"
+	"trivia.al/backend/internal/contracts"
 )
 
-const target = "https://api.example/tirivia.game.v1.GameService/SubmitAnswer"
+const target = "https://api.example/trivia.game.v1.GameService/SubmitAnswer"
 
 type fixture struct {
 	authn *Authenticator
@@ -31,7 +31,7 @@ func setup(t *testing.T) fixture {
 	if err != nil {
 		t.Fatal(err)
 	}
-	iss, err := tokens.NewIssuer("k1", priv, "https://api.example", "tirivia-api")
+	iss, err := tokens.NewIssuer("k1", priv, "https://api.example", "trivia-api")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -43,11 +43,11 @@ func setup(t *testing.T) fixture {
 	if err != nil {
 		t.Fatal(err)
 	}
-	val := tokens.NewValidator(map[string]ed25519.PublicKey{"k1": pub}, "https://api.example", "tirivia-api", 30*time.Second)
+	val := tokens.NewValidator(map[string]ed25519.PublicKey{"k1": pub}, "https://api.example", "trivia-api", 30*time.Second)
 	return fixture{
 		authn: New(val, ver),
 		issue: func(jkt string) string {
-			tok, _, err := iss.Issue("user-1", "device-1", "tirivia-ios", jkt)
+			tok, _, err := iss.Issue("user-1", "device-1", "trivia-ios", jkt)
 			if err != nil {
 				t.Fatal(err)
 			}

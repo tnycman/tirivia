@@ -8,9 +8,9 @@ import (
 
 	"connectrpc.com/connect/v2"
 
-	adminv1 "github.com/tirivia/protocol/gen/go/tirivia/admin/v1"
+	adminv1 "trivia.al/protocol/gen/go/trivia/admin/v1"
 
-	"github.com/tirivia/backend/internal/platform/switches"
+	"trivia.al/backend/internal/platform/switches"
 )
 
 // memStore stands in for Postgres (feature_switches + audit_log in one transaction).

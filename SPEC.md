@@ -1,4 +1,4 @@
-# SPEC: Tirivia Live Trivia (technical specification)
+# SPEC: Trivia Live Trivia (technical specification)
 
 | | |
 |---|---|
@@ -6,7 +6,7 @@
 | **Source of truth for product scope** | [Master Plan v1.1](Master%20Plan/Trivia-Master-Plan-v1.1.pdf) |
 | **Research basis** | [`docs/research/`](docs/research/): five domain reports, every fact cited to a primary source |
 | **Decisions** | [`docs/adr/`](docs/adr/) |
-| **Codename** | `tirivia` (the product name and brand are still OPEN, Master Plan §11) |
+| **Codename** | `trivia` (the product name and brand are still OPEN, Master Plan §11) |
 
 **Markers used in this document:**
 
@@ -235,7 +235,7 @@ SCHEDULED → LOBBY → QUESTION_OPEN → QUESTION_CLOSED → REVEAL ─┬→ Q
 
 ### 6.4 Timed-metadata cues
 
-- **Schema:** [`protocol/proto/tirivia/cue/v1/cue.proto`](protocol/proto/tirivia/cue/v1/cue.proto).
+- **Schema:** [`protocol/proto/trivia/cue/v1/cue.proto`](protocol/proto/trivia/cue/v1/cue.proto).
 - **Wire format:** `"t1." + base64url(SignedCue)`, where `SignedCue = {body, Ed25519 signature, key_id}`.
 
 | Rule | Value | Why |

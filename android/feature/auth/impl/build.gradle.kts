@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.tirivia.android.feature)
+    alias(libs.plugins.trivia.android.feature)
 }
 
-android { namespace = "com.tirivia.feature.auth.impl" }
+android { namespace = "al.trivia.feature.auth.impl" }

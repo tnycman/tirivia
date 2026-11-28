@@ -32,12 +32,12 @@ One definition of every message and RPC, shared by the Go server, the iOS app, t
 4. **Tag numbers:** hot fields get tags 1–15, which encode in one byte. This matters for cues, which have a 900 B budget.
 5. **Time types:** use `google.protobuf.Timestamp` and `Duration` for times. Keep `int64 *_unix_ms` only inside cues, where every byte counts.
 6. **Naming:** lower_snake_case files and fields, TitleCase types, plural names for repeated fields, enum values prefixed with the enum name. ([style guide](https://protobuf.dev/programming-guides/style/))
-7. **Versioned packages** (`tirivia.game.v1`). A `v2` package is created only for a breaking change.
+7. **Versioned packages** (`trivia.game.v1`). A `v2` package is created only for a breaking change.
 8. **Read-only RPCs** are marked `idempotency_level = NO_SIDE_EFFECTS` so Connect can serve them as cacheable GETs. ([Connect protocol](https://connectrpc.com/docs/protocol/))
 9. **Idempotency.** Mutating RPCs accept the `Idempotency-Key` header and follow draft-09 semantics: 400 when the key is missing, 409 while the first request is in flight, 422 when the key is reused with a different payload. ([IETF draft](https://www.ietf.org/archive/id/draft-ietf-httpapi-idempotency-key-header-09.html))
 
 ## Rules for this codebase
-- Cues: `t1.` + base64url(`SignedCue`), encoded size **≤ 900 bytes**, Ed25519 signature over the exact body bytes received. See [`cue.proto`](../../protocol/proto/tirivia/cue/v1/cue.proto).
+- Cues: `t1.` + base64url(`SignedCue`), encoded size **≤ 900 bytes**, Ed25519 signature over the exact body bytes received. See [`cue.proto`](../../protocol/proto/trivia/cue/v1/cue.proto).
 - The **correct answer is never placed in any message that a client receives before `reveal`.**
 - Kinesis events are written as **canonical proto3 JSON**, because Firehose's Parquet conversion only accepts JSON.
 - Generated code is never edited by hand. Regenerate it with `buf generate`.

@@ -9,23 +9,23 @@ dependencies {
 gradlePlugin {
     plugins {
         register("androidApplication") {
-            id = "tirivia.android.application"
+            id = "trivia.android.application"
             implementationClass = "AndroidApplicationConventionPlugin"
         }
         register("androidLibrary") {
-            id = "tirivia.android.library"
+            id = "trivia.android.library"
             implementationClass = "AndroidLibraryConventionPlugin"
         }
         register("androidCompose") {
-            id = "tirivia.android.compose"
+            id = "trivia.android.compose"
             implementationClass = "AndroidComposeConventionPlugin"
         }
         register("androidFeature") {
-            id = "tirivia.android.feature"
+            id = "trivia.android.feature"
             implementationClass = "AndroidFeatureConventionPlugin"
         }
         register("hilt") {
-            id = "tirivia.hilt"
+            id = "trivia.hilt"
             implementationClass = "HiltConventionPlugin"
         }
     }

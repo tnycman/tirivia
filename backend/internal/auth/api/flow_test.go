@@ -6,8 +6,8 @@ import (
 
 	"connectrpc.com/connect/v2"
 
-	corev1 "github.com/tirivia/protocol/gen/go/tirivia/core/v1"
-	"github.com/tirivia/protocol/gen/go/tirivia/core/v1/corev1connect"
+	corev1 "trivia.al/protocol/gen/go/trivia/core/v1"
+	"trivia.al/protocol/gen/go/trivia/core/v1/corev1connect"
 )
 
 func TestSignInAndRotate(t *testing.T) {

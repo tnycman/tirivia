@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	cuev1 "github.com/tirivia/protocol/gen/go/tirivia/cue/v1"
+	cuev1 "trivia.al/protocol/gen/go/trivia/cue/v1"
 )
 
 const uuidLike = "0193a1b2-c3d4-7e5f-8a9b-0c1d2e3f4a5b" // 36 chars, UUIDv7 text form

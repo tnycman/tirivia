@@ -6,7 +6,7 @@ import (
 	"log/slog"
 	"sync"
 
-	"github.com/tirivia/backend/internal/studio/api"
+	"trivia.al/backend/internal/studio/api"
 )
 
 // MemStore keeps switch rows in memory and logs an audit line for every change.

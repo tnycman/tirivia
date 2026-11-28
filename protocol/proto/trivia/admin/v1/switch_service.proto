@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package trivia.admin.v1;
+
+import "google/protobuf/timestamp.proto";
+
+// Back-office feature/kill switches (SPEC §6.10, §9; ADR-0009).
+service SwitchService {
+  rpc ListSwitches(ListSwitchesRequest) returns (ListSwitchesResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+  }
+  rpc SetSwitch(SetSwitchRequest) returns (SetSwitchResponse);
+}
+
+enum SwitchScope {
+  SWITCH_SCOPE_UNSPECIFIED = 0;
+  SWITCH_SCOPE_GLOBAL = 1;
+  // Overrides the global value for one show.
+  SWITCH_SCOPE_SHOW = 2;
+}
+
+message Switch {
+  // Stable key, e.g. "chat.enabled", "reactions.enabled", "extra_lives.enabled", "signups.enabled".
+  string key = 1;
+  SwitchScope scope = 2;
+  // Set when scope = SWITCH_SCOPE_SHOW.
+  string show_id = 3;
+  bool enabled = 4;
+  // Effective value for show_id after resolution (show > global > default).
+  bool effective = 5;
+  // True when no row exists and the built-in default applies (chat defaults OFF).
+  bool is_default = 6;
+  string changed_by = 7;
+  google.protobuf.Timestamp changed_at = 8;
+}
+
+message ListSwitchesRequest {
+  // Optional: also resolve effective values for this show.
+  string show_id = 1;
+}
+
+message ListSwitchesResponse {
+  repeated Switch switches = 1;
+}
+
+message SetSwitchRequest {
+  string key = 1;
+  SwitchScope scope = 2;
+  string show_id = 3;
+  bool enabled = 4;
+  // Required, free text, stored in the audit log (e.g. "rehearsal chat test").
+  string reason = 5;
+}
+
+message SetSwitchResponse {
+  Switch switch = 1;
+}

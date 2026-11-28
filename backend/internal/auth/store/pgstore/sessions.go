@@ -8,8 +8,8 @@ import (
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 
-	"github.com/tirivia/backend/internal/auth/sessions"
-	"github.com/tirivia/backend/internal/auth/store/pgstore/pgq"
+	"trivia.al/backend/internal/auth/sessions"
+	"trivia.al/backend/internal/auth/store/pgstore/pgq"
 )
 
 // Sessions stores refresh-token families; the DPoP key comes from the device row.

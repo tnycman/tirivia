@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	tv "github.com/tirivia/backend/internal/platform/testvectors"
+	tv "trivia.al/backend/internal/platform/testvectors"
 )
 
 func encode(v any) []byte {

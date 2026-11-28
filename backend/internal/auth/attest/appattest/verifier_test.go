@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tirivia/backend/internal/auth/attest"
+	"trivia.al/backend/internal/auth/attest"
 )
 
 // The device vector signed clientData "wurzelpfropf" over challenge "wurzel", i.e. ClientData("wurzel", "pfropf").

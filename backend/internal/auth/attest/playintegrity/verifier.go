@@ -5,7 +5,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/tirivia/backend/internal/auth/attest"
+	"trivia.al/backend/internal/auth/attest"
 )
 
 // Decoder decrypts a standard-request token; only Google's servers can (standard requests page).

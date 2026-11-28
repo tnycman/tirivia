@@ -1,13 +1,13 @@
 plugins {
-    alias(libs.plugins.tirivia.android.application)
-    alias(libs.plugins.tirivia.android.compose)
-    alias(libs.plugins.tirivia.hilt)
+    alias(libs.plugins.trivia.android.application)
+    alias(libs.plugins.trivia.android.compose)
+    alias(libs.plugins.trivia.hilt)
 }
 
 android {
-    namespace = "com.tirivia.app"
+    namespace = "al.trivia.app"
     defaultConfig {
-        applicationId = "com.tirivia.app"
+        applicationId = "al.trivia.app"
         versionCode = 1
         versionName = "0.1.0"
     }

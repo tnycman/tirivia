@@ -1,5 +1,5 @@
-# XcodeGen 2.49.0 spec; CI generates Tirivia.xcodeproj from it (research 15).
-name: Tirivia
+# XcodeGen 2.49.0 spec; CI generates Trivia.xcodeproj from it (research 15).
+name: Trivia
 options:
   deploymentTarget:
     iOS: "16.0"
@@ -9,23 +9,23 @@ packages:
   Features:
     path: Packages/Features
 targets:
-  TiriviaApp:
+  TriviaApp:
     type: application
     platform: iOS
-    sources: [App/TiriviaApp]
+    sources: [App/TriviaApp]
     scheme: {}
     dependencies:
       - package: Features
       - package: Core
         product: DesignSystem
     info:
-      path: App/TiriviaApp/Info.plist
+      path: App/TriviaApp/Info.plist
       properties:
-        CFBundleDisplayName: Tirivia
+        CFBundleDisplayName: Trivia
         UILaunchScreen: {}
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.tirivia.app
+        PRODUCT_BUNDLE_IDENTIFIER: al.trivia.app
         SWIFT_VERSION: "6.0"
         MARKETING_VERSION: 0.1.0
         CURRENT_PROJECT_VERSION: 1

@@ -8,8 +8,8 @@ import (
 
 	"github.com/valkey-io/valkey-go"
 
-	"github.com/tirivia/backend/internal/platform/kv"
-	"github.com/tirivia/backend/internal/platform/livestate"
+	"trivia.al/backend/internal/platform/kv"
+	"trivia.al/backend/internal/platform/livestate"
 )
 
 // loadTarget is the TS-15 load-test player count.

@@ -5,7 +5,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/tirivia/backend/internal/auth/accounts"
+	"trivia.al/backend/internal/auth/accounts"
 )
 
 // RunRace checks that concurrent first sign-ins for one phone converge on one user.

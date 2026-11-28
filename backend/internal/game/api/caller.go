@@ -6,7 +6,7 @@ import (
 
 	"connectrpc.com/connect/v2"
 
-	"github.com/tirivia/backend/internal/contracts"
+	"trivia.al/backend/internal/contracts"
 )
 
 var errUnauth = connect.NewError(connect.CodeUnauthenticated, "authentication failed")

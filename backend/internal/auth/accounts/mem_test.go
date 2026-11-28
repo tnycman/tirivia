@@ -3,8 +3,8 @@ package accounts_test
 import (
 	"testing"
 
-	"github.com/tirivia/backend/internal/auth/accounts"
-	"github.com/tirivia/backend/internal/auth/accounts/accountstest"
+	"trivia.al/backend/internal/auth/accounts"
+	"trivia.al/backend/internal/auth/accounts/accountstest"
 )
 
 func TestMem(t *testing.T) {

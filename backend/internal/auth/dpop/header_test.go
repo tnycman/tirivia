@@ -14,7 +14,7 @@ import (
 
 	"github.com/go-jose/go-jose/v4"
 
-	"github.com/tirivia/backend/internal/auth/dpop"
+	"trivia.al/backend/internal/auth/dpop"
 )
 
 func signRaw(t *testing.T, payload []byte, opts *jose.SignerOptions, key any, alg jose.SignatureAlgorithm) string {
