@@ -25,6 +25,7 @@ activityCompose = "1.13.0"    # stable per developer.android.com/jetpack/android
 minSdk = "26"                 # ADR-0004
 targetSdk = "36"              # Play requirement since 2026-08-31
 compileSdk = "37"             # AGP 9.5 max API 37
+compileSdkMinor = "1"         # 37.1: Compose 1.13 needs it (compose-ui notes, 1.13.0-alpha03)
 
 [libraries]
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }

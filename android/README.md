@@ -1,6 +1,6 @@
 # android: native Android app
 
-Built with Kotlin 2.4, Jetpack Compose (Material 3) and Hilt. SDK levels: **minSdk 26**, **targetSdk 36**, **compileSdk 37**. Stack and best practices are in [`stack/07-android`](../stack/07-android/README.md).
+Built with Kotlin 2.4, Jetpack Compose (Material 3) and Hilt. SDK levels: **minSdk 26**, **targetSdk 36**, **compileSdk 37.1**. Stack and best practices are in [`stack/07-android`](../stack/07-android/README.md).
 
 ```
 android/

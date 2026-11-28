@@ -8,7 +8,9 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) = with(target) {
         pluginManager.apply("com.android.application")
         extensions.configure<ApplicationExtension> {
-            compileSdk = sdk("compileSdk")
+            compileSdk {
+                version = release(sdk("compileSdk")) { minorApiLevel = sdk("compileSdkMinor") }
+            }
             defaultConfig {
                 minSdk = sdk("minSdk")
                 targetSdk = sdk("targetSdk")

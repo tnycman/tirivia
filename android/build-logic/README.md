@@ -4,8 +4,8 @@ Convention plugins, following the Now in Android pattern ([modularization patter
 
 | Plugin id | Applies |
 |---|---|
-| `tirivia.android.application` | AGP application, compileSdk 37 / targetSdk 36 / minSdk 26 (from the version catalog), `generateLocaleConfig = true` |
-| `tirivia.android.library` | AGP library, compileSdk 37 / minSdk 26 |
+| `tirivia.android.application` | AGP application, compileSdk 37.1 / targetSdk 36 / minSdk 26 (from the version catalog), `generateLocaleConfig = true` |
+| `tirivia.android.library` | AGP library, compileSdk 37.1 / minSdk 26 |
 | `tirivia.android.compose` | Compose compiler plugin, `buildFeatures.compose`, the Compose BOM, UI and Material 3 |
 | `tirivia.android.feature` | library + compose + hilt, with `core:ui`, `core:designsystem` and `core:network` |
 | `tirivia.hilt` | Hilt and KSP |
