@@ -56,6 +56,7 @@ These rules bind the main session and every agent it starts, including research 
 - Install the pinned tools with `sh scripts/install-tools.sh`.
 - Lint and format check: `buf lint && buf format -d --exit-code`.
 - After any proto change, regenerate Go with `buf generate --template buf.gen.go.yaml`. The backend consumes `trivia.al/protocol/gen` through a `replace` directive in `backend/go.mod`. CI fails if `gen/` is stale.
+- For Android, regenerate with `buf generate --template buf.gen.kotlin.yaml` (pinned remote plugins, output committed in `android/core/protocol/src/gen`). CI fails if it is stale.
 - `buf breaking` runs against the PR base. A deliberate break needs the `buf skip breaking` label.
 
 ### Other projects

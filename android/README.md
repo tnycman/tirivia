@@ -24,7 +24,7 @@ android/
 ## Rules
 
 - **Feature dependencies:** a feature's `impl` module may depend only on other features' `api` modules. `app` owns navigation.
-- **Generated code:** all of it lives in `core:protocol`.
+- **Generated code:** all of it lives in `core:protocol/src/gen`, produced by `protocol/buf.gen.kotlin.yaml` and never edited by hand.
 - **Chat:** the panel shows or hides based on `chat_enabled`. The value comes from `JoinShowResponse` at join and from `Pulse` while the show is live ([ADR-0009](../docs/adr/0009-chat-backend-switch.md)).
 - **Integrity signals:** they are logged. Users of accessibility services are never penalised.
 

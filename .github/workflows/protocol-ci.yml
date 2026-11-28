@@ -3,10 +3,10 @@ name: protocol-ci
 
 on:
   pull_request:
-    paths: ["protocol/**", ".github/workflows/protocol-ci.yml"]
+    paths: ["protocol/**", "android/core/protocol/src/gen/**", ".github/workflows/protocol-ci.yml"]
   push:
     branches: [main]
-    paths: ["protocol/**"]
+    paths: ["protocol/**", "android/core/protocol/src/gen/**"]
 
 permissions: {}
 
@@ -37,6 +37,14 @@ jobs:
       - name: Generated Go code is up to date
         working-directory: protocol
         run: buf generate --template buf.gen.go.yaml && git diff --exit-code -- gen/
+      - name: Generated Kotlin code is up to date (BSR token avoids the shared-IP rate limit)
+        working-directory: protocol
+        env:
+          BUF_TOKEN: ${{ secrets.BUF_TOKEN }}
+        run: |
+          buf generate --template buf.gen.kotlin.yaml
+          git diff --exit-code -- ../android/core/protocol/src/gen
+          test -z "$(git ls-files --others --exclude-standard -- ../android/core/protocol/src/gen)"
       - name: Test vectors are up to date and pass (Go reference)
         working-directory: backend
         run: go run ./cmd/testvectors -check
