@@ -27,6 +27,10 @@ xcuserdata/
 .build/
 /ios/Vendor/AmazonIVSPlayer/*
 !/ios/Vendor/AmazonIVSPlayer/.gitkeep
+!/ios/Vendor/AmazonIVSPlayer/Package.swift
+/ios/Tirivia.xcodeproj/
+/ios/App/TiriviaApp/Info.plist
+/ios/Packages/Core/Tests/CoreProtocolTests/Vectors/
 
 # Android / Gradle
 .gradle/

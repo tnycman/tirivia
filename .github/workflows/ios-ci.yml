@@ -1,0 +1,49 @@
+# iOS CI (stack/06-ios, research 15). Free on public repos; xcode-27 is the only image with Xcode 27.2.
+name: ios-ci
+
+on:
+  pull_request:
+    paths: ["ios/**", "protocol/testvectors/**", ".github/workflows/ios-ci.yml"]
+  push:
+    branches: [main]
+    paths: ["ios/**", "protocol/testvectors/**", ".github/workflows/ios-ci.yml"]
+
+permissions: {}
+
+concurrency:
+  group: ios-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  XCODEGEN_TAG: "2.49.0"
+  XCODEGEN_COMMIT: "45ad520"
+  SIMULATOR: "platform=iOS Simulator,name=iPhone 17,OS=27.2"
+
+jobs:
+  build:
+    runs-on: xcode-27
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Select Xcode 27.2
+        run: sudo xcode-select -s /Applications/Xcode_27.2.app && xcodebuild -version
+      - name: Copy shared test vectors
+        run: |
+          mkdir -p ios/Packages/Core/Tests/CoreProtocolTests/Vectors
+          cp protocol/testvectors/shuffle_vectors.json ios/Packages/Core/Tests/CoreProtocolTests/Vectors/
+      - name: Core package tests (shuffle vectors)
+        working-directory: ios/Packages/Core
+        run: xcodebuild test -scheme Core-Package -destination "$SIMULATOR"
+      - name: Build XcodeGen from its pinned tag
+        run: |
+          git clone --depth 1 --branch "$XCODEGEN_TAG" https://github.com/yonaskolb/XcodeGen.git "$RUNNER_TEMP/xcodegen"
+          git -C "$RUNNER_TEMP/xcodegen" rev-parse HEAD | grep -q "^$XCODEGEN_COMMIT"
+          swift build -c release --package-path "$RUNNER_TEMP/xcodegen"
+      - name: Generate the Xcode project
+        run: '"$RUNNER_TEMP/xcodegen/.build/release/xcodegen" generate --spec ios/project.yml'
+      - name: Build the app for the simulator (unsigned)
+        working-directory: ios
+        run: xcodebuild build -project Tirivia.xcodeproj -scheme TiriviaApp -destination "generic/platform=iOS Simulator" CODE_SIGNING_ALLOWED=NO
