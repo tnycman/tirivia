@@ -16,6 +16,7 @@ protobufJavalite = "4.36.2"    # latest stable on Maven Central (4.37.0 is RC)
 sentryAndroid = "8.65.1"      # verified
 okhttp = "5.5.1"              # Maven Central metadata, 2026-11-25
 datastore = "1.3.0"           # Google Maven metadata, 2026-11-25
+tinkAndroid = "1.24.0"        # latest release, Maven Central metadata 2026-11-28; datastore-tink 1.3.0 needs >= 1.20.0
 benchmarkMacro = "1.5.0"      # latest stable on Google Maven (1.6.0 is alpha)
 profileinstaller = "1.4.1"    # Google Maven metadata, 2026-11-25
 junit = "4.13.2"               # Maven Central metadata, 2026-11-25
@@ -43,9 +44,11 @@ connect-kotlin-okhttp = { group = "com.connectrpc", name = "connect-kotlin-okhtt
 connect-kotlin-google-javalite-ext = { group = "com.connectrpc", name = "connect-kotlin-google-javalite-ext", version.ref = "connectKotlin" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 okhttp-mockwebserver = { group = "com.squareup.okhttp3", name = "mockwebserver3", version.ref = "okhttp" }
-protobuf-kotlin-lite ={ group = "com.google.protobuf", name = "protobuf-kotlin-lite", version.ref = "protobufJavalite" }
+protobuf-kotlin-lite = { group = "com.google.protobuf", name = "protobuf-kotlin-lite", version.ref = "protobufJavalite" }
 sentry-android = { group = "io.sentry", name = "sentry-android", version.ref = "sentryAndroid" }
 androidx-datastore = { group = "androidx.datastore", name = "datastore", version.ref = "datastore" }
+androidx-datastore-tink = { group = "androidx.datastore", name = "datastore-tink", version.ref = "datastore" }
+tink-android = { group = "com.google.crypto.tink", name = "tink-android", version.ref = "tinkAndroid" }
 androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profileinstaller", version.ref = "profileinstaller" }
 androidx-benchmark-macro = { group = "androidx.benchmark", name = "benchmark-macro-junit4", version.ref = "benchmarkMacro" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
