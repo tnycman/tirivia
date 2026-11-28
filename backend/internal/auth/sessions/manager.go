@@ -42,13 +42,20 @@ func (m *Manager) Rotate(ctx context.Context, refreshToken, proofJKT string) (st
 	return m.issue(ctx, s.UserID, s.DeviceID, s.JKT, s.FamilyID)
 }
 
-// Revoke ends the family of refreshToken; unknown tokens are ignored.
-func (m *Manager) Revoke(ctx context.Context, refreshToken string) error {
+// Revoke ends the family of refreshToken if proofJKT holds it (ID-7); unknown tokens are ignored.
+func (m *Manager) Revoke(ctx context.Context, refreshToken, proofJKT string) error {
 	s, err := m.store.ByRefreshHash(ctx, hashToken(refreshToken))
 	if err != nil {
 		return nil //nolint:nilerr // unknown token: nothing to revoke
 	}
+	if !sameKey(s.JKT, proofJKT) {
+		return ErrBinding
+	}
 	return m.store.RevokeFamily(ctx, s.FamilyID, ReasonSignOut, m.now())
+}
+
+func sameKey(bound, proof string) bool {
+	return subtle.ConstantTimeCompare([]byte(bound), []byte(proof)) == 1
 }
 
 func (m *Manager) check(ctx context.Context, s Session, proofJKT string) error {
@@ -62,7 +69,7 @@ func (m *Manager) check(ctx context.Context, s Session, proofJKT string) error {
 		return ErrRevoked
 	case s.RotatedAt != nil:
 		return revoke(ReasonReuse, ErrReuse)
-	case subtle.ConstantTimeCompare([]byte(s.JKT), []byte(proofJKT)) != 1:
+	case !sameKey(s.JKT, proofJKT):
 		return revoke(ReasonBinding, ErrBinding)
 	case now.Sub(s.LastUsedAt) > InactivityTTL:
 		return revoke(ReasonInactivity, ErrExpired)

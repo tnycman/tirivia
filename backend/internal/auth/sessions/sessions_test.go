@@ -69,7 +69,7 @@ func TestSignOutAndUnknown(t *testing.T) {
 	ctx := context.Background()
 	m := NewManager(NewMemStore())
 	r1, _, _ := m.Create(ctx, "user", "dev", jkt)
-	if err := m.Revoke(ctx, r1); err != nil {
+	if err := m.Revoke(ctx, r1, jkt); err != nil {
 		t.Fatal(err)
 	}
 	if _, _, err := m.Rotate(ctx, r1, jkt); !errors.Is(err, ErrRevoked) {

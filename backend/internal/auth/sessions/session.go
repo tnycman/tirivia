@@ -16,7 +16,7 @@ var (
 	ErrReuse   = errors.New("sessions: refresh token reused; family revoked")
 	ErrRevoked = errors.New("sessions: session revoked")
 	ErrExpired = errors.New("sessions: expired after inactivity")
-	ErrBinding = errors.New("sessions: DPoP key mismatch; family revoked")
+	ErrBinding = errors.New("sessions: DPoP key mismatch")
 )
 
 // Revoke reasons.

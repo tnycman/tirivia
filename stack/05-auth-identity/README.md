@@ -59,6 +59,7 @@
 10. **Refresh tokens:**
     - Opaque, rotated on every use.
     - **If an old refresh token is reused, revoke the whole token family.**
+    - **A refresh or sign-out whose DPoP key differs from the token's key is refused; the family stays live** ([ID-7](../../docs/decision-register.md), [RFC 7009 §2.1](https://www.rfc-editor.org/rfc/rfc7009.html#section-2.1), [RFC 9449 §5](https://www.rfc-editor.org/rfc/rfc9449.html#section-5)).
     - Expire after 30 days of inactivity ([RFC 9700 §4.14](https://www.rfc-editor.org/rfc/rfc9700.html)).
 11. **Step-up:**
     - Claims and payout changes need a biometric unlock of the DPoP key plus a server nonce.
