@@ -57,7 +57,7 @@ class DpopProofsTest {
         assertEquals("dpop+jwt", header.getString("typ"))
         assertEquals("ES256", header.getString("alg"))
         val jwk = header.getJSONObject("jwk")
-        assertEquals(setOf("kty", "crv", "x", "y"), jwk.keySet())
+        assertEquals(setOf("kty", "crv", "x", "y"), jwk.keys().asSequence().toSet())
         assertEquals("EC", jwk.getString("kty"))
         assertEquals("P-256", jwk.getString("crv"))
         assertEquals(RFC_X, jwk.getString("x"))
